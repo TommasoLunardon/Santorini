@@ -12,10 +12,9 @@ public class Player {
     private String playerID;
     private int playerAge;
     private PlayerColor color;
-    private transient PlayerDivinity playerDivinity;
     private transient Worker worker;
-    private final Box playerBox;
-    private transient Box move;
+    private final Map playerMap;
+    private transient Worker move;
     private transient Box costruction;
 
 
@@ -23,19 +22,17 @@ public class Player {
         this.playerID = playerID;
         this.playerAge = playerAge;
         this.color = null;
-        this.playerBox = new playerBox();
+        this.playerMap = new playerMap();
         this.worker = null;
-        playerDivinity = null;
         move = null;
         costruction = null;
     }
-    public Player(String playerID, int playerAge, PlayerColor color, Box playerBox) {
+    public Player(String playerID, int playerAge, PlayerColor color, Map playerMap) {
         this.playerID = playerID;
         this.playerAge = playerAge;
         this.color = color;
-        this.playerBox = playerBox;
+        this.playerMap = playerMap;
         this.worker = worker;
-        playerDivinity = null;
         move = null;
         costruction = null;
     }
@@ -52,17 +49,15 @@ public class Player {
     public void setColor(PlayerColor color) {
         this.color = color;
     }
-    public Box getPlayerBox() {
-        return this.playerBox;
-    }
+
     public Worker getWorker(Worker worker){
        this.worker = worker;
     }
 
-    public PlayerDivinity getPlayerDivinity() {
-        return playerDivinity;
+    public Map getPlayerMap() {
+        return this.playerMap;
     }
-    public Box getmove() {
+    public Worker getmove() {
         return move;
     }
     public Box getCostruction() {
