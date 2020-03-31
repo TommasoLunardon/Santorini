@@ -50,7 +50,7 @@ public class Player {
         this.color = color;
     }
 
-    public Worker getWorker(Worker worker){
+    public void setWorker(Worker worker){
        this.worker = worker;
     }
 
