@@ -22,7 +22,7 @@ public class Player {
         this.playerID = playerID;
         this.playerAge = playerAge;
         this.color = null;
-        this.playerMap = new playerMap();
+        this.playerMap = new Map();
         this.worker = null;
         move = null;
         costruction = null;
