@@ -1,5 +1,8 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.model.exceptions.InvalidIndicesException;
+import it.polimi.ingsw.server.model.exceptions.NotValidBoxException;
+
 /**
  * @author Tommaso Lunardon
  */
@@ -18,7 +21,8 @@ public class Map {
             for (int j = 0; j < 5; j++) {
                 try {
                     map[i][j] = new Box(i, j, this);
-                } catch (Exception e) { e.printStackTrace();}
+                } catch (NotValidBoxException e) {
+                    System.out.println(e);;}
             }
 
         }
@@ -31,9 +35,9 @@ public class Map {
      * @return Box at position (x,y) in the matrix
      * @trows Exception if (x,y) isn't a position in the matrix
      */
-    public Box getBox(int x, int y) throws Exception{
+    public Box getBox(int x, int y) throws InvalidIndicesException {
 
-        if(x<0 || y<0 || x>4 || y>4) {throw new Exception();}
+        if(x<0 || y<0 || x>4 || y>4) {throw new InvalidIndicesException();}
         Box box;
         box = map[x][y];
         return box;
@@ -52,8 +56,8 @@ public class Map {
                     if (getBox(i, j).getLevel() == 4) {
                         x++;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InvalidIndicesException e) {
+                    System.out.println(e);;
                 }
             }
         }

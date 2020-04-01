@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author Tommaso Lunardon
+ */
+
 class MapTest {
 
     private Map map;

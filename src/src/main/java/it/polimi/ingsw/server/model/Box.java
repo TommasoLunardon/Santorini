@@ -1,4 +1,8 @@
 package it.polimi.ingsw.server.model;
+import it.polimi.ingsw.server.model.exceptions.NotValidBoxException;
+import it.polimi.ingsw.server.model.exceptions.NotValidLevelException;
+import it.polimi.ingsw.server.model.exceptions.WorkerNotExistException;
+
 import java.util.ArrayList;
 
 /**
@@ -21,10 +25,10 @@ public class Box{
      * @param x = box latitude
      * @param y = box longitude
      * @param map = Map containing the box
-     * @throws Exception if position(x,y) doesn't belong to the Map matrix, or the Map doesn't exist
+     * @throws NotValidBoxException if position(x,y) doesn't belong to the Map matrix, or the Map doesn't exist
      */
-    public Box(int x, int y, Map map)throws Exception{
-        if (x<0 || y<0 || x>4 || y>4 || map == null) {throw new Exception();}
+    public Box(int x, int y, Map map)throws NotValidBoxException{
+        if (x<0 || y<0 || x>4 || y>4 || map == null) {throw new NotValidBoxException();}
         level = 0;
         positionX = x;
         positionY = y;
@@ -88,36 +92,36 @@ public class Box{
 
         try{
         if (left)  neighboursMatrix[0][1] = (map.getBox(positionX -1, positionY));} catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);;
         }
         try{
         if (right)  neighboursMatrix[2][1] = (map.getBox(positionX +1, positionY));}catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);;
         }
         try{
         if (up)  neighboursMatrix[1][2] = (map.getBox(positionX , positionY +1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
         try{
         if (down) neighboursMatrix[1][0] = (map.getBox(positionX, positionY-1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
 
         try{
         if (left && down) neighboursMatrix[0][0] = (map.getBox(positionX - 1, positionY-1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
         try{
         if (left && up)  neighboursMatrix[0][2] = (map.getBox(positionX -1, positionY +1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
         try{
         if (right && down)  neighboursMatrix[2][0] = (map.getBox(positionX +1, positionY-1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
         try{
         if (right && up)  neighboursMatrix[2][2] = (map.getBox(positionX +1, positionY +1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
 
 
@@ -139,40 +143,40 @@ public class Box{
 
         try{
         if (left)  neighbours.add(map.getBox(positionX -1, positionY));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
         try{
         if (right)  neighbours.add(map.getBox(positionX +1, positionY));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
 
         try{
         if (up)  neighbours.add(map.getBox(positionX , positionY +1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
 
         try{
         if (down) neighbours.add(map.getBox(positionX, positionY-1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
 
         try{
         if (left && down) neighbours.add(map.getBox(positionX - 1, positionY-1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
         try{
         if (left && up)  neighbours.add(map.getBox(positionX -1, positionY +1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
 
         try{
         if (right && down)  neighbours.add(map.getBox(positionX +1, positionY-1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
 
         try{
         if (right && up)  neighbours.add(map.getBox(positionX +1, positionY +1));}catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);;
         }
 
 
@@ -190,11 +194,11 @@ public class Box{
     /**
      *
      * @return the worker on the box
-     * @throws Exception if the box doesn't have any worker
+     * @throws WorkerNotExistException if the box doesn't have any worker
      */
-    public Worker getWorker() throws Exception{
+    public Worker getWorker() throws WorkerNotExistException{
 
-        if(!hasWorker()) { throw new Exception();}
+        if(!hasWorker()) { throw new WorkerNotExistException();}
 
         else {
             Worker w = worker;
@@ -207,10 +211,10 @@ public class Box{
     /**
      *
      * @param level = new box's level
-     * @throws Exception if the new level isn't acceptable by the game's rules
+     * @throws NotValidLevelException if the new level isn't acceptable by the game's rules
      */
-    public void setLevel(int level) throws Exception {
-        if (level < 0 || level >4) throw new Exception();
+    public void setLevel(int level) throws NotValidLevelException {
+        if (level < 0 || level >4) throw new NotValidLevelException();
         this.level = level;
         if (level==4){
             setDome(true);
@@ -245,6 +249,10 @@ public class Box{
     public void removeWorker(){
         this.hasWorker = false;
         this.worker = null;
+    }
+
+    public Map getMap() {
+        return map;
     }
 }
 

@@ -1,4 +1,8 @@
 package it.polimi.ingsw.server.model;
+import it.polimi.ingsw.server.model.exceptions.NotValidLevelException;
+import it.polimi.ingsw.server.model.exceptions.WrongConstructionException;
+import it.polimi.ingsw.server.model.exceptions.WrongMovementException;
+
 import java.util.ArrayList;
 
 /**
@@ -60,13 +64,13 @@ public class Worker {
     /**
      *
      * @param nextBox = box where the worker will move
-     * @throws Exception if the Box selected isn't valid
+     * @throws WrongMovementException if the Box selected isn't valid
      */
-    public void move(Box nextBox) throws Exception{
+    public void move(Box nextBox) throws WrongMovementException{
         ArrayList<Box> neighbours = box.getNeighbours();
 
         if (!neighbours.contains(nextBox) || nextBox.hasWorker() || nextBox.hasDome() || nextBox.getLevel() > box.getLevel() +1){
-        throw new Exception();
+        throw new WrongMovementException();
         }
 
         else {
@@ -83,16 +87,20 @@ public class Worker {
     /**
      *
      * @param selectedBox = box in which the worker will build a new level
-     * @throws Exception if  the selected box isn't valid
+     * @throws WrongConstructionException if  the selected box isn't valid
      */
-    public void construction(Box selectedBox) throws Exception{
+    public void build(Box selectedBox) throws WrongConstructionException{
 
         ArrayList<Box> neighbours = box.getNeighbours();
 
-        if (!neighbours.contains(selectedBox) || selectedBox.hasWorker() || selectedBox.hasDome()) {throw new Exception();}
+        if (!neighbours.contains(selectedBox) || selectedBox.hasWorker() || selectedBox.hasDome()) {throw new WrongConstructionException();}
 
         int currentLevel = selectedBox.getLevel();
+        try{
         selectedBox.setLevel(currentLevel+1);
+        }catch(NotValidLevelException e){
+            System.out.println(e);
+        }
     }
 
     /**

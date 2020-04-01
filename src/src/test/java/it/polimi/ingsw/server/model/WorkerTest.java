@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author Tommaso Lunardon
+ */
+
 class WorkerTest {
 
     private Worker worker;
@@ -15,8 +19,8 @@ class WorkerTest {
 
     @BeforeEach
     void setUp() {
-        player = new Player("aaa",'y');
-        Map map = new Map();
+        player = new Player("aaa", 12, PlayerColor.YELLOW, new Map());
+        Map map = player.getPlayerMap();
         try{Box box = new Box(2,2,map);
             worker = new Worker(player,box);}
         catch(Exception e){
@@ -98,7 +102,7 @@ class WorkerTest {
         ArrayList<Box> neighbours = worker.getBox().getNeighbours();
         Box next = neighbours.get(neighbours.size()-1);
         int oldLevel = next.getLevel();
-        try{worker.construction(next);}catch (Exception e){
+        try{worker.build(next);}catch (Exception e){
             e.printStackTrace();
         }
         assertTrue(next.getLevel() == oldLevel+1);
@@ -111,7 +115,7 @@ class WorkerTest {
         ArrayList<Box> neighbours = worker.getBox().getNeighbours();
         Box next = neighbours.get(neighbours.size()-1);
         next.setDome(true);
-        try{worker.construction(next);}catch (Exception e){
+        try{worker.build(next);}catch (Exception e){
             System.out.println("Correct Response!");
         }
     }

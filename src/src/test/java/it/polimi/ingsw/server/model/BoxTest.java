@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author Tommaso Lunardon
+ */
 class BoxTest {
 
     private Box box;
@@ -49,7 +52,7 @@ class BoxTest {
     //Test case with worker
     @Test
     void hasWorker2() {
-        box.setWorker(new Worker(new Player("a", 'y'),this.box));
+        box.setWorker(new Worker(new Player("a", 12, PlayerColor.RED, new Map()),this.box));
         assertTrue(box.hasWorker());
     }
 
@@ -152,7 +155,7 @@ class BoxTest {
     //Test Case with worker
     @Test
     void getWorker2() {
-        Worker w = new Worker(new Player("aaa",'y'),this.box);
+        Worker w = new Worker(new Player("aaa", 12, PlayerColor.RED,new Map()),this.box);
         box.setWorker(w);
         try{ assertEquals(w,box.getWorker());}catch(Exception e){
             e.printStackTrace();
@@ -196,7 +199,7 @@ class BoxTest {
     //Test Case with correct input
     @Test
     void setWorker1() {
-        Worker w = new Worker(new Player("aaa",'y'),this.box);
+        Worker w = new Worker(new Player("aaa", 12,PlayerColor.RED, new Map()),this.box);
         try{box.setWorker(w);}catch (NullPointerException e){
             e.printStackTrace();
         }
@@ -214,7 +217,7 @@ class BoxTest {
     //Single Test Case to verify correctness of the removing
     @Test
     void removeWorker1() {
-        Worker w = new Worker(new Player("aaa",'y'),this.box);
+        Worker w = new Worker(new Player("aaa", 12, PlayerColor.YELLOW, new Map()),this.box);
         box.setWorker(w);
         box.removeWorker();
         assertFalse(box.hasWorker());

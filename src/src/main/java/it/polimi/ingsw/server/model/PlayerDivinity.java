@@ -1,290 +1,409 @@
-package Progetto;
+package it.polimi.ingsw.server.model;
 
-import javafx.scene.layout.HBox;
-import javafx.scene.transform.MatrixType;
-
-import javax.swing.*;
-import java.lang.management.BufferPoolMXBean;
+import it.polimi.ingsw.server.model.exceptions.*;
 
 import java.util.ArrayList;
+
+/**
+ * @author Gabriele Gatti, Tommaso Lunardon
+ * Subclasses of Player, used to play games with Divinity Cards
+ */
 
     class PlayerDivinity extends Player{
     private String godName;
     private Integer nPlayer;
-    protected PlayerDivinity(String id, Integer age, Map map, Integer nPlayer, String godName){
-        super(id, age, map);
-        this.nPlayer=nPlayer;
-        this.godName=godName;
+
+    protected PlayerDivinity(String id, Integer age, Map map, PlayerColor color, Integer nPlayer, String godName){
+        super(id, age, color, map);
+        this.nPlayer = nPlayer;
+        this.godName = godName;
     }
+
+    /**
+     *
+     * @return The name of the God's Card assigned to the player
+     */
     protected String getGodName(){
+
         return godName;
     }
+
+    /**
+     *
+     * @return the  accepted number of players in the game for the specific card used
+     */
     protected Integer getnPlayer(){
-        Integer nPlayer1 = this.nPlayer;
+        int nPlayer1 = this.nPlayer;
         return nPlayer1;
     }
 }
 
     class PlayerNotAthena extends PlayerDivinity{
-        private Boolean possiblyLevel;
-        public PlayerNotAthena(String id, Integer age, Map map,Integer nPlayer, String godName){
-            super(id, age, map, nPlayer, godName);
-            possiblyLevel = Boolean.TRUE;
+
+        private boolean freeMovement;
+
+        public PlayerNotAthena(String id, Integer age, Map map, PlayerColor color, Integer nPlayer, String godName){
+
+            super(id, age, map, color,  nPlayer, godName);
+
+            freeMovement = true;
         }
 
-        public void move(Box nextBox, Worker worker) throws Exception, AthenaLevelledException{
-            try{
-                if ((checkPossiblyLevel()||nextBox.getLevel()<=worker.getBox().getLevel()) && nextBox.getNeighbours().contains(worker.getBox())){
+        /**
+         * Override of the movement method, to satisfy the eventual Athena's restriction
+         * @param worker is the worker that will perform the movement
+         * @param nextBox is the box in which the worker will move
+         * @exception if the Athena Condition isn't followed
+         */
+        public void move(Worker worker, Box nextBox) throws AthenaConditionException, InvalidMovementException {
+            if (checkFreeMovement()){
+
+                move(worker,nextBox);
+            }
+            else{
+                int oldLevel = worker.getBox().getLevel();
+
+                try{
                     worker.move(nextBox);
+                }catch (Exception e){
+                    System.out.println(e);;
                 }
-                else {
-                    throw new AthenaLevelledException();
+                if(oldLevel < worker.getBox().getLevel()){
+                    throw new AthenaConditionException();
                 }
-            }catch (Exception e){
-                System.out.println("ERROR IN MOVE");
+
             }
         }
 
-        public void update(){
-            possiblyLevel=Boolean.FALSE;
+        /**
+         * Method used to update the Athena Condition (Pattern Observer)
+         * @param condition
+         */
+        public void update(boolean condition){
+
+            freeMovement = condition;
         }
-        protected Boolean checkPossiblyLevel(){
-            Boolean p = this.possiblyLevel;
+
+        protected Boolean checkFreeMovement(){
+
+            Boolean p = this.freeMovement;
             return p;
         }
     }
 
     class PlayerApollo extends PlayerNotAthena {
 
-        public PlayerApollo(String id, Integer age, Map map) {
-            super(id, age, map, 4, "Apollo");
+        public PlayerApollo(String id, Integer age, PlayerColor color, Map map) {
+
+            super(id, age, map, color, 4, "Apollo");
         }
 
-        public void move(Box nextBox, Worker worker) throws Exception, AthenaLevelledException {
-                Worker wSpostable;
-                if ((nextBox.getLevel()<=worker.getBox().getLevel()) && nextBox.getNeighbours().contains(worker.getBox())){
-                    if (checkPossiblyLevel()){
-                        if (nextBox.hasWorker()) {
-                            wSpostable = nextBox.getWorker();
-                            wSpostable.setBox(worker.getBox());
-                            nextBox.setWorker(wSpostable);
-                        }
-                        worker.move(nextBox);
-                } else {
-                    throw new AthenaLevelledException();
-                }
-            } else  throw new Exception();
-        }
-    }
+        /**
+         * Method to perform the special movement available only to players having Apollo as God,
+         * it is in addition to the standard movement
+         * @param worker selected worker to perform the movement
+         * @param nextBox selected Box to move in
+         * @throws WrongMovementException if the movement isn't valid
+         */
+        public void moveApollo(Worker worker, Box nextBox) throws WrongMovementException {
 
-    class PlayerArthemis extends PlayerNotAthena {
-
-        Boolean alreadyMove;
-        Box initialBox;
-
-        public PlayerArthemis(String id, Integer age, Map map) {
-            super(id, age, map, 4, "Arthemis");
-        }
-
-        public void move(Box nextBox, Worker worker) throws Exception, AthenaLevelledException {
-            try {
-                if( (nextBox.getLevel()<=worker.getBox().getLevel()) && nextBox.getNeighbours().contains(worker.getBox())){
-                    if (checkPossiblyLevel()){
-                        if (!alreadyMove) {
-                            initialBox = worker.getBox();
-                            alreadyMove = Boolean.TRUE;
-                        }
-                        else {
-                            if (nextBox == initialBox) {
-                                throw new Exception("Can't return to your original box");
-                            } else {
-                                worker.move(nextBox);
-                            }
-                        }
-                    } else throw new AthenaLevelledException();
-                }
-
-            } catch (Exception e) {
-                System.out.println("ERROR IN MOVE");
-            }
-        }
-
-        public void construction(Box box, Worker worker) throws Exception {
-            try{
-                worker.construction(box);
-                alreadyMove = Boolean.FALSE;
-            }
-            catch (Exception e){
-
-            }
-        }
-    }
-
-    class PlayerAtlas extends PlayerNotAthena {
-
-        public PlayerAtlas(String id, Integer age, Map map) {
-            super(id, age, map, 4, "Atlas");
-        }
-
-        public void constructionDome(Box box) throws Exception {
-            if (box.hasDome()) throw new Exception("CAN'T BUILD A DOME, THE BOX HAS A STRUCTURE");
-            else {
-                box.setDome(Boolean.TRUE);
-            }
-        }
-    }
-
-    class PlayerDemeter extends PlayerNotAthena {
-
-        private Box initialCostructionBox;
-        private Boolean haveBuild;
-        private Boolean stopBuild;
-        //always lanch stop Demeter after her turn
-        public PlayerDemeter(String id, Integer age, Map map) {
-            super(id, age, map, 4, "Demeter");
-        }
-
-        public void costruction(Worker worker, Box box) throws Exception {
-            try {
-                if (!haveBuild) {
-                    worker.construction(box);
-                    haveBuild = Boolean.TRUE;
-                    initialCostructionBox = box;
-                } else {
-                    if (!(stopBuild) || (box == initialCostructionBox))
-                        throw new Exception("Can't Build Here Again");
-                    else {
-                        worker.construction(box);
-                        stopBuild = Boolean.TRUE;
-                    }
-                }
-            } catch (Exception e) {
-
-            }
-        }
-
-        public void costructionDome(Box box) throws Exception {
-            if (box.hasDome() || box.getLevel() == 0 || stopBuild || initialCostructionBox == box)
-                throw new Exception("Build Failed");
-            else if (haveBuild) {
-                box.setDome(Boolean.TRUE);
-                stopBuild = Boolean.TRUE;
-            } else {
-                box.setDome(Boolean.TRUE);
-                haveBuild = Boolean.TRUE;
-                initialCostructionBox = box;
+            if (!checkFreeMovement() && worker.getBox().getLevel() < nextBox.getLevel()) {
+                throw new WrongMovementException();
             }
 
-        }
-
-        public void stopDemeter(){
-            initialCostructionBox=null;
-            haveBuild=Boolean.FALSE;
-            stopBuild=Boolean.FALSE;
-        }
-    }
-
-    class PlayerEphaestus extends PlayerNotAthena {
-
-        public PlayerEphaestus(String id, Integer age, Map map) {
-            super(id, age, map, 4, "Ephaestus");
-        }
-
-        public void costruction (Worker worker, Box box, Boolean twiceBuild) throws Exception{
-            worker.construction(box);
-            if (twiceBuild) worker.construction(box);
-        }
-
-    }
-
-    class PlayerMinotaur extends PlayerNotAthena { //Asterios per gli amici tra cui: Euriale, Atalanta, la sovracitata Artemide, Gudao/Gudako, il Capitano Francis Drake, San re Davide per qualche motivo e MASHUUUUUU
-
-        public PlayerMinotaur(String id, Integer age, Map map) {
-            super(id, age, map, 4, "Minotaur");
-        }
-
-        public void move(Box nextBox, Worker worker) throws Exception{
-            Box[][] map;
-            int x=0,y=0;
-            Box boxDirNext;
-            Worker wSpostable;
-            if ((checkPossiblyLevel()||nextBox.getLevel()<=worker.getBox().getLevel()) && nextBox.getNeighbours().contains(worker.getBox())){
-                if (nextBox.hasWorker()){
-                    map=worker.getBox().getNeighboursMatrix();
-                    for ( x=0; x<3; x++){
-                        for ( y=0; y<3; y++){
-                            if (map[x][y]==nextBox){
-                                break;
-                            }
-                        }
-                    }
-                    boxDirNext=nextBox.getNeighboursMatrix()[x][y];
-                    wSpostable = nextBox.getWorker();
-                    wSpostable.setBox(boxDirNext);
-                    nextBox.setWorker(null);
-                }
-                worker.move(nextBox);
+            if (!worker.getBox().getNeighbours().contains(nextBox) || nextBox.hasDome() || nextBox.getLevel() > worker.getBox().getLevel() + 1) {
+                throw new WrongMovementException();
             }
-            else throw new Exception("Can't move");
-        }
-    }
 
-    class PlayerPan extends PlayerNotAthena {
-        public PlayerPan(String id, Integer age, Map map) {
-            super(id, age, map, 4, "Pan");
-        }
-
-        public void move(Box nextBox, Worker worker) throws Exception {
-            Box oldBox;
-            if ((checkPossiblyLevel()||nextBox.getLevel()<=worker.getBox().getLevel()) && nextBox.getNeighbours().contains(worker.getBox())){
-                oldBox=worker.getBox();
-                worker.move(nextBox);
-                if (oldBox.getLevel()>=2+nextBox.getLevel()){
-                    worker.setWinner(Boolean.TRUE);
-                }
+            if (!nextBox.hasWorker()) {
+                throw new WrongMovementException();
             }
-            else {
-                throw new Exception("Can't Move");
-            }
-        }
 
-    }
+            try{Worker enemy = nextBox.getWorker();
 
-    class PlayerPrometheus extends PlayerNotAthena {
-        private Boolean hasMove;
-
-        public PlayerPrometheus(String id, Integer age, Map map) {
-            super(id, age, map, 4, "Prometheus");
-        }
-
-        //leave gestion of Prometheus Ability to controller
-    }
-
-    class PlayerAthena extends PlayerDivinity {
-
-        private ArrayList<PlayerNotAthena> observer;
-
-        public PlayerAthena(String id, Integer age, Map map) {
-            super(id, age, map, 4, "Athena");
-        }
-
-        public void attach (ArrayList<PlayerNotAthena> observersList){
-            for(int x=0; x<observersList.size(); x++) {
-                observer.add(x,observersList.get(x));
-            }
-        }
-
-        public void move(Box nextBox, Progetto.Worker worker) throws Exception {
             Box oldBox = worker.getBox();
-            worker.move(nextBox);
-            if (nextBox.getLevel() > oldBox.getLevel()) notifyPlayers();
-        }
 
-        private void notifyPlayers() {
-            for (int con = 0; con < observer.size(); con++) {
-                observer.get(con).update();
+            nextBox.setWorker(worker);
+            oldBox.setWorker(enemy);
+            worker.setBox(nextBox);
+            enemy.setBox(oldBox);
+
+            if (worker.getBox().getLevel() == 3) {
+                setWinner(true);
+            }
+            }catch ( WorkerNotExistException e){
+                System.out.println(e);
             }
         }
     }
+
+        class PlayerArthemis extends PlayerNotAthena {
+
+            public PlayerArthemis(String id, Integer age, PlayerColor color, Map map) {
+
+                super(id, age, map, color, 4, "Arthemis");
+            }
+
+            /**
+             * Method to perform the special movement available to player with Arthemis as God,
+             * in addition to the standard movement method
+             * @param nextBox1 first box to move in
+             * @param nextBox2 second box to move in
+             * @param worker selected worker to perform the movement
+             * @throws WrongMovementException if the movement isn't valid
+             */
+            public void moveArthemis(Box nextBox1, Box nextBox2, Worker worker) throws WrongMovementException {
+
+                Box initialBox = worker.getBox();
+                try {
+                    worker.move(nextBox1);
+                } catch (WrongMovementException e) {
+                    System.out.println(e);;
+                }
+                try {
+                    worker.move(nextBox2);
+
+                    if (nextBox2.equals(initialBox)) {
+                        throw new WrongMovementException();
+                    }
+                } catch (WrongMovementException e) {
+                    System.out.println(e);;
+                }
+            }
+
+
+        }
+
+        class PlayerAtlas extends PlayerNotAthena {
+
+            public PlayerAtlas(String id, Integer age, PlayerColor color, Map map) {
+
+                super(id, age, map, color, 4, "Atlas");
+            }
+
+            /**
+             * Method to perform the special construction available to players with Atlas as God,
+             * in addition to the standard construction method
+             * @param box selected box to perform the construction in
+             * @param worker selected player to perform the construction
+             * @throws WrongConstructionException if the construction isn't valid
+             */
+            public void buildAtlas(Box box, Worker worker) throws WrongConstructionException {
+                if ((!worker.getBox().getNeighbours().contains(box)) || box.hasDome()) {
+                    throw new WrongConstructionException();
+                } else {
+                    box.setDome(true);
+                }
+            }
+        }
+
+        class PlayerDemeter extends PlayerNotAthena {
+
+            public PlayerDemeter(String id, Integer age, PlayerColor color, Map map) {
+                super(id, age, map, color, 4, "Demeter");
+            }
+
+            /**
+             * Method to perform the special construction available to players with Demether as God,
+             * in addition to the standard construction method
+             * @param box1 first selected box to perform the construction in
+             * @param box2 second selected box to perform the construction in
+             * @param worker selected player to perform the construction
+             * @throws WrongConstructionException if the construction isn't valid
+             */
+            public void buildDemeter(Worker worker, Box box1, Box box2) throws WrongConstructionException {
+                try {
+                    worker.build(box1);
+                } catch (WrongConstructionException e) {
+                    System.out.println(e);;
+                }
+
+                try {
+                    worker.build(box2);
+
+                    if (box1.equals(box2)) {
+                        throw new WrongConstructionException();
+                    }
+
+                } catch (WrongConstructionException e) {
+                    System.out.println(e);;
+                }
+            }
+
+        }
+
+        class PlayerEphaestus extends PlayerNotAthena {
+
+            public PlayerEphaestus(String id, Integer age, PlayerColor color, Map map) {
+
+                super(id, age, map, color, 4, "Ephaestus");
+            }
+
+            /**
+             * Method to perform the special construction available to players with Demether as God,
+             * in addition to the standard construction method
+             * @param box selected box to perform the construction in
+             * @param worker selected player to perform the construction
+             * @throws WrongConstructionException if the construction isn't valid
+             */
+            public void buildEphaestus(Worker worker, Box box) throws WrongConstructionException {
+                try {
+                    worker.build(box);
+                    worker.build(box);
+
+                    if (box.hasDome()) {
+                        throw new WrongConstructionException();
+                    }
+                } catch (WrongConstructionException e) {
+                    System.out.println(e);
+                }
+
+            }
+
+        }
+
+        class PlayerMinotaur extends PlayerNotAthena {
+
+            public PlayerMinotaur(String id, Integer age, PlayerColor color, Map map) {
+
+                super(id, age, map, color, 4, "Minotaur");
+            }
+
+            /**
+             * Method to perform the special movement available to players with Minotaur as god,
+             * in addition to the standard movement
+             * @param worker is the selected worker to perform the movement
+             * @param nextBox is the selected box to move in
+             * @throws WrongMovementException if the movement isn't valid
+             */
+            public void moveMinotaur(Worker worker, Box nextBox) throws WrongMovementException {
+
+                if (!checkFreeMovement() && worker.getBox().getLevel() < nextBox.getLevel()) {
+                    throw new WrongMovementException();
+                }
+
+                if (!worker.getBox().getNeighbours().contains(nextBox) || nextBox.hasDome() || nextBox.getLevel() > worker.getBox().getLevel() + 1) {
+                    throw new WrongMovementException();
+                }
+
+                if (!nextBox.hasWorker()) {
+                    throw new WrongMovementException();
+                }
+
+             try{
+                Worker enemy = nextBox.getWorker();
+                Box oldBox = worker.getBox();
+                int dirX = nextBox.getPosition()[0] - oldBox.getPosition()[0];
+                int dirY = nextBox.getPosition()[1] - oldBox.getPosition()[1];
+                Box nextBox2 = playerMap.getBox(nextBox.getPosition()[0] + dirX, nextBox.getPosition()[1] + dirY);
+
+                if (nextBox2.hasWorker() || nextBox2.hasDome()) {
+                    throw new WrongMovementException();
+                }
+
+                nextBox.setWorker(worker);
+                nextBox2.setWorker(enemy);
+                worker.setBox(nextBox);
+                enemy.setBox(nextBox2);
+
+                if (worker.getBox().getLevel() == 3) {
+                    setWinner(true);
+                }
+             }catch(Exception e){
+                 System.out.println(e);
+             }
+
+            }
+        }
+
+        class PlayerPan extends PlayerNotAthena {
+
+            public PlayerPan(String id, Integer age, PlayerColor color, Map map) {
+                super(id, age, map, color, 4, "Pan");
+            }
+
+            /**
+             * Method for movement that takes into account the additional win condition
+             * assigned to players with Pan as God
+             * @param worker is the worker that will perform the movement
+             * @param nextBox is the box in which the worker will move
+             * @throws InvalidMovementException if the movement isn't valid
+             */
+            public void move(Worker worker, Box nextBox) throws InvalidMovementException {
+                int oldLevel = worker.getBox().getLevel();
+
+                try {
+                    super.move(worker, nextBox);
+                } catch (AthenaConditionException e) {
+                    System.out.println(e);
+                }
+                if (worker.getBox().getLevel() <= oldLevel - 2) {
+                    setWinner(true);
+                }
+
+            }
+
+        }
+
+        class PlayerPrometheus extends PlayerNotAthena {
+
+            public PlayerPrometheus(String id, Integer age, PlayerColor color, Map map) {
+
+                super(id, age, map, color, 4, "Prometheus");
+            }
+
+            //leave management of Prometheus Ability to controller
+            //  "turnPrometheus" ==> build(), move() [CHECK NOT UPPER LEVEL], build()
+        }
+
+        class PlayerAthena extends PlayerDivinity {
+
+            private ArrayList<PlayerNotAthena> observer = new ArrayList<PlayerNotAthena>();
+
+            public PlayerAthena(String id, Integer age, PlayerColor color, Map map) {
+                super(id, age, map, color, 4, "Athena");
+            }
+
+            /**
+             *Method to assign other players as Observers of Athena Condition
+             * @param observersList is the list of players playing the same game as the one having Athena as god
+             */
+            public void attach(ArrayList<PlayerNotAthena> observersList) {
+                for (int x = 0; x < observersList.size(); x++) {
+                    observer.add(x, observersList.get(x));
+                }
+            }
+
+            /**
+             * Method that overrides the standard movement and assigns the Athena Condition if
+             * the level is increased
+             * @param worker is the worker that will perform the movement
+             * @param nextBox is the box in which the worker will move
+             */
+            public void move( Worker worker, Box nextBox) {
+                int oldLevel = worker.getBox().getLevel();
+                try {
+                    worker.move(nextBox);
+                    if (nextBox.getLevel() > oldLevel) {
+                        notifyPlayers(false);
+                    } else {
+                        notifyPlayers(true);
+                    }
+
+                } catch (WrongMovementException e) {
+                    System.out.println(e);
+                }
+            }
+
+            /**
+             * Method used to update the Athena Condition an notify the Observers
+             * @param condition
+             */
+            private void notifyPlayers(boolean condition) {
+                for (int i = 0; i < observer.size(); i++) {
+                    observer.get(i).update(condition);
+                }
+            }
+        }
 
 
