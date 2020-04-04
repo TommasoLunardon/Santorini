@@ -86,7 +86,8 @@ class BoxTest {
         int y = box.getPosition()[1];
         for (int i =0; i<3; i++){
             for (int j =0; j<3; j++){
-                assertTrue(neighbours[i][j].equals(map.getBox(x-1+i,y-1+j)));
+                if(!(j==1 && i ==1)){
+                assertTrue(neighbours[i][j].equals(map.getBox(x-1+i,y-1+j)));}
             }
         }
     }

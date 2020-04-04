@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.exceptions.AthenaConditionException;
-import it.polimi.ingsw.server.model.exceptions.InvalidConstructionException;
-import it.polimi.ingsw.server.model.exceptions.InvalidMovementException;
+import it.polimi.ingsw.server.model.exceptions.*;
 
 import java.util.ArrayList;
 
@@ -26,7 +24,10 @@ public class Player {
 
 
 
-    public Player(String playerID, int playerAge, PlayerColor color, Map playerMap) {
+    public Player(String playerID, int playerAge, PlayerColor color, Map playerMap) throws NullPointerException {
+
+        if(playerID == null|| color == null||playerMap==null){throw new NullPointerException();}
+
         this.playerID = playerID;
         this.playerAge = playerAge;
         this.color = color;
@@ -37,11 +38,24 @@ public class Player {
         isWinner = false;
     }
 
-    public void setWorker1(Worker worker1){
+    public void setWorker1(Box box) throws NullPointerException, InvalidBoxException {
+        if(box==null){throw new NullPointerException();}
+
+        if(!box.getMap().equals(playerMap)|| box.hasDome()||box.hasWorker()){throw new InvalidBoxException();}
+
+        Worker worker1 = new Worker(this,box);
+
         this.worker1 = worker1;
     }
 
-    public void setWorker2(Worker worker2){
+    public void setWorker2(Box box)throws NullPointerException, InvalidBoxException{
+        if(box==null){throw new NullPointerException();}
+
+        if(!box.getMap().equals(playerMap)|| box.hasDome()||box.hasWorker()){throw new InvalidBoxException();}
+
+        Worker worker2 = new Worker(this,box);
+
+
         this.worker2 = worker2;
     }
 
@@ -118,7 +132,7 @@ public class Player {
      *
      * @param worker is the worker that will perform the movement
      * @param nextBox is the box in which the worker will move
-     * @throws InvalidMovementException if the movement isn't allowed
+     * @throws InvalidMovementException if the worker can't be chosen
      */
     public void move(Worker worker, Box nextBox) throws InvalidMovementException, AthenaConditionException {
 
@@ -126,7 +140,7 @@ public class Player {
 
         try{
             worker.move(nextBox);
-        }catch(Exception e){
+        }catch(WrongMovementException e){
             e.printStackTrace();
         }
         if (worker.isWinner()){
@@ -138,14 +152,14 @@ public class Player {
      *
      * @param worker is the worker that will build
      * @param selectedBox is the box in which the worker will build a block
-     * @throws InvalidConstructionException if this construction isn't allowed
+     * @throws InvalidConstructionException if the worker can't be chosen
      */
     public void build(Worker worker, Box selectedBox) throws InvalidConstructionException{
         if (!getWorkers().contains(worker)){ throw new InvalidConstructionException();}
 
         try{
             worker.build(selectedBox);
-        }catch(Exception e){
+        }catch(WrongConstructionException e){
             System.out.println(e);;
         }
 

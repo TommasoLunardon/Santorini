@@ -33,7 +33,7 @@ public class Map {
      * @param x = latitude of box
      * @param y = longitude of box
      * @return Box at position (x,y) in the matrix
-     * @trows Exception if (x,y) isn't a position in the matrix
+     * @throws InvalidIndicesException if (x,y) isn't a position in the matrix
      */
     public Box getBox(int x, int y) throws InvalidIndicesException {
 

@@ -26,6 +26,7 @@ public class Worker {
         isLoser = false;
         isWinner = false;
         this.box = box;
+        box.setWorker(this);
     }
 
     /**

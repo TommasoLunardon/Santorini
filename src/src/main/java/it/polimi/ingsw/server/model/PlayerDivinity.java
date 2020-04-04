@@ -53,12 +53,12 @@ import java.util.ArrayList;
          * Override of the movement method, to satisfy the eventual Athena's restriction
          * @param worker is the worker that will perform the movement
          * @param nextBox is the box in which the worker will move
-         * @exception if the Athena Condition isn't followed
+         * @throws AthenaConditionException if the Athena Condition isn't followed
          */
         public void move(Worker worker, Box nextBox) throws AthenaConditionException, InvalidMovementException {
             if (checkFreeMovement()){
 
-                move(worker,nextBox);
+                super.move(worker,nextBox);
             }
             else{
                 int oldLevel = worker.getBox().getLevel();
@@ -100,22 +100,22 @@ import java.util.ArrayList;
 
         /**
          * Method to perform the special movement available only to players having Apollo as God,
-         * it is in addition to the standard movement
+         * in addition to the standard movement
          * @param worker selected worker to perform the movement
          * @param nextBox selected Box to move in
          * @throws WrongMovementException if the movement isn't valid
          */
-        public void moveApollo(Worker worker, Box nextBox) throws WrongMovementException {
+        public void moveApollo(Worker worker, Box nextBox) throws WrongMovementException, AthenaConditionException, WorkerNotExistException {
 
             if (!checkFreeMovement() && worker.getBox().getLevel() < nextBox.getLevel()) {
-                throw new WrongMovementException();
+                throw new AthenaConditionException();
             }
 
             if (!worker.getBox().getNeighbours().contains(nextBox) || nextBox.hasDome() || nextBox.getLevel() > worker.getBox().getLevel() + 1) {
                 throw new WrongMovementException();
             }
 
-            if (!nextBox.hasWorker()) {
+            if (!nextBox.hasWorker() || this.getWorkers().contains(nextBox.getWorker())) {
                 throw new WrongMovementException();
             }
 
@@ -204,7 +204,7 @@ import java.util.ArrayList;
             }
 
             /**
-             * Method to perform the special construction available to players with Demether as God,
+             * Method to perform the special construction available to players with Demeter as God,
              * in addition to the standard construction method
              * @param box1 first selected box to perform the construction in
              * @param box2 second selected box to perform the construction in
@@ -212,6 +212,10 @@ import java.util.ArrayList;
              * @throws WrongConstructionException if the construction isn't valid
              */
             public void buildDemeter(Worker worker, Box box1, Box box2) throws WrongConstructionException {
+
+                if (box1.equals(box2)) {
+                    throw new WrongConstructionException();}
+
                 try {
                     worker.build(box1);
                 } catch (WrongConstructionException e) {
@@ -220,10 +224,6 @@ import java.util.ArrayList;
 
                 try {
                     worker.build(box2);
-
-                    if (box1.equals(box2)) {
-                        throw new WrongConstructionException();
-                    }
 
                 } catch (WrongConstructionException e) {
                     System.out.println(e);;
@@ -240,7 +240,7 @@ import java.util.ArrayList;
             }
 
             /**
-             * Method to perform the special construction available to players with Demether as God,
+             * Method to perform the special construction available to players with Ephaestus as God,
              * in addition to the standard construction method
              * @param box selected box to perform the construction in
              * @param worker selected player to perform the construction
@@ -276,7 +276,7 @@ import java.util.ArrayList;
              * @param nextBox is the selected box to move in
              * @throws WrongMovementException if the movement isn't valid
              */
-            public void moveMinotaur(Worker worker, Box nextBox) throws WrongMovementException {
+            public void moveMinotaur(Worker worker, Box nextBox) throws WrongMovementException, WorkerNotExistException, InvalidIndicesException {
 
                 if (!checkFreeMovement() && worker.getBox().getLevel() < nextBox.getLevel()) {
                     throw new WrongMovementException();
@@ -286,11 +286,10 @@ import java.util.ArrayList;
                     throw new WrongMovementException();
                 }
 
-                if (!nextBox.hasWorker()) {
+                if (!nextBox.hasWorker()||this.getWorkers().contains(nextBox.getWorker())) {
                     throw new WrongMovementException();
                 }
 
-             try{
                 Worker enemy = nextBox.getWorker();
                 Box oldBox = worker.getBox();
                 int dirX = nextBox.getPosition()[0] - oldBox.getPosition()[0];
@@ -305,13 +304,11 @@ import java.util.ArrayList;
                 nextBox2.setWorker(enemy);
                 worker.setBox(nextBox);
                 enemy.setBox(nextBox2);
+                oldBox.removeWorker();
 
                 if (worker.getBox().getLevel() == 3) {
                     setWinner(true);
                 }
-             }catch(Exception e){
-                 System.out.println(e);
-             }
 
             }
         }
@@ -380,19 +377,18 @@ import java.util.ArrayList;
              * @param worker is the worker that will perform the movement
              * @param nextBox is the box in which the worker will move
              */
-            public void move( Worker worker, Box nextBox) {
+            public void move( Worker worker, Box nextBox) throws InvalidMovementException, AthenaConditionException {
                 int oldLevel = worker.getBox().getLevel();
-                try {
-                    worker.move(nextBox);
-                    if (nextBox.getLevel() > oldLevel) {
+                    super.move(worker,nextBox);
+
+                    if (worker.getBox().getLevel() > oldLevel) {
                         notifyPlayers(false);
-                    } else {
+                    }
+                    else {
                         notifyPlayers(true);
                     }
 
-                } catch (WrongMovementException e) {
-                    System.out.println(e);
-                }
+
             }
 
             /**

@@ -41,9 +41,10 @@ public class Box{
     /**
      *
      * @param box
-     * @return
+     * @return true <==> this.box and box are equal
      */
-    public boolean equals(Box box){
+    public boolean equals(Box box) throws NullPointerException{
+        if(box == null) {throw new NullPointerException();}
         boolean check = true;
         if(box.map!=map || box.getPosition()[0] != positionX || box.getPosition()[1] != positionY){
             check = false;
