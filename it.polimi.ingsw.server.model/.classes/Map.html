@@ -1,0 +1,149 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Map</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.server.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Map (it.polimi.ingsw.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Map</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85%
+  </span>
+  <span class="absValue">
+    (17/ 20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.server.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.server.model.exceptions.InvalidIndicesException;
+<i>4</i>&nbsp;import it.polimi.ingsw.server.model.exceptions.NotValidBoxException;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; * @author Tommaso Lunardon
+<i>8</i>&nbsp; */
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;public class Map {
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    private Box[][] map;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    /**
+<i>15</i>&nbsp;     * Map Constructor
+<i>16</i>&nbsp;     * creates the Box matrix
+<i>17</i>&nbsp;     */
+<b class="fc"><i>18</i>&nbsp;    public Map(){</b>
+<b class="fc"><i>19</i>&nbsp;        this.map = new Box [5][5];</b>
+<b class="fc"><i>20</i>&nbsp;        for(int i = 0; i &lt; 5; i++) {</b>
+<b class="fc"><i>21</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<i>22</i>&nbsp;                try {
+<b class="fc"><i>23</i>&nbsp;                    map[i][j] = new Box(i, j, this);</b>
+<b class="nc"><i>24</i>&nbsp;                } catch (NotValidBoxException e) {</b>
+<b class="fc"><i>25</i>&nbsp;                    System.out.println(e);;}</b>
+<i>26</i>&nbsp;            }
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;        }
+<b class="fc"><i>29</i>&nbsp;    }</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     *
+<i>33</i>&nbsp;     * @param x = latitude of box
+<i>34</i>&nbsp;     * @param y = longitude of box
+<i>35</i>&nbsp;     * @return Box at position (x,y) in the matrix
+<i>36</i>&nbsp;     * @throws InvalidIndicesException if (x,y) isn&#39;t a position in the matrix
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    public Box getBox(int x, int y) throws InvalidIndicesException {
+<i>39</i>&nbsp;
+<b class="fc"><i>40</i>&nbsp;        if(x&lt;0 || y&lt;0 || x&gt;4 || y&gt;4) {throw new InvalidIndicesException();}</b>
+<i>41</i>&nbsp;        Box box;
+<b class="fc"><i>42</i>&nbsp;        box = map[x][y];</b>
+<b class="fc"><i>43</i>&nbsp;        return box;</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    /**
+<i>48</i>&nbsp;     *
+<i>49</i>&nbsp;     * @return number of completed buildings in the map
+<i>50</i>&nbsp;     */
+<i>51</i>&nbsp;    public int getCompletedBuildings() {
+<b class="fc"><i>52</i>&nbsp;        int x = 0;</b>
+<b class="fc"><i>53</i>&nbsp;        for(int i = 0; i &lt; 5; i++){</b>
+<b class="fc"><i>54</i>&nbsp;            for(int j = 0; j &lt; 5; j++) {</b>
+<i>55</i>&nbsp;                try {
+<b class="fc"><i>56</i>&nbsp;                    if (getBox(i, j).getLevel() == 4) {</b>
+<b class="fc"><i>57</i>&nbsp;                        x++;</b>
+<i>58</i>&nbsp;                    }
+<b class="nc"><i>59</i>&nbsp;                } catch (InvalidIndicesException e) {</b>
+<b class="nc"><i>60</i>&nbsp;                    System.out.println(e);;</b>
+<b class="fc"><i>61</i>&nbsp;                }</b>
+<i>62</i>&nbsp;            }
+<i>63</i>&nbsp;        }
+<b class="fc"><i>64</i>&nbsp;        return x;</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-04 18:11</div>
+</div>
+</body>
+</html>
