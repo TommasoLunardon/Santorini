@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.server.Server;
+
 import java.net.ServerSocket;
 import java.io.IOException;
 import java.net.Socket;
@@ -10,6 +12,9 @@ public class SocketServer extends Thread{
     private SocketConnection server;
     private int port;
     private java.net.ServerSocket serverSocket;
+
+    public SocketServer(Server server, int socketPort) {
+    }
 
     public void SocketServer(SocketConnection server, int port) {
         this.server = server;
