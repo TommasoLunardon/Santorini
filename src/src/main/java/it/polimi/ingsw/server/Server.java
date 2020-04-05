@@ -1,10 +1,13 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.server;
+
+import it.polimi.ingsw.network.SocketServer;
 
 public class Server {
     static final int SOCKET_PORT = 1111;
 
     public server(){
         (new SocketServer(this, SOCKET_PORT)).start();
+
 
     }
 

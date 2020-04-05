@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.logging.Logger;
 
-public class SocketConnection {
+
+public class SocketConnection implements it.polimi.ingsw.network.SocketController {
 
     private final Socket socket;
     private final SocketServer socketServer;
@@ -28,7 +28,7 @@ public class SocketConnection {
         listener.start();
     }
     @Override
-    public void run() {
+    public void run() throws IOException, ClassNotFoundException {
         while (!Thread.currentThread().isInterrupted()) {
             ClientMessage clientMessage = (ClientMessage) in.readObject();
             while() {
