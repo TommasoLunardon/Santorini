@@ -79,7 +79,7 @@ public class Worker {
             this.box.removeWorker();
             this.setBox(nextBox);
 
-            if (getBox().getLevel() == 3){
+            if (getBox().getLevel() == 3 && box.getLevel() < 3){
                 this.isWinner = true;
             }
         }

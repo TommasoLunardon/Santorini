@@ -84,6 +84,18 @@ public class Player {
       return workers;
     }
 
+    /**
+     * Method to remove the player's workers from the map
+     * @throws WorkerNotExistException if the player doesn't have any workers on the map
+     */
+    public void removeWorkers() throws  WorkerNotExistException{
+
+        if(worker1==null||worker2==null) {throw new WorkerNotExistException();}
+
+        getWorkers().get(0).getBox().removeWorker();
+        getWorkers().get(1).getBox().removeWorker();
+    }
+
     public boolean isLoser() {
         return isLoser;
     }

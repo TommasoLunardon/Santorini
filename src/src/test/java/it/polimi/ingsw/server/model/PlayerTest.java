@@ -198,4 +198,29 @@ class PlayerTest {
         }
     }
 
+    //Test Case where the operation is performed correctly
+    @Test
+    void removeWorkers1() throws InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
+        player.setWorker1(map.getBox(1,1));
+        player.setWorker2(map.getBox(0,0));
+
+        player.removeWorkers();
+
+        assertFalse(map.getBox(1,1).hasWorker());
+        assertFalse(map.getBox(0,0).hasWorker());
+
+
+    }
+
+    //Test Case where the player doesn't have workers
+    @Test
+    void removeWorkers2(){
+
+        try{player.removeWorkers();}catch (WorkerNotExistException e){
+            System.out.println("Correct Response");
+        }
+
+    }
+
+
 }
