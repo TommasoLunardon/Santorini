@@ -1,22 +1,18 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.server.Server;
 
-import java.net.ServerSocket;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
-public class SocketServer extends Thread{
+public class SocketServer extends Thread {
 
-    private SocketConnection server;
+    private Server server;
     private int port;
     private java.net.ServerSocket serverSocket;
 
-    public SocketServer(Server server, int socketPort) {
-    }
-
-    public void SocketServer(SocketConnection server, int port) {
+    public SocketServer(Server server, int port) {
         this.server = server;
         this.port = port;
         try {
@@ -37,5 +33,8 @@ public class SocketServer extends Thread{
                 Logger.getGlobal().warning(e.getMessage());
             }
         }
+    }
+    void login(String username, SocketConnection connection) {
+        server.login(username, connection);
     }
 }
