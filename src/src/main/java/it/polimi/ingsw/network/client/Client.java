@@ -14,17 +14,46 @@ public abstract class Client {
         this.port = port;
     }
 
+    /**
+     *
+     * @return the username of the player
+     *
+     */
+
     public String getUsername() {
         return username;
     }
+
+    /**
+     *
+     * @return the port of the server
+     *
+     */
 
     public int getPort() {
         return port;
     }
 
+    /**
+     *
+     * The startConnection method obtain the connection with the server
+     *
+     */
+
     public abstract void startConnection(Socket clientConnection) throws IOException;
 
-    public void sendMessage(Message message) throws IOException{}
+    /**
+     * The sendClientMessage method Send a message to the server
+     * @param message message to send to the server
+     *
+     */
+    public void sendClientMessage(Message message) throws IOException{}
+
+    /**
+     *
+     * The close method close the connection with the server
+     *
+     */
 
     public abstract void close() throws Exception;
 

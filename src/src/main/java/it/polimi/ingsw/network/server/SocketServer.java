@@ -8,13 +8,16 @@ import java.util.logging.Logger;
 
 public class SocketServer extends Thread {
 
-    private Server server;
-    private int port;
-    private java.net.ServerSocket serverSocket;
+    private final Server server;
+    private final int port;
+    private ServerSocket serverSocket;
 
     public SocketServer(Server server, int port) {
         this.server = server;
         this.port = port;
+    }
+
+    public void start() {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -24,17 +27,18 @@ public class SocketServer extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
+            Socket newClientConnection;
             try {
-                Socket newClientConnection = serverSocket.accept();
+                newClientConnection = serverSocket.accept();
                 Logger.getGlobal().info("New client connected.");
-                new SocketConnection(this, newClientConnection);
+                new SocketConnection(this,newClientConnection );
             } catch (IOException e) {
                 Logger.getGlobal().warning(e.getMessage());
             }
         }
     }
-    void login(String username, SocketConnection connection) {
-        server.login(username, connection);
+    static void login(String username, ServerConnection connection){
+        Server.login(username,connection);
     }
 }
