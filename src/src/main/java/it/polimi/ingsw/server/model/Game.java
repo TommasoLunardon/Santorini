@@ -187,8 +187,6 @@ public class Game {
         player.setWorker2(box2);
     }
 
-
-
 }
 
 

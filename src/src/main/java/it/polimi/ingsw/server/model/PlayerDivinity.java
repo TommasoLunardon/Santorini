@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Subclasses of Player, used to play games with Divinity Cards
  */
 
-    class PlayerDivinity extends Player{
+public class PlayerDivinity extends Player{
     private String godName;
     private Integer nPlayer;
 
@@ -23,7 +23,7 @@ import java.util.ArrayList;
      *
      * @return The name of the God's Card assigned to the player
      */
-    protected String getGodName(){
+    public String getGodName(){
 
         return godName;
     }
