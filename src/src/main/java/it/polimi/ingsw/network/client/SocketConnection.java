@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network.client;
 
 
-import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.network.messages.ConnectionRequest;
+import it.polimi.ingsw.network.messages.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -63,6 +63,9 @@ public class SocketConnection extends Client implements Runnable {
             }
 
         }
+    }
+    public ObjectOutputStream getOut() {
+        return out;
     }
     /**
      *
