@@ -1,6 +1,8 @@
 package it.polimi.ingsw.network.server;
 
 
+import it.polimi.ingsw.network.messages.Message;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -41,4 +43,5 @@ public class SocketServer extends Thread {
     static void login(String username, ServerConnection connection){
         Server.login(username,connection);
     }
+    void receivedMessage(Message message) { server.receivedMessage(message); }
 }

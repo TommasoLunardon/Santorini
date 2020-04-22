@@ -86,7 +86,13 @@ public class Server implements Runnable {
         LOGGER.log(Level.INFO, "Send: {0}, {1}", new Object[]{message.getSenderUsername(), message});
 
     }
+    /**
+     * The receivedMessage method process a message sent to server
+     *
+     */
+    void receivedMessage(Message message) {
 
+    }
 
     @Override
     public void run() {
