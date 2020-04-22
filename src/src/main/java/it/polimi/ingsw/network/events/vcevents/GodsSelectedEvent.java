@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.events.vcevents;
 import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GodsSelectedEvent extends VCEvent {
@@ -14,7 +15,7 @@ public class GodsSelectedEvent extends VCEvent {
     }
 
     @Override
-    public void manage(VCEventSender eventSender) {
+    public void manage(VCEventSender eventSender) throws IOException {
         eventSender.send(this);
     }
 

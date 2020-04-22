@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.network.messages.ConnectionRequest;
 import it.polimi.ingsw.network.messages.Message;
 
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class SocketConnection implements Runnable, ServerConnection {
     @Override
     public void run() {
         while (isActive()) try {
-            Message message = (Message) in.readObject();
+            ConnectionRequest message = (ConnectionRequest) in.readObject();
             if (message != null) {
                 if (message.getContent().equals("CONNECTION")) {
                     SocketServer.login(message.getSenderUsername(), this);

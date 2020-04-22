@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.events;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 /*
@@ -18,7 +19,7 @@ public abstract class Event implements Serializable {
 
     }
 
-    public void manage(VCEventSender eventSender){
+    public void manage(VCEventSender eventSender) throws IOException {
 
         eventSender.send(this);
     }

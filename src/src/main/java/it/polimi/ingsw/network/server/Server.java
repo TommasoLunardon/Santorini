@@ -69,7 +69,7 @@ public class Server implements Runnable {
      * @param username username of the client who will receive the message
      * @param message message to send
      */
-    public void sendMessage(String username,Message message){
+    public void sendMessage(String username, Message message){
         synchronized (clientsLock) {
             for (Map.Entry<String, ServerConnection> client : clients.entrySet()) {
                 if (client.getKey().equals(username) && client.getValue() != null && client.getValue().isActive()) {
@@ -83,14 +83,15 @@ public class Server implements Runnable {
             }
         }
 
-        LOGGER.log(Level.INFO, "Send: {0}, {1}", new Object[]{message.getSenderUsername(), message});
+        LOGGER.log(Level.INFO, "Send: {0}, {1}", new Object[]{username, message});
 
     }
     /**
      * The receivedMessage method process a message sent to server
      *
      */
-    void receivedMessage(Message message) {
+    public String receivedMessage(Message message) {
+        return message.getContent();
 
     }
 
@@ -98,6 +99,11 @@ public class Server implements Runnable {
     public void run() {
     }
 
+
+    //METHOD LISTEN() THAT WILL BE IMPLEMENTED AFTER THE SERVER IS READY!
+    public Message listen(){
+        return new Message("");
+    }
 
     public static void main(String[] args) {
 

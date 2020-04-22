@@ -4,6 +4,8 @@ import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
 import it.polimi.ingsw.server.model.PlayerColor;
 
+import java.io.IOException;
+
 public class PlayerDataEnteredEvent extends VCEvent {
 
     private String ID;
@@ -18,7 +20,7 @@ public class PlayerDataEnteredEvent extends VCEvent {
     }
 
     @Override
-    public void manage(VCEventSender eventSender) {
+    public void manage(VCEventSender eventSender) throws IOException {
         eventSender.send(this);
 
     }

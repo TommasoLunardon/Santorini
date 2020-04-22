@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.events;
 
+import java.io.IOException;
+
 public abstract class VCEvent extends Event {
 
     private String origin;
@@ -8,7 +10,7 @@ public abstract class VCEvent extends Event {
         this.origin = origin;
     }
 
-    public abstract void manage(VCEventSender eventSender);
+    public abstract void manage(VCEventSender eventSender) throws IOException;
 
 
     public String getOrigin() {

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.client;
 
 
+import it.polimi.ingsw.network.JsonHelper;
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.network.messages.ConnectionRequest;
 
@@ -16,11 +17,14 @@ public class SocketConnection extends Client implements Runnable {
     private transient ObjectInputStream in;
     private transient ObjectOutputStream out;
     private transient Thread messageReceiver;
-    private Message Message;
+    private Message message;
+    public final JsonHelper helper = new JsonHelper();
 
     public SocketConnection(String username, int port) {
         super(username, port);
     }
+
+    public Message getMessage(){return message;}
 
     /**
      *
@@ -33,7 +37,10 @@ public class SocketConnection extends Client implements Runnable {
         out = new ObjectOutputStream(clientConnection.getOutputStream());
         in = new ObjectInputStream(clientConnection.getInputStream());
 
-        sendClientMessage(new ConnectionRequest(getUsername()));
+        String m = helper.serialization(new ConnectionRequest(getUsername()));
+        Message message = new Message(m);
+
+        sendClientMessage(message);
 
         messageReceiver = new Thread(this);
         messageReceiver.start();
@@ -56,7 +63,7 @@ public class SocketConnection extends Client implements Runnable {
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                Message = (Message) in.readObject();
+                message = (Message) in.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 Logger.getGlobal().warning(e.getMessage());
                 disconnect();
@@ -92,4 +99,6 @@ public class SocketConnection extends Client implements Runnable {
         in = null;
         out = null;
     }
+
+
 }

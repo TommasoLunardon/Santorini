@@ -1,7 +1,5 @@
 package it.polimi.ingsw.server.model;
-import it.polimi.ingsw.server.model.exceptions.NotValidLevelException;
-import it.polimi.ingsw.server.model.exceptions.WrongConstructionException;
-import it.polimi.ingsw.server.model.exceptions.WrongMovementException;
+import it.polimi.ingsw.server.model.exceptions.*;
 
 import java.util.ArrayList;
 
@@ -146,4 +144,94 @@ public class Worker {
         this.box = box;
     }
 
-}
+    /**
+     * Method to check if the worker can move in a specific box
+     * @param box box that needs to be checked
+     * @return true <==> the worker can move in such box
+     */
+    public boolean canMove(Box box) throws WorkerNotExistException {
+        boolean check = false;
+        if (player instanceof PlayerNotAthena && !((PlayerNotAthena) player).checkFreeMovement()) {
+            if (box.getLevel() <= getBox().getLevel() && !box.hasWorker() && !box.hasDome()) {
+                check = true;
+            }
+        }
+
+        if (player instanceof PlayerApollo && !((PlayerApollo) player).checkFreeMovement()) {
+            if (box.getLevel() <= getBox().getLevel() && !box.hasWorker() && !box.hasDome()) {
+                check = true;
+            } else {
+                if (box.hasWorker() && !player.getWorkers().contains(box.getWorker()) && box.getLevel() <= getBox().getLevel()) {
+                    check = true;
+                }
+
+            }
+
+        }
+        if (player instanceof PlayerApollo && ((PlayerApollo) player).checkFreeMovement()) {
+            if (!box.hasWorker() && !box.hasDome() && !(box.getLevel() > getBox().getLevel() + 1)) {
+                check = true;
+            } else {
+                if (box.hasWorker() && !player.getWorkers().contains(box.getWorker()) && box.getLevel() <= getBox().getLevel() + 1) {
+                    check = true;
+                }
+
+            }
+
+        }
+
+        if (player instanceof PlayerMinotaur && !((PlayerApollo) player).checkFreeMovement()) {
+            if (box.getLevel() <= getBox().getLevel() && !box.hasWorker() && !box.hasDome()) {
+                check = true;
+            } else {
+                boolean enemyNear = box.hasWorker() && !player.getWorkers().contains(box.getWorker()) && box.getLevel() <= getBox().getLevel();
+
+                if (enemyNear) {
+                    int dirX = box.getPosition()[0] - getBox().getPosition()[0];
+                    int dirY = box.getPosition()[1] - getBox().getPosition()[1];
+                    try {
+                        Box nextBox2 = player.getPlayerMap().getBox(box.getPosition()[0] + dirX, box.getPosition()[1] + dirY);
+                        if (!nextBox2.hasWorker() && !nextBox2.hasDome()) {
+                            check = true;
+                        }
+
+                    } catch (InvalidIndicesException e) {
+                    }
+
+                }
+
+            }
+        }
+            if (player instanceof PlayerMinotaur && ((PlayerApollo) player).checkFreeMovement()) {
+                if (!box.hasWorker() && !box.hasDome() && !(box.getLevel() > getBox().getLevel() + 1)) {
+                    check = true;
+                } else {
+                    boolean enemyNear = box.hasWorker() && !player.getWorkers().contains(box.getWorker()) && box.getLevel() <= getBox().getLevel() + 1;
+
+                    if (enemyNear) {
+                        int dirX = box.getPosition()[0] - getBox().getPosition()[0];
+                        int dirY = box.getPosition()[1] - getBox().getPosition()[1];
+                        try {
+                            Box nextBox2 = player.getPlayerMap().getBox(box.getPosition()[0] + dirX, box.getPosition()[1] + dirY);
+                            if (!nextBox2.hasWorker() && !nextBox2.hasDome()) {
+                                check = true;
+                            }
+
+                        } catch (InvalidIndicesException e) {
+                        }
+
+                    }
+
+                }
+
+            } else {
+                if (!box.hasWorker() && !box.hasDome() && !(box.getLevel() > getBox().getLevel() + 1)) {
+                    check = true;
+                }
+
+            }
+            return check;
+
+
+        }
+    }

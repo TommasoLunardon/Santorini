@@ -1,8 +1,15 @@
 package it.polimi.ingsw.network.messages;
 
-public class ConnectionRequest extends Message {
+import it.polimi.ingsw.network.events.Event;
+
+public class ConnectionRequest extends Event {
+
+    private final String username;
+    private final String content;
+
     public ConnectionRequest(String username) {
-        super(username,"CONNECTION");
+        this.content = "CONNECTION";
+        this.username = username;
     }
 
     @Override
@@ -13,4 +20,11 @@ public class ConnectionRequest extends Message {
                 "}";
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public String getSenderUsername() {
+        return username;
+    }
 }

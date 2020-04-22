@@ -4,6 +4,8 @@ import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
 import it.polimi.ingsw.server.model.Box;
 
+import java.io.IOException;
+
 
 public class BoxSelectedEvent extends VCEvent {
 
@@ -15,7 +17,7 @@ public class BoxSelectedEvent extends VCEvent {
     }
 
     @Override
-    public void manage(VCEventSender eventSender) {
+    public void manage(VCEventSender eventSender) throws IOException {
         eventSender.send(this);
 
     }

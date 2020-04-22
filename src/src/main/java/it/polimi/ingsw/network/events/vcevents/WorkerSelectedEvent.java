@@ -4,6 +4,8 @@ import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
 import it.polimi.ingsw.server.model.Worker;
 
+import java.io.IOException;
+
 public class WorkerSelectedEvent extends VCEvent {
 
     private Worker worker;
@@ -14,7 +16,7 @@ public class WorkerSelectedEvent extends VCEvent {
     }
 
     @Override
-    public void manage(VCEventSender eventSender) {
+    public void manage(VCEventSender eventSender) throws IOException {
         eventSender.send(this);
 
     }

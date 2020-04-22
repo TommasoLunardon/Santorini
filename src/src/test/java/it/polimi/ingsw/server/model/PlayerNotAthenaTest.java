@@ -26,7 +26,7 @@ class PlayerNotAthenaTest {
 
     //Test Case to check the particular case of AthenaConditionException, otherwise the method works as a normal movement
     @Test
-    void move() throws InvalidIndicesException, InvalidBoxException, NotValidLevelException, InvalidMovementException {
+    void move() throws InvalidIndicesException, InvalidBoxException, NotValidLevelException, InvalidMovementException, WrongMovementException, WorkerNotExistException, AthenaConditionException {
         player.update(false);
         Box box1 = map.getBox(0, 0);
 
@@ -35,9 +35,51 @@ class PlayerNotAthenaTest {
 
         try {
             player.move(player.getWorkers().get(0), map.getBox(0, 1));
-        } catch (AthenaConditionException e) {
+        } catch (WrongMovementException e) {
             System.out.println("correct");
         }
+    }
+
+    //Test Case to verify the additional constraints for PlayerNotAthena (Can Move)
+    @Test
+    void canMove1() throws InvalidIndicesException, InvalidBoxException, WorkerNotExistException, NotValidLevelException {
+        player.update(false);
+        Box box1 = map.getBox(0,0);
+        Box box2 = map.getBox(4,4);
+        map.getBox(0,1).setLevel(2);
+        map.getBox(1,1).setLevel(2);
+        map.getBox(1,0).setLevel(2);
+
+
+        map.getBox(3,3).setLevel(2);
+        map.getBox(3,4).setLevel(2);
+        player.setWorker1(box1);
+        player.setWorker2(box2);
+
+        assertTrue(player.canMove());
+
+    }
+
+
+    //Test Case to verify the additional constraints for PlayerNotAthena (Can't Move)
+    @Test
+    void canMove2() throws InvalidIndicesException, NotValidLevelException, InvalidBoxException, WorkerNotExistException {
+        player.update(false);
+        Box box1 = map.getBox(0,0);
+        Box box2 = map.getBox(4,4);
+        map.getBox(0,1).setLevel(2);
+        map.getBox(1,1).setLevel(2);
+        map.getBox(1,0).setLevel(2);
+
+
+        map.getBox(3,3).setLevel(2);
+        map.getBox(3,4).setLevel(2);
+        map.getBox(4,3).setLevel(2);
+        player.setWorker1(box1);
+        player.setWorker2(box2);
+
+        assertFalse(player.canMove());
+
     }
 
 }
