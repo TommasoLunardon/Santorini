@@ -10,3 +10,6 @@ public class ApolloCLI extends DivinityCLI {
         super("Apollo","you can only move to an opponent's player's box\n(using the normal moving's roule) and force\nhim to occupy the newly freed box, swapping \npositions");
     }
 }
+
+
+
