@@ -183,7 +183,7 @@ public class Game {
 
     }
 
-    //Controller checks that all cards are different!
+    //Selectio of god cards for a game with god cards (Controller checks that all cards are different!)
      public void selectGodCards(ArrayList<String> cards) throws InvalidInputException{
         if(cards.size() != numPlayers){throw new InvalidInputException();}
         if(!availableGods.containsAll(cards)){throw new InvalidInputException();}
@@ -193,6 +193,7 @@ public class Game {
     }
 
 
+    //Player selects his/her card for the game
     public void chooseCard(Player player, String card)throws InvalidInputException{
         if(!getPlayers().contains(player) || !gameGods.contains(card) ){throw new InvalidInputException();}
 
@@ -201,6 +202,7 @@ public class Game {
 
     }
 
+    //Selection of the starting player for the game
     public void chooseStarter(Player player)throws InvalidInputException{
         if(!getPlayers().contains(player)){throw new InvalidInputException();}
 
@@ -225,6 +227,7 @@ public class Game {
 
     }
 
+    //Player places his/her two workers on the map at the beginning of the game
     public void placeWorkers(Player player, Box box1, Box box2) throws InvalidBoxException, InvalidInputException {
         if(!getPlayers().contains(player) || !box1.getMap().equals(map)  || !box2.getMap().equals(map)){throw new InvalidInputException();}
 
@@ -233,11 +236,13 @@ public class Game {
     }
 
 
+    //Returns all the pairs PlayerID-Player
     public ArrayList<Pair> getPairs() {
         ArrayList<Pair> p = pairs;
         return p;
     }
 
+    //Returns all the PlayerIDs in the game
     public ArrayList<String> getIDs() {
         ArrayList<String> i = IDs;
         return i;

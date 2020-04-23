@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * @author Gabriele Gatti, Tommaso Lunardon
- * Subclasses of Player, used to play games with Divinity Cards
+ * Subclass of Player, used to play games with Divinity Cards
  */
 
     public class PlayerDivinity extends Player{

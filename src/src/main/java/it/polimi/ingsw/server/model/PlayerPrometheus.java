@@ -7,6 +7,6 @@ public class PlayerPrometheus extends PlayerNotAthena {
                 super(id, age, map, color, 4, "Prometheus");
             }
 
-            //leave management of Prometheus Ability to controller
+            // Management of Prometheus Ability left to controller
             //  "turnPrometheus" ==> build(), move() [CHECK NOT UPPER LEVEL], build()
         }
