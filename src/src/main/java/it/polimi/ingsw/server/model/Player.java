@@ -120,7 +120,7 @@ public class Player {
      *
      * @return true <==> the player is able to move with at least one worker
      */
-    public boolean canMove(){
+    public boolean canMove() throws WorkerNotExistException {
         boolean check = false;
         for (int i = 0; i<getWorkers().size(); i++){
             if(getWorkers().get(i).canMove()){check = true;}
@@ -146,15 +146,12 @@ public class Player {
      * @param nextBox is the box in which the worker will move
      * @throws InvalidMovementException if the worker can't be chosen
      */
-    public void move(Worker worker, Box nextBox) throws InvalidMovementException, AthenaConditionException {
+    public void move(Worker worker, Box nextBox) throws InvalidMovementException, AthenaConditionException, WrongMovementException, WorkerNotExistException, InvalidIndicesException {
 
         if (!getWorkers().contains(worker)){ throw new InvalidMovementException();}
 
-        try{
             worker.move(nextBox);
-        }catch(WrongMovementException e){
-            e.printStackTrace();
-        }
+
         if (worker.isWinner()){
             setWinner(true);
         }
@@ -166,14 +163,11 @@ public class Player {
      * @param selectedBox is the box in which the worker will build a block
      * @throws InvalidConstructionException if the worker can't be chosen
      */
-    public void build(Worker worker, Box selectedBox) throws InvalidConstructionException{
+    public void build(Worker worker, Box selectedBox) throws InvalidConstructionException, WrongConstructionException {
         if (!getWorkers().contains(worker)){ throw new InvalidConstructionException();}
 
-        try{
             worker.build(selectedBox);
-        }catch(WrongConstructionException e){
-            System.out.println(e);;
-        }
+
 
     }
 

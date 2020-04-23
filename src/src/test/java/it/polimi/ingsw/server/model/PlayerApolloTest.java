@@ -25,14 +25,14 @@ class PlayerApolloTest {
 
     //Test Case where the special Apollo movement works correctly
     @Test
-    void moveApollo1() throws InvalidBoxException, InvalidIndicesException, WorkerNotExistException, WrongMovementException, AthenaConditionException {
+    void move1() throws InvalidBoxException, InvalidIndicesException, WorkerNotExistException, WrongMovementException, AthenaConditionException, InvalidMovementException {
         Box box1 = map.getBox(0,0);
 
         Box box2 = map.getBox(0,1);
         Worker worker2 = new Worker(new Player("a",3,PlayerColor.RED,map), box2);
         player.setWorker1(box1);
 
-        player.moveApollo(player.getWorkers().get(0),box2);
+        player.move(player.getWorkers().get(0),box2);
 
         assertEquals(player.getWorkers().get(0).getBox(),box2);
         assertEquals(worker2.getBox(),box1);
@@ -49,7 +49,7 @@ class PlayerApolloTest {
         Box box2 = map.getBox(0,1);
         player.setWorker1(box1);
 
-        try{player.moveApollo(player.getWorkers().get(0),box2);}catch(WrongMovementException e) {
+        try{player.move(player.getWorkers().get(0),box2);}catch(WrongMovementException | InvalidMovementException e) {
             System.out.println("Correct!");
         }
 
@@ -64,13 +64,48 @@ class PlayerApolloTest {
         player.setWorker1(box1);
         player.setWorker2(box2);
 
-        try{player.moveApollo(player.getWorkers().get(0),box2);}catch(WrongMovementException e) {
+        try{player.move(player.getWorkers().get(0),box2);}catch(WrongMovementException | InvalidMovementException e) {
             System.out.println("Correct!");
         }
     }
 
 
 
+    //Test Case to verify the additional movement possibilities for Apollo
+    @Test
+    void canMove1() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
+        Box box1 = map.getBox(0,0);
+        Box box2 = map.getBox(4,4);
+        map.getBox(0,1).setDome(true);
+        map.getBox(1,1).setDome(true);
+
+        map.getBox(4,3).setDome(true);
+        map.getBox(3,3).setDome(true);
+        map.getBox(3,4).setDome(true);
+        player.setWorker1(box1);
+        player.setWorker2(box2);
+
+        Worker w = new Worker(new Player("b",12, PlayerColor.YELLOW,map),map.getBox(1,0));
+        assertTrue(player.canMove());
+    }
+
+    //Test Case to verify the additional movement possibilities for Apollo (Case where the movement isn't possible)
+    @Test
+    void canMove2() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
+        Box box1 = map.getBox(0,0);
+        Box box2 = map.getBox(1,0);
+        map.getBox(0,1).setDome(true);
+        map.getBox(1,1).setDome(true);
+        player.setWorker1(box1);
+        player.setWorker2(box2);
+
+        map.getBox(2,1).setDome(true);
+        map.getBox(2,0).setDome(true);
+
+
+        assertFalse(player.canMove());
+
+    }
 
 
 }

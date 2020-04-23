@@ -1,0 +1,113 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ConnectionRequest</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.network.messages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ConnectionRequest (it.polimi.ingsw.network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ConnectionRequest</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.network.messages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.network.events.Event;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;public class ConnectionRequest extends Event {
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;    private final String username;
+<i>8</i>&nbsp;    private final String content;
+<i>9</i>&nbsp;
+<b class="nc"><i>10</i>&nbsp;    public ConnectionRequest(String username) {</b>
+<b class="nc"><i>11</i>&nbsp;        this.content = &quot;CONNECTION&quot;;</b>
+<b class="nc"><i>12</i>&nbsp;        this.username = username;</b>
+<b class="nc"><i>13</i>&nbsp;    }</b>
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    @Override
+<i>16</i>&nbsp;    public String toString() {
+<b class="nc"><i>17</i>&nbsp;        return &quot;ConnectionRequest{&quot; +</b>
+<b class="nc"><i>18</i>&nbsp;                &quot;senderUsername=&quot; + getSenderUsername() +</b>
+<b class="nc"><i>19</i>&nbsp;                &quot;, content=&quot; + getContent() +</b>
+<i>20</i>&nbsp;                &quot;}&quot;;
+<i>21</i>&nbsp;    }
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    public String getContent() {
+<b class="nc"><i>24</i>&nbsp;        return content;</b>
+<i>25</i>&nbsp;    }
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    public String getSenderUsername() {
+<b class="nc"><i>28</i>&nbsp;        return username;</b>
+<i>29</i>&nbsp;    }
+<i>30</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-23 09:55</div>
+</div>
+</body>
+</html>

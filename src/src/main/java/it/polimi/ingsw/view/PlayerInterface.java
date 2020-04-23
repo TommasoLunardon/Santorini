@@ -1,6 +1,8 @@
 package it.polimi.ingsw.view;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.Box;
+import it.polimi.ingsw.server.model.exceptions.WorkerNotExistException;
+
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -22,7 +24,7 @@ public class PlayerInterface implements Runnable {
     private ArrayList<Object> playerInformation;
 
     public void run() {
-
+        System.out.println();
     }
 
     /**
@@ -136,7 +138,7 @@ public class PlayerInterface implements Runnable {
      * Communicate to server player's worker, make an input check and print new position on the map
      * @deprecated
      */
-    public void move(){
+    public void move() throws WorkerNotExistException {
         Scanner in = new Scanner(System.in);
         int boxX, boxY;
         int index=-1;

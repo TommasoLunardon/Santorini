@@ -90,7 +90,7 @@ class PlayerTest {
 
     //Test Case where the Player can move
     @Test
-    void canMove1() throws InvalidIndicesException, InvalidBoxException {
+    void canMove1() throws InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(1,1);
 
@@ -102,7 +102,7 @@ class PlayerTest {
 
     //Test Case where the Player can't move
     @Test
-    void canMove2() throws InvalidBoxException, InvalidIndicesException {
+    void canMove2() throws InvalidBoxException, InvalidIndicesException, WorkerNotExistException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(4,4);
 
@@ -152,7 +152,7 @@ class PlayerTest {
 
     //Test Case where the movement is correct
     @Test
-    void move1() throws InvalidIndicesException, InvalidBoxException, InvalidMovementException, AthenaConditionException {
+    void move1() throws InvalidIndicesException, InvalidBoxException, InvalidMovementException, AthenaConditionException, WrongMovementException, WorkerNotExistException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(0,1);
 
@@ -172,12 +172,16 @@ class PlayerTest {
 
         try{player.move(w,map.getBox(1,2));}catch(InvalidMovementException e){
             System.out.println("correct response");
+        } catch (WorkerNotExistException e) {
+            e.printStackTrace();
+        } catch (WrongMovementException e) {
+            e.printStackTrace();
         }
     }
 
     //Test case where the construction is correct
     @Test
-    void build1() throws InvalidIndicesException, InvalidBoxException, InvalidConstructionException {
+    void build1() throws InvalidIndicesException, InvalidBoxException, InvalidConstructionException, WrongConstructionException {
         Box box1 = map.getBox(0,0);
 
         player.setWorker1(box1);
@@ -190,7 +194,7 @@ class PlayerTest {
 
     //Test case where the construction isn't correct (Worker doesn't belong to the player)
     @Test
-    void build2() throws InvalidIndicesException {
+    void build2() throws InvalidIndicesException, WrongConstructionException {
         Worker w = new Worker(new Player("b", 15, PlayerColor.BLUE,map), map.getBox(2,2));
 
         try{player.build(w,map.getBox(1,2));}catch(InvalidConstructionException  e){

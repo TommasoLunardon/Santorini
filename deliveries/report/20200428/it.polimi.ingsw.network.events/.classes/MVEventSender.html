@@ -1,0 +1,84 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MVEventSender</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.network.events</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MVEventSender (it.polimi.ingsw.network.events)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">MVEventSender</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.network.events;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.network.events.mvevents.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;public interface MVEventSender extends  EventSender {
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;    @Override
+<i>8</i>&nbsp;     void send(Event event);
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;     void send(CardSelectionEvent event);
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;     void send(CommunicationEvent event);
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;     void send(GameCreatedEvent event);
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;     void send(GameUpdatingEvent event);
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;     void send(GodCardsSelectedEvent event);
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;     void send(InvalidConstructionEvent event);
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;     void send(InvalidInputEvent event);
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;     void send(InvalidMovementEvent event);
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;     void send(LoserPlayerEvent event);
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;     void send(MatchStartsEvent event);
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;     void send(PlayerJoinedEvent event);
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;     void send(StarterSelectionEvent event);
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;     void send(WinnerPlayerEvent event);
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-23 09:55</div>
+</div>
+</body>
+</html>
