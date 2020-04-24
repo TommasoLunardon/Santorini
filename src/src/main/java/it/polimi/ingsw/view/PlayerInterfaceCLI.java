@@ -1,9 +1,10 @@
 package it.polimi.ingsw.view;
+import it.polimi.ingsw.network.client.NetworkHandler;
+import it.polimi.ingsw.network.events.vcevents.PlayerDataEnteredEvent;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.Box;
 import it.polimi.ingsw.server.model.exceptions.WorkerNotExistException;
 
-import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,36 +14,63 @@ import java.util.Scanner;
  *  his action and his support's operation
  */
 
-public class PlayerInterface implements Runnable {
+public class PlayerInterfaceCLI {
     //avviso per il server
-    private NetworkInterface net;
+    private ArrayList<PlayerColor> vaildColors;
+    private NetworkHandler networkHandler;
     private MapCLI mapCLI;
     private Map map;
     private Game game;
     private Player player;
     private DivinityCLI divinityCLI;
-    private ArrayList<Object> playerInformation;
+    private boolean waitForServer;
 
-    public void run() {
-        System.out.println();
-    }
 
     /**
      * Create Client's link to Server and begin player construction
      * @deprecated
      */
-    public PlayerInterface() {
-        setPlayer();
+    public PlayerInterfaceCLI(NetworkHandler networkHandler, String origin) {
+        this.networkHandler=networkHandler;
+        setPlayer(origin);
     }
 
     /**
+     * ask to server the available colors
+     * @return list of available colors
+     */
+    private String receivePlayerColors(){
+        ArrayList<PlayerColor> list;
+        waitForServer=true;
+        waitForServerCLI();
+        /*evento di aspettamento colore*/
+        waitForServer=false;
+        notifyAll();
+        return list;
+    }
+
+    /**
+     * print something on screen while
+     */
+    private void waitForServerCLI() {
+        while (waitForServer) {
+            try {
+               wait(100,0);
+                System.out.println("█");
+
+            }
+            catch (InterruptedException e){}
+        }
+        System.out.print("\n");
+    }
+    /**
      * True Player Constructor
      */
-    synchronized public void setPlayer() {
-
-        String iD, iP, url;
+    synchronized public void setPlayer(String origin) {
+        waitForServer=false;
+        String colorsAvailable= receivePlayerColors();
+        String iD;
         int age;
-        ArrayList<Object> out= new ArrayList<Object>();
         System.out.println("Please, Insert Your Information");
         Scanner in=new Scanner(System.in);
         System.out.print("\tInsert ID (can't use space character) : ");
@@ -57,24 +85,17 @@ public class PlayerInterface implements Runnable {
             System.out.print("\t\tPlease. Insert A Valid Age: ");
             age = in.nextInt();
         }
-        out.add(iD);
-        out.add(age);
-        out.add("_");
-        out.add(iD.length());
-        playerInformation=out;
-        updateInformation(out);
+        System.out.println("\tIn The End Select Your Color: Available Colours");
+        /*metodo che stampa i colori*/
+        waitForServer;
+        networkHandler.send(new PlayerDataEnteredEvent(origin,iD,age,));
     // inserire il metodo che mi restituisce la classe Game dal Server
         // inserire il metodo che mi restituisce la classe Player dal Server
     }
 
-    /**
-     * Communicate to server Player's new information
-     * @param stuff: player's information
-     */
-    private void updateInformation(ArrayList<Object> stuff){
+    public void getValidColors(){
 
     }
-
     /**
      * print the screen
      * @param youPlay if the player is now play
@@ -179,7 +200,7 @@ public class PlayerInterface implements Runnable {
                 boxY=in.nextInt();
                 try {
                     mapCLI.moveWorker(boxX,boxY,worker);
-                    /* informa il server dell'avvenuto movimento */
+
                     break;
                 }
                 catch (InputFailedException e){
