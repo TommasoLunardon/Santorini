@@ -17,13 +17,12 @@ import java.util.Scanner;
 public class PlayerInterfaceCLI {
     //avviso per il server
     private ArrayList<PlayerColor> vaildColors;
-    private NetworkHandler networkHandler;
     private MapCLI mapCLI;
     private Map map;
     private Game game;
     private Player player;
     private DivinityCLI divinityCLI;
-    private boolean waitForServer;
+   // private boolean waitForServer;
 
 
     /**
@@ -31,7 +30,6 @@ public class PlayerInterfaceCLI {
      * @deprecated
      */
     public PlayerInterfaceCLI(NetworkHandler networkHandler, String origin) {
-        this.networkHandler=networkHandler;
         setPlayer(origin);
     }
 
@@ -39,20 +37,20 @@ public class PlayerInterfaceCLI {
      * ask to server the available colors
      * @return list of available colors
      */
-    private String receivePlayerColors(){
+    /*private String receivePlayerColors(){
         ArrayList<PlayerColor> list;
         waitForServer=true;
+        //eventi di attesa colori
         waitForServerCLI();
-        /*evento di aspettamento colore*/
         waitForServer=false;
         notifyAll();
         return list;
-    }
+    }*/
 
     /**
      * print something on screen while
      */
-    private void waitForServerCLI() {
+    /*private void waitForServerCLI() {
         while (waitForServer) {
             try {
                wait(100,0);
@@ -62,13 +60,11 @@ public class PlayerInterfaceCLI {
             catch (InterruptedException e){}
         }
         System.out.print("\n");
-    }
+    }*/
     /**
      * True Player Constructor
      */
     synchronized public void setPlayer(String origin) {
-        waitForServer=false;
-        String colorsAvailable= receivePlayerColors();
         String iD;
         int age;
         System.out.println("Please, Insert Your Information");
@@ -87,9 +83,7 @@ public class PlayerInterfaceCLI {
         }
         System.out.println("\tIn The End Select Your Color: Available Colours");
         /*metodo che stampa i colori*/
-        waitForServer;
-        networkHandler.send(new PlayerDataEnteredEvent(origin,iD,age,));
-    // inserire il metodo che mi restituisce la classe Game dal Server
+        // inserire il metodo che mi restituisce la classe Game dal Server
         // inserire il metodo che mi restituisce la classe Player dal Server
     }
 
