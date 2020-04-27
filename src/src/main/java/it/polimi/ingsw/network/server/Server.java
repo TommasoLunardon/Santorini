@@ -3,6 +3,8 @@ package it.polimi.ingsw.network.server;
 import it.polimi.ingsw.network.messages.Message;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -15,21 +17,24 @@ import java.util.logging.SimpleFormatter;
 public class Server implements Runnable {
 
     private final Object clientsLock = new Object();
+    private final Socket socket;
     private static Map<String, ServerConnection> clients;
     private int socketPort;
     public static final Logger LOGGER = Logger.getLogger("Server");
+    private Message message;
+    private ObjectInputStream in;
 
     /**
-     *
      * The Server method starts with a new game
-     *
      */
-    public Server() {
+    public Server(Socket socket) throws IOException {
+        this.socket = socket;
         initLogger();
         synchronized (clientsLock) {
             clients = new HashMap<>();
         }
         startServer();
+        in = new ObjectInputStream(socket.getInputStream());
     }
 
     private void initLogger() {
@@ -55,9 +60,7 @@ public class Server implements Runnable {
 
 
     /**
-     *
      * Login method Adds player to the server
-     *
      */
     static void login(String username, ServerConnection connection) {
         clients.put(username, connection);
@@ -66,10 +69,11 @@ public class Server implements Runnable {
 
     /**
      * The sendMessage method sends a message to client
+     *
      * @param username username of the client who will receive the message
-     * @param message message to send
+     * @param message  message to send
      */
-    public void sendMessage(String username, Message message){
+    public void sendMessage(String username, Message message) {
         synchronized (clientsLock) {
             for (Map.Entry<String, ServerConnection> client : clients.entrySet()) {
                 if (client.getKey().equals(username) && client.getValue() != null && client.getValue().isActive()) {
@@ -86,26 +90,23 @@ public class Server implements Runnable {
         LOGGER.log(Level.INFO, "Send: {0}, {1}", new Object[]{username, message});
 
     }
-    /**
-     * The receivedMessage method process a message sent to server
-     *
-     */
-    public String receivedMessage(Message message) {
-        return message.getContent();
-
-    }
 
     @Override
     public void run() {
+        while (!Thread.currentThread().isInterrupted()) {
+            try {
+                message = (Message) in.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                Logger.getGlobal().warning(e.getMessage());
+            }
+        }
     }
 
-
-    //METHOD LISTEN() THAT WILL BE IMPLEMENTED AFTER THE SERVER IS READY!
-    public Message listen(){
-        return new Message("");
+    /**
+     * The listen method return the message sent to server
+     */
+    public String listen () {
+        return message.getContent();
     }
 
-    public static void main(String[] args) {
-
-    }
 }

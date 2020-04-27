@@ -131,6 +131,15 @@ public class NetworkHandler extends Observable implements Observer, VCEventSende
 
     }
 
+    @Override
+    public void send(ColorSelectedEvent event) throws IOException {
+        String m = helper.serialization(event);
+        Message message = new Message(m);
+
+        connection.sendClientMessage(message);
+
+    }
+
 
     public String receiveCardSelectionEvent() throws InvalidSenderException {
         connection.run();

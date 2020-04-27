@@ -27,6 +27,7 @@ public class Game {
     VirtualView virtualView;
     private ArrayList<Pair> pairs;
     private ArrayList<String> IDs;
+    private ArrayList<String> availableColors;
 
 
     //Game creation, deciding the game's settings
@@ -45,7 +46,15 @@ public class Game {
         availableGods.addAll(Arrays.asList(g));
         pairs = new ArrayList<>();
         IDs = new ArrayList<>();
+        availableColors = new ArrayList<>();
+        String[] c = {"Yellow", "Blue", "Red"};
+        availableColors.addAll(Arrays.asList(c));
 
+    }
+
+    public ArrayList<String> getAvailableColors() {
+        ArrayList<String> a = availableColors;
+        return a;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -101,6 +110,7 @@ public class Game {
         players.add(player);
         IDs.add(player.getPlayerID());
         pairs.add(new Pair(player, player.getPlayerID()));
+        availableColors.remove(player.getColor().toString());
         if(age<minAge){ minAge = age;}
 
     }
