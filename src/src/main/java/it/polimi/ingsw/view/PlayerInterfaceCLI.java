@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view;
 import it.polimi.ingsw.network.client.NetworkHandler;
+import it.polimi.ingsw.network.events.vcevents.NumPlayersSelectedEvent;
 import it.polimi.ingsw.network.events.vcevents.PlayerDataEnteredEvent;
+import it.polimi.ingsw.network.events.vcevents.WithGodsSelectedEvent;
+import it.polimi.ingsw.network.events.vcevents.WorkerSelectedEvent;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.Box;
 import it.polimi.ingsw.server.model.exceptions.WorkerNotExistException;
@@ -21,23 +24,25 @@ public class PlayerInterfaceCLI {
     private Map map;
     private Game game;
     private Player player;
+    private String iD;
     private DivinityCLI divinityCLI;
-   // private boolean waitForServer;
+    private boolean waitForServer;
 
 
     /**
      * Create Client's link to Server and begin player construction
      * @deprecated
      */
-    public PlayerInterfaceCLI(NetworkHandler networkHandler, String origin) {
-        setPlayer(origin);
+    public PlayerInterfaceCLI() {
+        setPlayer();
     }
+
 
     /**
      * ask to server the available colors
      * @return list of available colors
      */
-    /*private String receivePlayerColors(){
+    private String receivePlayerColors(){
         ArrayList<PlayerColor> list;
         waitForServer=true;
         //eventi di attesa colori
@@ -45,26 +50,31 @@ public class PlayerInterfaceCLI {
         waitForServer=false;
         notifyAll();
         return list;
-    }*/
+    }
 
     /**
      * print something on screen while
      */
-    /*private void waitForServerCLI() {
+    private void waitForServerCLI() {
         while (waitForServer) {
             try {
                wait(100,0);
                 System.out.println("█");
-
             }
-            catch (InterruptedException e){}
+            catch (InterruptedException ignored){}
         }
         System.out.print("\n");
-    }*/
+        notify();
+    }
     /**
      * True Player Constructor
+     * @deprecated fixare la parte dei colori
      */
-    synchronized public void setPlayer(String origin) {
+    synchronized public void setPlayer() {
+        waitForServer=false;
+        try {
+            wait();
+        } catch (InterruptedException ignored){}
         String iD;
         int age;
         System.out.println("Please, Insert Your Information");
@@ -75,27 +85,31 @@ public class PlayerInterfaceCLI {
             System.out.print("\t\tPlease Insert Valid ID: ");
             iD = in.nextLine();
         }
+        this.iD=iD;
         System.out.print("\tInsert Your Age: ");
         age = in.nextInt();
         while (age<0){
             System.out.print("\t\tPlease. Insert A Valid Age: ");
             age = in.nextInt();
         }
+        receivePlayerColors();
         System.out.println("\tIn The End Select Your Color: Available Colours");
         /*metodo che stampa i colori*/
         // inserire il metodo che mi restituisce la classe Game dal Server
-        // inserire il metodo che mi restituisce la classe Player dal Server
+        waitForServer=true;
     }
 
-    public void getValidColors(){
 
-    }
     /**
      * print the screen
      * @param youPlay if the player is now play
      * @param endTurn if the print is been made in the end of turn
      */
     public void printScreen(boolean youPlay, boolean endTurn){
+        waitForServer=false;
+        try {
+            wait();
+        } catch (InterruptedException ignored){}
         String nameDivinity;
         if (youPlay){
             System.out.println("I'ts An Other Player Turn, Wait For Your");
@@ -139,6 +153,7 @@ public class PlayerInterfaceCLI {
         if (youPlay&&!endTurn){
             System.out.println("Make Your Play:");
         }
+
     }
 
     public void win(){
@@ -151,12 +166,13 @@ public class PlayerInterfaceCLI {
 
     /**
      * Communicate to server player's worker, make an input check and print new position on the map
-     * @deprecated
+     * @deprecated modificare poi dopo aver viso la classe di tommaso
+     *
      */
     public void move() throws WorkerNotExistException {
         Scanner in = new Scanner(System.in);
         int boxX, boxY;
-        int index=-1;
+        int index;
         Box box;
         Worker worker;
         if (player.canMove()){
@@ -194,15 +210,13 @@ public class PlayerInterfaceCLI {
                 boxY=in.nextInt();
                 try {
                     mapCLI.moveWorker(boxX,boxY,worker);
-
                     break;
                 }
                 catch (InputFailedException e){
                     System.out.println("σφάλμα INSERT VALID INFOS");
                 }
             }
-
-
+            new WorkerSelectedEvent(iD,worker);
         }
         else{
             System.out.println("Sorry You Haven't Movable Worker So");
@@ -210,6 +224,40 @@ public class PlayerInterfaceCLI {
             //segnala la sconfitta al server
         }
 
+    }
+
+    /**
+     * if this player is the first logged he must select number of player and type of the game
+     */
+    public void setTypeGame(){
+        waitForServer=false;
+        try {
+            wait();
+        } catch (InterruptedException ignored){}
+        int num;
+        int type;
+        boolean whitGods;
+        Scanner in=new Scanner(System.in);
+        do{
+            System.out.print("You Are The First Player, Select Number Of Players (Just 2 Or 3): ");
+            num=in.nextInt();
+            if (num<=3 && num>=2){
+                if (num==3){
+                    type=2;
+                }
+                else{
+                    System.out.println("Select Type Of Game:\n\t1-Not Whit Divinity\n\t2-Whit Divinity\n: ");
+                    type=in.nextInt();
+                    if (type==2||type==1){
+                        whitGods= type == 2;
+                        break;
+                    }
+                }
+            }
+        }while (true);
+        new NumPlayersSelectedEvent(iD,num);
+        new WithGodsSelectedEvent(iD,whitGods);
+        waitForServer=true;
     }
 
 }
