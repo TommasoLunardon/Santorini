@@ -17,7 +17,7 @@ import java.util.logging.SimpleFormatter;
 public class Server implements Runnable {
 
     private final Object clientsLock = new Object();
-    private final Socket socket;
+    private final Socket socket = new Socket();
     private static Map<String, ServerConnection> clients;
     private int socketPort;
     public static final Logger LOGGER = Logger.getLogger("Server");
@@ -27,8 +27,7 @@ public class Server implements Runnable {
     /**
      * The Server method starts with a new game
      */
-    public Server(Socket socket) throws IOException {
-        this.socket = socket;
+    public Server() throws IOException {
         initLogger();
         synchronized (clientsLock) {
             clients = new HashMap<>();
