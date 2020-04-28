@@ -45,8 +45,7 @@ public class Controller implements Observer{
     //Method used to receive BoxSelectedEvent
     public Box receiveBoxSelectedEvent(String ID) throws InvalidSenderException {
 
-        Message m = server.listen();
-        String message = server.receivedMessage(m);
+        String message = server.listen();
         BoxSelectedEvent event = (BoxSelectedEvent) helper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
@@ -58,8 +57,7 @@ public class Controller implements Observer{
 
     public String receiveCardSelectedEvent(String ID) throws InvalidSenderException {
 
-        Message m = server.listen();
-        String message = server.receivedMessage(m);
+        String message = server.listen();
         CardSelectedEvent event = (CardSelectedEvent) helper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
@@ -71,8 +69,7 @@ public class Controller implements Observer{
 
     public ArrayList<String> receiveGodsSelectedEvent(String ID) throws InvalidSenderException {
 
-        Message m = server.listen();
-        String message = server.receivedMessage(m);
+        String message = server.listen();
         GodsSelectedEvent event = (GodsSelectedEvent) helper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
@@ -85,8 +82,7 @@ public class Controller implements Observer{
 
     public int receiveNumPlayersSelectedEvent(String ID) throws InvalidSenderException {
 
-        Message m = server.listen();
-        String message = server.receivedMessage(m);
+        String message = server.listen();
         NumPlayersSelectedEvent event = (NumPlayersSelectedEvent) helper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
@@ -98,8 +94,7 @@ public class Controller implements Observer{
 
     public Object[]  receivePlayerDataEnteredEvent(String ID) throws InvalidSenderException {
 
-        Message m = server.listen();
-        String message = server.receivedMessage(m);
+        String message = server.listen();
         PlayerDataEnteredEvent event = (PlayerDataEnteredEvent) helper.deserialization(message);
 
         if(!event.getOrigin().equals(ID)){
@@ -111,8 +106,8 @@ public class Controller implements Observer{
     }
 
     public String receiveStarterSelectedEvent(String ID) throws InvalidSenderException{
-        Message m = server.listen();
-        String message = server.receivedMessage(m);
+
+        String message = server.listen();
         StarterSelectedEvent event = (StarterSelectedEvent) helper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
@@ -124,8 +119,8 @@ public class Controller implements Observer{
 
 
     public boolean receiveWithGodsSelectedEvent(String ID) throws InvalidSenderException{
-        Message m = server.listen();
-        String message = server.receivedMessage(m);
+
+        String message = server.listen();
         WithGodsSelectedEvent event = (WithGodsSelectedEvent) helper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
@@ -136,8 +131,8 @@ public class Controller implements Observer{
     }
 
     public Worker receiveWorkerSelectedEvent(String ID) throws InvalidSenderException{
-        Message m = server.listen();
-        String message = server.receivedMessage(m);
+
+        String message = server.listen();
         WorkerSelectedEvent event = (WorkerSelectedEvent) helper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
@@ -148,8 +143,8 @@ public class Controller implements Observer{
     }
 
     public boolean receiveUseofSpecialPowerEvent(String ID) throws InvalidSenderException{
-        Message m = server.listen();
-        String message = server.receivedMessage(m);
+
+        String message = server.listen();
         UseofSpecialPowerEvent event = (UseofSpecialPowerEvent) helper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
@@ -160,8 +155,8 @@ public class Controller implements Observer{
     }
 
     public PlayerColor receiveColorSelectedEvent(String ID) throws InvalidSenderException{
-        Message m = server.listen();
-        String message = server.receivedMessage(m);
+
+        String message = server.listen();
         ColorSelectedEvent event = (ColorSelectedEvent) helper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
