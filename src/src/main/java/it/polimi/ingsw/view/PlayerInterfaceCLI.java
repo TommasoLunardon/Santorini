@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view;
 import it.polimi.ingsw.network.client.NetworkHandler;
-import it.polimi.ingsw.network.events.vcevents.NumPlayersSelectedEvent;
-import it.polimi.ingsw.network.events.vcevents.PlayerDataEnteredEvent;
-import it.polimi.ingsw.network.events.vcevents.WithGodsSelectedEvent;
-import it.polimi.ingsw.network.events.vcevents.WorkerSelectedEvent;
+import it.polimi.ingsw.network.events.vcevents.*;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.Box;
 import it.polimi.ingsw.server.model.exceptions.WorkerNotExistException;
@@ -41,11 +38,12 @@ public class PlayerInterfaceCLI {
     /**
      * ask to server the available colors
      * @return list of available colors
+     * @deprecated going to add a MVEvent CommunicationEvent
      */
     private String receivePlayerColors(){
         ArrayList<PlayerColor> list;
         waitForServer=true;
-        //eventi di attesa colori
+        //eventi di attesa colori: COMUNICATION EVENT
         waitForServerCLI();
         waitForServer=false;
         notifyAll();
@@ -71,6 +69,7 @@ public class PlayerInterfaceCLI {
      * @deprecated fixare la parte dei colori
      */
     synchronized public void setPlayer() {
+        String avialableColor;
         waitForServer=false;
         try {
             wait();
@@ -96,6 +95,8 @@ public class PlayerInterfaceCLI {
         System.out.println("\tIn The End Select Your Color: Available Colours");
         /*metodo che stampa i colori*/
         // inserire il metodo che mi restituisce la classe Game dal Server
+        if (a)
+
         waitForServer=true;
     }
 
@@ -164,10 +165,19 @@ public class PlayerInterfaceCLI {
         System.out.println("You Lose :(");
     }
 
+    public void build(){
+        Scanner in=new Scanner(System.in);
+
+    }
+
+
+    private boolean usableBox(int x, int y, Box box){
+
+    }
+
+
     /**
      * Communicate to server player's worker, make an input check and print new position on the map
-     * @deprecated modificare poi dopo aver viso la classe di tommaso
-     *
      */
     public void move() throws WorkerNotExistException {
         Scanner in = new Scanner(System.in);
@@ -182,8 +192,10 @@ public class PlayerInterfaceCLI {
                     System.out.println("\t (" + (player.getWorkers().get(i).getBox().getPosition()[0]) + (player.getWorkers().get(i).getBox().getPosition()[1]) + ") worker #" +i);
                 }
             }
-            System.out.print("Select Worker #: ");
-            index=in.nextInt();
+            do {
+                System.out.print("Select Worker #: ");
+                index = in.nextInt();
+            }while (index<0||index>3);
             worker=player.getWorkers().get(index);
             box=worker.getBox();
             System.out.println("Now You Can Move In A Green Box");
@@ -217,6 +229,7 @@ public class PlayerInterfaceCLI {
                 }
             }
             new WorkerSelectedEvent(iD,worker);
+            new BoxSelectedEvent(iD,box.getNeighboursMatrix()[boxX][boxY] );
         }
         else{
             System.out.println("Sorry You Haven't Movable Worker So");
