@@ -32,10 +32,10 @@ public class SocketConnection extends Client implements Runnable {
      *
      */
     @Override
-    public void startConnection(java.net.Socket clientConnection) throws IOException {
+    public void startConnection() throws IOException {
         socket = new java.net.Socket(getUsername(), getPort());
-        out = new ObjectOutputStream(clientConnection.getOutputStream());
-        in = new ObjectInputStream(clientConnection.getInputStream());
+        out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
 
         String m = helper.serialization(new ConnectionRequest(getUsername()));
         Message message = new Message(m);
