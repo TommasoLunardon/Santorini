@@ -159,6 +159,18 @@ public class Controller implements Observer{
         }
     }
 
+    public PlayerColor receiveColorSelectedEvent(String ID) throws InvalidSenderException{
+        Message m = server.listen();
+        String message = server.receivedMessage(m);
+        ColorSelectedEvent event = (ColorSelectedEvent) helper.deserialization(message);
+        if(!event.getOrigin().equals(ID)){
+            throw new InvalidSenderException();
+        }
+        else{
+            return event.getColor();
+        }
+    }
+
 
 
 

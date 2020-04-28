@@ -8,7 +8,9 @@ import java.io.IOException;
 public interface VCEventSender extends EventSender {
 
      @Override
-    void send(Event event);
+     void send(Event event);
+
+     void send(ColorSelectedEvent event) throws IOException;
 
      void send(BoxSelectedEvent event) throws IOException;
 
