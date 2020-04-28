@@ -40,7 +40,7 @@ public abstract class Client {
      *
      */
 
-    public abstract void startConnection(Socket clientConnection) throws IOException;
+    public abstract void startConnection() throws IOException;
 
     /**
      * The sendClientMessage method Send a message to the server

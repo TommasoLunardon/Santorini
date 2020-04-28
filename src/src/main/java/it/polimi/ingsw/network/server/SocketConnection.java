@@ -19,17 +19,30 @@ import java.util.logging.Logger;
 public class SocketConnection implements Runnable, ServerConnection {
 
     private final Socket socket;
+    private final Object outLock = new Object();
+    private final Object inLock = new Object();
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private boolean active;
     private Thread listener;
 
-    SocketConnection(SocketServer socketServer, Socket clientConnection) throws IOException {
-        this.socket = clientConnection;
+    SocketConnection(SocketServer socketServer, Socket socket) {
+
+        this.socket = socket;
         this.active = true;
 
-        out = new ObjectOutputStream(socket.getOutputStream());
-        in = new ObjectInputStream(socket.getInputStream());
+        try {
+            synchronized (inLock) {
+                this.in = new ObjectInputStream(socket.getInputStream());
+            }
+
+            synchronized (outLock) {
+                this.out = new ObjectOutputStream(socket.getOutputStream());
+            }
+        } catch (IOException e) {
+            Server.LOGGER.severe(e.toString());
+        }
+
         listener = new Thread(this);
         listener.start();
     }
@@ -40,17 +53,26 @@ public class SocketConnection implements Runnable, ServerConnection {
      */
     @Override
     public void run() {
-        while (isActive()) try {
-            ConnectionRequest message = (ConnectionRequest) in.readObject();
-            if (message != null) {
-                if (message.getContent().equals("CONNECTION")) {
-                    SocketServer.login(message.getSenderUsername(), this);
+        while (!Thread.currentThread().isInterrupted())
+            try {
+                synchronized (inLock) {
+
+                    Message message = (Message) in.readObject();
+
+                    if (message.getContent().equals("CONNECTION")) {
+
+                        ConnectionRequest request = (ConnectionRequest) in.readObject();
+
+                        if (request != null) {
+                                SocketServer.login(request.getSenderUsername(), this);
+                        }
+                    }
                 }
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            Logger.getGlobal().warning(e.getMessage());
-            disconnect();
-        }
+                } catch(IOException e){
+                    disconnect();
+                } catch(ClassNotFoundException e){
+                    Server.LOGGER.severe(e.getMessage());
+                }
     }
 
     /**
