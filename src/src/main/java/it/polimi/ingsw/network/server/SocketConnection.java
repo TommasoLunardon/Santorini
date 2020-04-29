@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  */
 
-public class SocketConnection implements Runnable, ServerConnection {
+public class SocketConnection extends ServerConnection implements Runnable {
 
     private final Socket socket;
     private final Object outLock = new Object();
