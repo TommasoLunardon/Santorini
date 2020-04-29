@@ -23,7 +23,6 @@ public class PlayerInterfaceCLI {
     private Player player;
     private String iD;
     private DivinityCLI divinityCLI;
-    private boolean waitForServer;
 
 
     /**
@@ -31,46 +30,19 @@ public class PlayerInterfaceCLI {
      * @deprecated
      */
     public PlayerInterfaceCLI() {
+        System.out.println("Welcome To Santorini CLI");
         setPlayer();
-    }
+        while(true){
 
-
-    /**
-     * ask to server the available colors
-     * @return list of available colors
-     * @deprecated going to add a MVEvent CommunicationEvent
-     */
-    private String receivePlayerColors(){
-        ArrayList<PlayerColor> list;
-        waitForServer=true;
-        //eventi di attesa colori: COMUNICATION EVENT
-        waitForServerCLI();
-        waitForServer=false;
-        notifyAll();
-        return list;
-    }
-
-    /**
-     * print something on screen while
-     */
-    private void waitForServerCLI() {
-        while (waitForServer) {
-            try {
-               wait(100,0);
-                System.out.println("█");
-            }
-            catch (InterruptedException ignored){}
         }
-        System.out.print("\n");
-        notify();
     }
+
     /**
      * True Player Constructor
      * @deprecated fixare la parte dei colori
      */
     synchronized public void setPlayer() {
         String avialableColor;
-        waitForServer=false;
         try {
             wait();
         } catch (InterruptedException ignored){}
@@ -91,13 +63,10 @@ public class PlayerInterfaceCLI {
             System.out.print("\t\tPlease. Insert A Valid Age: ");
             age = in.nextInt();
         }
-        receivePlayerColors();
         System.out.println("\tIn The End Select Your Color: Available Colours");
         /*metodo che stampa i colori*/
         // inserire il metodo che mi restituisce la classe Game dal Server
-        if (a)
 
-        waitForServer=true;
     }
 
 
@@ -107,7 +76,6 @@ public class PlayerInterfaceCLI {
      * @param endTurn if the print is been made in the end of turn
      */
     public void printScreen(boolean youPlay, boolean endTurn){
-        waitForServer=false;
         try {
             wait();
         } catch (InterruptedException ignored){}
@@ -169,12 +137,6 @@ public class PlayerInterfaceCLI {
         Scanner in=new Scanner(System.in);
 
     }
-
-
-    private boolean usableBox(int x, int y, Box box){
-
-    }
-
 
     /**
      * Communicate to server player's worker, make an input check and print new position on the map
@@ -243,7 +205,6 @@ public class PlayerInterfaceCLI {
      * if this player is the first logged he must select number of player and type of the game
      */
     public void setTypeGame(){
-        waitForServer=false;
         try {
             wait();
         } catch (InterruptedException ignored){}
@@ -270,7 +231,6 @@ public class PlayerInterfaceCLI {
         }while (true);
         new NumPlayersSelectedEvent(iD,num);
         new WithGodsSelectedEvent(iD,whitGods);
-        waitForServer=true;
     }
 
 }
