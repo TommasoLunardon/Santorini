@@ -6,7 +6,6 @@ import it.polimi.ingsw.network.server.ServerConnection;
 import it.polimi.ingsw.network.server.SocketServer;
 import it.polimi.ingsw.network.server.VirtualView;
 import it.polimi.ingsw.server.controller.Controller;
-import it.polimi.ingsw.server.controller.exceptions.InvalidSenderException;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.exceptions.*;
 
@@ -67,14 +66,30 @@ public class Server implements Runnable {
         LOGGER.info("Socket Server Started");
     }
 
+    public void disconnect(String user){
+        //DEVE ESSERE IMPLEMENTATO
+        //ELIMINA CONNESSIONE ED ELIMINA L'ID DALLA LISTA USERS E DALLA MAP!
+    }
+
 
     /**
      * Login method Adds player to the server
      */
-    public static void login(String username, ServerConnection connection) {
+    public synchronized void login() {
+        String user = virtualView.receiveConnectionRequest();
 
-        clients.put(username, connection);
-        LOGGER.log(Level.INFO, "{0} connected to server!", username);
+        clients.put(user, new ServerConnection());
+        this.users.add(user);
+        LOGGER.log(Level.INFO, "{0} connected to server!", user);
+
+        if (users.contains(user)){
+            String message = "You need to change your username";
+            CommunicationEvent event = new CommunicationEvent(user,message);
+            virtualView.send(event);
+            //METHODS DISCONNECT NEEDS TO BE IMPLEMENTED (JING)
+            disconnect(user);
+        }
+
     }
 
     /**
@@ -125,6 +140,11 @@ public class Server implements Runnable {
     }
 
 
+    public void kickPlayer(){
+
+    }
+
+
 
     /**
      * The Server method starts with a new game
@@ -145,12 +165,37 @@ public class Server implements Runnable {
         controller.setUsers(users);
 
 
-        //    START OF THE COMMUNICATION WITH THE CLIENTS TO GET THE GAME'S SETTINGS
+        //***** LOBBY *****//
+
+        //Let up to three players connect to the server
+        while(users.size() < 3){
+            login();
+        }
+
+
+        //Message to players waiting for the game creation
+        String message = "Please wait, the host is creating the game";
+        for (int i = 1; i < users.size(); i++) {
+            CommunicationEvent event = new CommunicationEvent(game.getIDs().get(i), message);
+            virtualView.send(event);
+        }
+
 
         //Insertion of Game Settings and Creation of the Game
         controller.gameCreation();
 
+        //Game Created, all players are notified
         game.gameUpdate();
+
+        if(game.getNumPlayers() == 2){
+
+            String m = "You need to change your username";
+            CommunicationEvent event = new CommunicationEvent(users.get(2),m);
+            virtualView.send(event);
+            //METHODS DISCONNECT NEEDS TO BE IMPLEMENTED (JING)
+            disconnect(users.get(2));
+
+        }
 
 
         //Players enter the game until the game is full
@@ -216,10 +261,5 @@ public class Server implements Runnable {
         new Server();
 
     }
-
-
-
-
-
 
 }
