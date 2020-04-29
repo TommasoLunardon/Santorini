@@ -39,6 +39,10 @@ public class Controller{
         view.setController(this);
     }
 
+
+
+
+
     //Method used for the creation of a game.
     public void gameCreation(){
         while (getGame() == null) {

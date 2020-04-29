@@ -4,6 +4,7 @@ import it.polimi.ingsw.network.JsonHelper;
 import it.polimi.ingsw.network.events.*;
 import it.polimi.ingsw.network.events.mvevents.*;
 import it.polimi.ingsw.network.events.vcevents.*;
+import it.polimi.ingsw.network.messages.ConnectionRequest;
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.controller.Controller;
@@ -185,7 +186,11 @@ public class VirtualView implements MVEventSender {
 
 
 
-
+    public String receiveConnectionRequest(){
+        String message = server.listen();
+        ConnectionRequest request = (ConnectionRequest) helper.deserialization(message);
+        return request.getSenderUsername();
+    }
 
 }
 
