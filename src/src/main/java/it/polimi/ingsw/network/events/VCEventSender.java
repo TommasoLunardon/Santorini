@@ -1,8 +1,10 @@
 package it.polimi.ingsw.network.events;
 
-import it.polimi.ingsw.network.events.vcevents.*;
-
 import java.io.IOException;
+
+/**
+ *  Interface representing the generic VCEvent sender.
+ */
 
 
 public interface VCEventSender extends EventSender {

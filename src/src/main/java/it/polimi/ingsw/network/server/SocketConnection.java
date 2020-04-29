@@ -27,7 +27,8 @@ public class SocketConnection extends ServerConnection implements Runnable {
     private boolean active;
     private Thread listener;
 
-    SocketConnection(SocketServer socketServer, Socket socket) {
+    //MODIFICATO, SOLO SOCKET IN INPUT?
+    public SocketConnection( Socket socket) {
 
         this.socket = socket;
         this.active = true;

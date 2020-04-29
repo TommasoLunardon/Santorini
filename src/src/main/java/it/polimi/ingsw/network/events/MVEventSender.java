@@ -1,6 +1,8 @@
 package it.polimi.ingsw.network.events;
 
-import it.polimi.ingsw.network.events.mvevents.*;
+/**
+ *  Interface representing the generic MVEvent sender.
+ */
 
 public interface MVEventSender extends  EventSender {
 

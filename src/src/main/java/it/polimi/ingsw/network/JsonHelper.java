@@ -3,9 +3,8 @@ package it.polimi.ingsw.network;
 import com.google.gson.*;
 import it.polimi.ingsw.network.events.Event;
 
-
-/*
-    Class that provides methods to serialize and deserialize events sent and received throughout our MVC architecture
+/**
+ *  Class that provides methods to serialize and deserialize events sent and received throughout our MVC architecture
  */
 
 

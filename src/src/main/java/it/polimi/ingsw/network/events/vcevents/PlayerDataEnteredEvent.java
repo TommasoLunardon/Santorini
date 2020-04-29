@@ -8,13 +8,11 @@ import java.io.IOException;
 
 public class PlayerDataEnteredEvent extends VCEvent {
 
-    private String ID;
     private  int age;
     private PlayerColor color;
 
-    public PlayerDataEnteredEvent(String origin, String ID, int age, PlayerColor color) {
+    public PlayerDataEnteredEvent(String origin, int age, PlayerColor color) {
         super(origin);
-        this.ID = ID;
         this.age = age;
         this.color = color;
     }
@@ -25,9 +23,6 @@ public class PlayerDataEnteredEvent extends VCEvent {
 
     }
 
-    public String getID() {
-        return ID;
-    }
 
     public int getAge() {
         return age;
@@ -38,10 +33,9 @@ public class PlayerDataEnteredEvent extends VCEvent {
     }
 
     public Object[] getData(){
-        Object[] data = new Object[4];
-        data[0] = getID();
-        data[1] = getAge();
-        data[2] = getColor();
+        Object[] data = new Object[3];
+        data[0] = getAge();
+        data[1] = getColor();
         return data;
     }
 }

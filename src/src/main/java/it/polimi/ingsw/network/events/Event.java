@@ -3,9 +3,11 @@ package it.polimi.ingsw.network.events;
 import java.io.IOException;
 import java.io.Serializable;
 
-/*
-   Abstract class Event that provides the method manage(), used to manage the forwarding of events, it is extended by MVEvent and VCEvent.
+/**
+ * Abstract class Event that provides the method manage(), used to manage the forwarding of events, it is extended by MVEvent and VCEvent.
  */
+
+
 
 public abstract class Event implements Serializable {
 

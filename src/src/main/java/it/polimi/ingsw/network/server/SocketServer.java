@@ -33,14 +33,15 @@ public class SocketServer extends Thread {
             try {
                 newClientConnection = serverSocket.accept();
                 Logger.getGlobal().info("New client connected.");
-                new SocketConnection(this,newClientConnection );
+                //MODIFICATO
+                new SocketConnection(newClientConnection );
             } catch (IOException e) {
                 Logger.getGlobal().warning(e.getMessage());
             }
         }
     }
-    static void login(String username, ServerConnection connection){
-        Server.login(username,connection);
-    }
+
+
+    public static void login(String username, ServerConnection connection){ Server.login(username,connection);}
     
 }

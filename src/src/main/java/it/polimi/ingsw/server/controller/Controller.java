@@ -1,4 +1,3 @@
-
 package it.polimi.ingsw.server.controller;
 
 
@@ -11,7 +10,10 @@ import it.polimi.ingsw.server.model.exceptions.*;
 import java.util.ArrayList;
 
 
-
+/**
+ * Class Controller is assigned to a VirtualView and to a Model (GAME), it helps the server in performing the actions
+ *  needed to play a Santorini Game.
+ */
 public class Controller{
 
     private Game game;
@@ -34,46 +36,43 @@ public class Controller{
     }
 
     public Controller(VirtualView view){
-
         this.view = view;
         view.setController(this);
     }
 
 
-
-
-
-    //Method used for the creation of a game.
+    /**
+     * Method used to get the game settings and create the game
+     */
     public void gameCreation(){
         while (getGame() == null) {
-            //Need to insert the message receiver/sender(USER)
-            String USER = "";
+
+            String ID = users.get(0);
             int numPlayers = 0;
             boolean withGods = false;
             String m1 = "Please insert the number of Players";
-            CommunicationEvent event = new CommunicationEvent(USER,m1);
+            CommunicationEvent event = new CommunicationEvent(ID,m1);
             view.send(event);
 
             try {
-                numPlayers = view.receiveNumPlayersSelectedEvent(USER);
+                numPlayers = view.receiveNumPlayersSelectedEvent(ID);
             } catch (InvalidSenderException e) {
-                InvalidInputEvent ev = new InvalidInputEvent(USER, e);
+                InvalidInputEvent ev = new InvalidInputEvent(ID, e);
                 view.send(ev);
             }
 
             if (numPlayers == 2) {
 
                 String m2 = "Do you want to play with gods?";
-                //Need to insert the message receiver(Only Connected User)
-                CommunicationEvent event2 = new CommunicationEvent(USER,m2);
+                CommunicationEvent event2 = new CommunicationEvent(ID,m2);
                 game.notify(event2);
                 try {
-                    withGods = view.receiveWithGodsSelectedEvent(USER);
+                    withGods = view.receiveWithGodsSelectedEvent(ID);
                     game = new Game(numPlayers, withGods);
                     game.setVirtualView(view);
                     this.setGame(game);
                 } catch (InvalidSenderException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(USER, e);
+                    InvalidInputEvent ev = new InvalidInputEvent(ID, e);
                     game.notify(ev);
                 }
 
@@ -86,7 +85,7 @@ public class Controller{
                 this.setGame(game);
 
             } else {
-                InvalidInputEvent ev = new InvalidInputEvent(USER, new InvalidInputException());
+                InvalidInputEvent ev = new InvalidInputEvent(ID, new InvalidInputException());
                 game.notify(ev);
 
             }
@@ -95,11 +94,13 @@ public class Controller{
         }
     }
 
-    //Method used to insert all users in the game as players
+    /**
+     * Method used to insert all users in the game as players
+     */
     public void playersEnter(){
         while (game.isGameFull()) {
             for (int i = 0; i < game.getNumPlayers(); i++) {
-                String ID = null;
+                String ID = users.get(i);
                 int age = 0;
                 PlayerColor color = null;
                 String m3 = "Please insert your data, colors available are: " + game.getAvailableColors();
@@ -129,7 +130,9 @@ public class Controller{
         }
     }
 
-    //Method used to choose the god cards for the game
+    /**
+     * Method used to choose the god cards for the game
+     */
     public void cardsSelection(){
         boolean cardsAssigned = false;
         while (!cardsAssigned) {
@@ -158,7 +161,9 @@ public class Controller{
         }
     }
 
-    //Method used to assign a card to each player
+    /**
+     * Method used to assign a card to each player
+     */
     public void godSelection(){
         for (int j = game.getNumPlayers() - 1; j > 0; j--) {
             boolean done = false;
@@ -191,8 +196,10 @@ public class Controller{
         }
     }
 
-    //Method used to select the starting player
-    public void starterSelecion(){
+    /**
+     * Method used to select the starting player
+     */
+    public void starterSelection(){
         boolean control = false;
         while (!control) {
             String starterID = null;
@@ -226,7 +233,12 @@ public class Controller{
 
     }
 
-    //Method used to place the workers in the map
+    //
+
+    /**
+     * Method used to place the workers in the map
+     * @throws InvalidInputException if the boxes selected aren't valid //** DA CONTROLLARE
+     */
     public void workersPlacement() throws InvalidInputException {
         for(int j = 0; j < game.getPlayers().size(); j++){
             boolean checkPlacement = false;
@@ -269,7 +281,13 @@ public class Controller{
     }
 
 
-    //Method used to perform the turns alternation between players
+
+
+    /**
+     * Method used to perform the turns alternation between players
+     * @throws InvalidInputException //DA CONTROLLARE
+     * @throws WorkerNotExistException // DA CONTROLLARE
+     */
     public void turns() throws InvalidInputException, WorkerNotExistException {
         match:
         while (game.getPlayers().size() > 1) {
@@ -396,9 +414,13 @@ public class Controller{
         }
     }
 
-    // AUXILIARY METHODS USED WHEN PERFORMING A PLAYER'S TURN DURING THE GAME
+    // ****AUXILIARY METHODS USED WHEN PERFORMING A PLAYER'S TURN DURING THE GAME**** -----
 
-    //Method used to ask for the special action of a player's god
+    /**
+     * Method used to ask for the special action of a player's god
+     * @param ID is the username of the player to ask
+     * @return true if the player asked for a special action
+     */
     public boolean askForSpecialAction(String ID){
         boolean gotResponse = false;
         while (!gotResponse) {
@@ -420,7 +442,13 @@ public class Controller{
         return false;
     }
 
-    //Standard Player Movement
+    /**
+     * Method to perform the Standard Player Movement
+     * @param player
+     * @param ID
+     * @param selectedWorker
+     * @return true if the movement was performed
+     */
     public boolean standardMove(Player player, String ID, Worker selectedWorker) {
         String m8 = "Please Select one box";
         CommunicationEvent event = new CommunicationEvent(ID,m8);
@@ -448,7 +476,13 @@ public class Controller{
     }
 
 
-    //Standard Player Construction
+    /**
+     * Method to perform the Standard Player Construction
+     * @param player
+     * @param ID
+     * @param selectedWorker
+     * @return true if the construction was performed
+     */
     public boolean standardBuild(Player player, String ID, Worker selectedWorker) {
         String m9 = "Please Select one box";
         CommunicationEvent event = new CommunicationEvent(ID,m9);
@@ -480,8 +514,13 @@ public class Controller{
 
     //*****  AUXILIARY METHODS USED TO PERFORM DIVINITIES MOVEMENTS AND CONSTRUCTIONS**********
 
-    //Method used to perform the special Arthemis Movement when required
-
+    /**
+     * Method used to perform the special Arthemis Movement when required
+     * @param player
+     * @param ID
+     * @param selectedWorker
+     * @return true if the movement was performed
+     */
     public boolean moveArthemis(Player player, String ID, Worker selectedWorker){
         String m8 = "Please Select the first box";
         CommunicationEvent event = new CommunicationEvent(ID,m8);
@@ -522,8 +561,13 @@ public class Controller{
 
     }
 
-
-    //Method used to perform the special Atlas Construction when required
+    /**
+     * Method used to perform the special Atlas Construction when required
+     * @param player
+     * @param ID
+     * @param selectedWorker
+     * @return true if the construction was performed
+     */
     public boolean buildAtlas(Player player, String ID, Worker selectedWorker){
         String m9 = "Please Select one box";
         CommunicationEvent event = new CommunicationEvent(ID,m9);
@@ -553,7 +597,13 @@ public class Controller{
 
     }
 
-    //Method used to perform the special Demeter Construction when required
+    /**
+     * Method used to perform the special Demeter Construction when required
+     * @param player
+     * @param ID
+     * @param selectedWorker
+     * @return true if the construction was performed
+     */
     public boolean buildDemeter(Player player, String ID, Worker selectedWorker){
         String m8 = "Please Select the first box";
         CommunicationEvent event = new CommunicationEvent(ID,m8);
@@ -594,9 +644,13 @@ public class Controller{
 
     }
 
-
-
-    //Method used to perform the special Ephaestus Construction when required
+    /**
+     * Method used to perform the special Ephaestus Construction when required
+     * @param player
+     * @param ID
+     * @param selectedWorker
+     * @return true if the construction was performed
+     */
     public boolean buildEphaestus(Player player, String ID, Worker selectedWorker){
         String m9 = "Please Select one box";
         CommunicationEvent event = new CommunicationEvent(ID,m9);
@@ -623,8 +677,13 @@ public class Controller{
         }
     }
 
-
-    //Method used to perform the special Prometheus Movement when required
+    /**
+     * Method used to perform the special Prometheus Movement when required
+     * @param player
+     * @param ID
+     * @param selectedWorker
+     * @return true if the movement was performed
+     */
     public boolean movePrometheus(Player player, String ID, Worker selectedWorker){
         String m9 = "Please Select the first box";
         CommunicationEvent event = new CommunicationEvent(ID,m9);

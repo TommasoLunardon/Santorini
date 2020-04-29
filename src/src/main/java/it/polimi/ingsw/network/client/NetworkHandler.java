@@ -18,8 +18,9 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-//Structure of the class Network Handler, needs to be completed using the network and view elements!
-
+/**
+ * Class Network Handler handles the client's communications with the server.
+ */
 
 public class NetworkHandler implements VCEventSender {
 
@@ -28,17 +29,20 @@ public class NetworkHandler implements VCEventSender {
     private SocketConnection connection;
     private String ID;
 
-    /*
-    Class NetworkHandler that sends VCEvents to the SERVER, and receives MVEvents from the SERVER.
-     */
 
     public NetworkHandler(){}
 
-
+    /**
+     *  Client connects to the network handler
+     * @param client SocketConnection used to connect
+     * @param ID Username of the client
+     * @param view client's view
+     */
     public void clientConnects(SocketConnection client, String ID, Client view){
         connection = client;
         this.ID = ID;
     }
+
 
     @Override
     public void send(Event event) {}

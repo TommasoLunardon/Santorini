@@ -2,6 +2,11 @@ package it.polimi.ingsw.network.events;
 
 import java.io.IOException;
 
+/**
+ * Abstract Class VCEvent that represents the generic event sent from the client to the server
+ */
+
+
 public abstract class VCEvent extends Event {
 
     private String origin;
@@ -10,6 +15,10 @@ public abstract class VCEvent extends Event {
         this.origin = origin;
     }
 
+    /**
+     *  Manage the forwarding of the event
+     * @param eventSender class that performs the event forwarding
+     */
     public abstract void manage(VCEventSender eventSender) throws IOException;
 
 

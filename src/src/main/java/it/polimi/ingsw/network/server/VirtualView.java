@@ -16,10 +16,12 @@ import it.polimi.ingsw.server.model.Worker;
 import java.util.ArrayList;
 
 
-
+/**
+ * Class VirtualView that sends MVEvents to the Client, and receives VCEvent from the Network Handler.
+ */
 
 /*
- Class VirtualView that sends MVEvent to the CLI, and receives VCEvent from the Network Handler, sending them to the Controller to be managed.
+
  */
 
 public class VirtualView implements MVEventSender {
@@ -60,7 +62,7 @@ public class VirtualView implements MVEventSender {
 
     }
 
-    //Method used to receive BoxSelectedEvent
+
     public Box receiveBoxSelectedEvent(String ID) throws InvalidSenderException {
 
         String message = server.listen();
