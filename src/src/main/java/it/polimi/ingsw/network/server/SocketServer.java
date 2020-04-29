@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public class SocketServer extends Thread {
 
-    private final Server server;
+    private static Server server;
     private final int port;
     private ServerSocket serverSocket;
 
@@ -17,6 +17,7 @@ public class SocketServer extends Thread {
         this.server = server;
         this.port = port;
     }
+
 
     public void start() {
         try {
@@ -39,5 +40,9 @@ public class SocketServer extends Thread {
             }
         }
     }
-    
+
+    public static void login() {
+        server.login();
+    }
+
 }

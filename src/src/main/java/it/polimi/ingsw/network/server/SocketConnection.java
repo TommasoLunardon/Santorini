@@ -27,8 +27,7 @@ public class SocketConnection implements Runnable, ServerConnection {
     private boolean active;
     private Thread listener;
 
-    //MODIFICATO, SOLO SOCKET IN INPUT?
-    public SocketConnection( Socket socket) {
+    public SocketConnection(SocketServer socketServer, Socket socket) {
 
         this.socket = socket;
         this.active = true;
@@ -66,15 +65,15 @@ public class SocketConnection implements Runnable, ServerConnection {
                         ConnectionRequest request = (ConnectionRequest) in.readObject();
 
                         if (request != null) {
-                                SocketServer.login(request.getSenderUsername(), this);
+                            SocketServer.login();
                         }
                     }
                 }
-                } catch(IOException e){
-                    disconnect();
-                } catch(ClassNotFoundException e){
-                    Server.LOGGER.severe(e.getMessage());
-                }
+            } catch(IOException e){
+                disconnect();
+            } catch(ClassNotFoundException e){
+                Server.LOGGER.severe(e.getMessage());
+            }
     }
 
     /**

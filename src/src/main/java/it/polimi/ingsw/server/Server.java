@@ -223,7 +223,7 @@ public class Server implements Runnable {
 
             //Selection of the Starting Player
 
-            controller.starterSelecion();
+            controller.starterSelection();
         }
 
         //Game without gods ----> starts the youngest player
