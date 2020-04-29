@@ -130,7 +130,7 @@ public class PlayerInterfaceCLI {
         while(true){
             Event event;
             // metodo di cattura evento
-            if (event.)
+            //if (event.)
         }
     }
 

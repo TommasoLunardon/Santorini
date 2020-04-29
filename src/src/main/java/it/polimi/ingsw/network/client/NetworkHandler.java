@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.network.JsonHelper;
 import it.polimi.ingsw.network.events.Event;
+import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
 import it.polimi.ingsw.network.events.vcevents.*;
 import it.polimi.ingsw.network.events.vcevents.CardSelectedEvent;
@@ -20,7 +21,7 @@ import java.util.Observer;
 //Structure of the class Network Handler, needs to be completed using the network and view elements!
 
 
-public class NetworkHandler extends Observable implements Observer, VCEventSender {
+public class NetworkHandler implements VCEventSender {
 
     public final JsonHelper helper = new JsonHelper();
     private Client view;
@@ -40,104 +41,14 @@ public class NetworkHandler extends Observable implements Observer, VCEventSende
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-
-    }
-
-    @Override
     public void send(Event event) {}
 
     @Override
-    public void send(BoxSelectedEvent event) throws IOException {
-
+    public void send(VCEvent event) throws IOException {
         String m = helper.serialization(event);
         Message message = new Message(m);
 
         connection.sendClientMessage(message);
-
-    }
-
-
-    @Override
-    public void send(CardSelectedEvent event) throws IOException {
-        String m = helper.serialization(event);
-        Message message = new Message(m);
-
-        connection.sendClientMessage(message);
-
-    }
-
-    @Override
-    public void send(GodsSelectedEvent event) throws IOException {
-        String m = helper.serialization(event);
-        Message message = new Message(m);
-
-        connection.sendClientMessage(message);
-
-    }
-
-    @Override
-    public void send(NumPlayersSelectedEvent event) throws IOException {
-        String m = helper.serialization(event);
-        Message message = new Message(m);
-
-        connection.sendClientMessage(message);
-
-    }
-
-    @Override
-    public void send(PlayerDataEnteredEvent event) throws IOException {
-        String m = helper.serialization(event);
-        Message message = new Message(m);
-
-        connection.sendClientMessage(message);
-
-    }
-
-    @Override
-    public void send(StarterSelectedEvent event) throws IOException {
-        String m = helper.serialization(event);
-        Message message = new Message(m);
-
-        connection.sendClientMessage(message);
-
-    }
-
-
-    @Override
-    public void send(UseofSpecialPowerEvent event) throws IOException {
-        String m = helper.serialization(event);
-        Message message = new Message(m);
-
-        connection.sendClientMessage(message);
-
-    }
-
-    @Override
-    public void send(WithGodsSelectedEvent event) throws IOException {
-        String m = helper.serialization(event);
-        Message message = new Message(m);
-
-        connection.sendClientMessage(message);
-
-    }
-
-    @Override
-    public void send(WorkerSelectedEvent event) throws IOException {
-        String m = helper.serialization(event);
-        Message message = new Message(m);
-
-        connection.sendClientMessage(message);
-
-    }
-
-    @Override
-    public void send(ColorSelectedEvent event) throws IOException {
-        String m = helper.serialization(event);
-        Message message = new Message(m);
-
-        connection.sendClientMessage(message);
-
     }
 
 

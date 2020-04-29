@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.network.messages.ConnectionRequest;
 import it.polimi.ingsw.network.messages.Message;
+import it.polimi.ingsw.server.Server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
