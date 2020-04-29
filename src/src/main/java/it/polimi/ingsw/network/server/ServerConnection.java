@@ -4,14 +4,12 @@ import it.polimi.ingsw.network.messages.Message;
 
 import java.io.IOException;
 
-public abstract class ServerConnection {
-    private boolean active = true;
+public interface ServerConnection {
+
     /**
      * the isActive method return the connection status
      */
-    public boolean isActive() {
-        return active;
-    }
+    boolean isActive();
 
 
     /**
@@ -20,10 +18,10 @@ public abstract class ServerConnection {
      *
      */
 
-    public abstract void sendServerMessage(Message message) throws IOException;
+    void sendServerMessage(Message message) throws IOException;
 
     /**
      * The disconnect method disconnect from the client
      */
-    public abstract void disconnect();
+    void disconnect();
 }

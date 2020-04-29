@@ -23,11 +23,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-/**
- * Class Server used to perform an entire game of Santorini with clients connected to the server
- * Needs to be completed with the management of connections and disconnections
- */
 
+/*
+   Class Server used to perform an entire game of Santorini with clients connected to the server
+   Needs to be completed with the game lobby, management of connections and disconnections, and setting of Active/ Inactive Players
+ */
 
 public class Server implements Runnable {
 
@@ -44,9 +44,6 @@ public class Server implements Runnable {
     private static Game game;
     private static Controller controller;
     private static VirtualView virtualView;
-
-    public static void login(String username, ServerConnection connection) {
-    }
 
 
     private void initLogger() {
@@ -77,13 +74,12 @@ public class Server implements Runnable {
 
 
     /**
-     * Login method adds player to the server
+     * Login method Adds player to the server
      */
     public synchronized void login() {
         String user = virtualView.receiveConnectionRequest();
 
-        //USARE SOCKETCONNECTION?
-        clients.put(user, new SocketConnection(socket));
+        clients.put(user, (ServerConnection) socket);
         this.users.add(user);
         LOGGER.log(Level.INFO, "{0} connected to server!", user);
 
@@ -143,6 +139,12 @@ public class Server implements Runnable {
         Game g = game;
         return g;
     }
+
+
+    public void kickPlayer(){
+
+    }
+
 
 
     /**
@@ -221,7 +223,7 @@ public class Server implements Runnable {
 
             //Selection of the Starting Player
 
-            controller.starterSelection();
+            controller.starterSelecion();
         }
 
         //Game without gods ----> starts the youngest player
