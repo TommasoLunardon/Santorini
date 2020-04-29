@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 import it.polimi.ingsw.network.client.NetworkHandler;
+import it.polimi.ingsw.network.events.Event;
 import it.polimi.ingsw.network.events.vcevents.*;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.Box;
@@ -123,6 +124,14 @@ public class PlayerInterfaceCLI {
             System.out.println("Make Your Play:");
         }
 
+    }
+
+    private void catchMVEvent(){
+        while(true){
+            Event event;
+            // metodo di cattura evento
+            if (event.)
+        }
     }
 
     public void win(){
