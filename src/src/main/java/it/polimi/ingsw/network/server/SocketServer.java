@@ -39,8 +39,5 @@ public class SocketServer extends Thread {
             }
         }
     }
-    static void login(String username, ServerConnection connection){
-        Server.login(username,connection);
-    }
     
 }

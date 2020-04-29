@@ -3,6 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.network.events.mvevents.*;
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.network.server.ServerConnection;
+import it.polimi.ingsw.network.server.SocketConnection;
 import it.polimi.ingsw.network.server.SocketServer;
 import it.polimi.ingsw.network.server.VirtualView;
 import it.polimi.ingsw.server.controller.Controller;
@@ -78,7 +79,7 @@ public class Server implements Runnable {
     public synchronized void login() {
         String user = virtualView.receiveConnectionRequest();
 
-        clients.put(user, new ServerConnection());
+        clients.put(user, (ServerConnection) socket);
         this.users.add(user);
         LOGGER.log(Level.INFO, "{0} connected to server!", user);
 
