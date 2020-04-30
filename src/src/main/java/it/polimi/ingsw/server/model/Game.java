@@ -7,6 +7,7 @@ import it.polimi.ingsw.network.server.VirtualView;
 import it.polimi.ingsw.server.model.exceptions.*;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,7 +16,7 @@ import java.util.Arrays;
  * Class Game with all the methods needed to create and play a match
  * @author Tommaso Lunardon
  */
-public class Game {
+public class Game implements Serializable{
     private ArrayList<Player> players;
     private Map map;
     private boolean withGods;
@@ -33,7 +34,6 @@ public class Game {
     //Game creation, deciding the game's settings
     public Game(int numPlayers, boolean withGods){
 
-        //Controller checks correct inputs for NUMPLAYERS and CARDS and WITHGODS
         //NB 3 PLAYERS ---> WITHGODS = TRUE
 
         this.withGods = withGods;

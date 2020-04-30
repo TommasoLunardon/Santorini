@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.server;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import it.polimi.ingsw.network.JsonHelper;
 import it.polimi.ingsw.network.events.*;
 import it.polimi.ingsw.network.events.mvevents.*;
@@ -13,6 +14,8 @@ import it.polimi.ingsw.server.model.Box;
 import it.polimi.ingsw.server.model.PlayerColor;
 import it.polimi.ingsw.server.model.Worker;
 
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 
@@ -20,13 +23,8 @@ import java.util.ArrayList;
  * Class VirtualView that sends MVEvents to the Client, and receives VCEvent from the Network Handler.
  */
 
-/*
-
- */
-
 public class VirtualView implements MVEventSender {
     private Controller controller;
-    public final JsonHelper helper = new JsonHelper();
     private Server server;
 
 
@@ -56,7 +54,7 @@ public class VirtualView implements MVEventSender {
     @Override
     public void send(MVEvent event) {
         String target = event.getTarget();
-        String m = helper.serialization(event);
+        String m = event.toString();
         Message message = new Message(m);
         server.sendMessage(target,message);
 
@@ -66,7 +64,7 @@ public class VirtualView implements MVEventSender {
     public Box receiveBoxSelectedEvent(String ID) throws InvalidSenderException {
 
         String message = server.listen();
-        BoxSelectedEvent event = (BoxSelectedEvent) helper.deserialization(message);
+        BoxSelectedEvent event = (BoxSelectedEvent) deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
         }
@@ -78,7 +76,7 @@ public class VirtualView implements MVEventSender {
     public String receiveCardSelectedEvent(String ID) throws InvalidSenderException {
 
         String message = server.listen();
-        CardSelectedEvent event = (CardSelectedEvent) helper.deserialization(message);
+        CardSelectedEvent event = (CardSelectedEvent) JsonHelper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
         }
@@ -90,7 +88,7 @@ public class VirtualView implements MVEventSender {
     public ArrayList<String> receiveGodsSelectedEvent(String ID) throws InvalidSenderException {
 
         String message = server.listen();
-        GodsSelectedEvent event = (GodsSelectedEvent) helper.deserialization(message);
+        GodsSelectedEvent event = (GodsSelectedEvent) JsonHelper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
         }
@@ -103,7 +101,7 @@ public class VirtualView implements MVEventSender {
     public int receiveNumPlayersSelectedEvent(String ID) throws InvalidSenderException {
 
         String message = server.listen();
-        NumPlayersSelectedEvent event = (NumPlayersSelectedEvent) helper.deserialization(message);
+        NumPlayersSelectedEvent event = (NumPlayersSelectedEvent) JsonHelper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
         }
@@ -115,7 +113,7 @@ public class VirtualView implements MVEventSender {
     public Object[]  receivePlayerDataEnteredEvent(String ID) throws InvalidSenderException {
 
         String message = server.listen();
-        PlayerDataEnteredEvent event = (PlayerDataEnteredEvent) helper.deserialization(message);
+        PlayerDataEnteredEvent event = (PlayerDataEnteredEvent) JsonHelper.deserialization(message);
 
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
@@ -128,7 +126,7 @@ public class VirtualView implements MVEventSender {
     public String receiveStarterSelectedEvent(String ID) throws InvalidSenderException{
 
         String message = server.listen();
-        StarterSelectedEvent event = (StarterSelectedEvent) helper.deserialization(message);
+        StarterSelectedEvent event = (StarterSelectedEvent) JsonHelper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
         }
@@ -141,7 +139,7 @@ public class VirtualView implements MVEventSender {
     public boolean receiveWithGodsSelectedEvent(String ID) throws InvalidSenderException{
 
         String message = server.listen();
-        WithGodsSelectedEvent event = (WithGodsSelectedEvent) helper.deserialization(message);
+        WithGodsSelectedEvent event = (WithGodsSelectedEvent) JsonHelper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
         }
@@ -153,7 +151,7 @@ public class VirtualView implements MVEventSender {
     public Worker receiveWorkerSelectedEvent(String ID) throws InvalidSenderException{
 
         String message = server.listen();
-        WorkerSelectedEvent event = (WorkerSelectedEvent) helper.deserialization(message);
+        WorkerSelectedEvent event = (WorkerSelectedEvent) deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
         }
@@ -165,7 +163,7 @@ public class VirtualView implements MVEventSender {
     public boolean receiveUseofSpecialPowerEvent(String ID) throws InvalidSenderException{
 
         String message = server.listen();
-        UseofSpecialPowerEvent event = (UseofSpecialPowerEvent) helper.deserialization(message);
+        UseofSpecialPowerEvent event = (UseofSpecialPowerEvent) JsonHelper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
         }
@@ -177,7 +175,7 @@ public class VirtualView implements MVEventSender {
     public PlayerColor receiveColorSelectedEvent(String ID) throws InvalidSenderException{
 
         String message = server.listen();
-        ColorSelectedEvent event = (ColorSelectedEvent) helper.deserialization(message);
+        ColorSelectedEvent event = (ColorSelectedEvent) JsonHelper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();
         }
@@ -190,8 +188,26 @@ public class VirtualView implements MVEventSender {
 
     public String receiveConnectionRequest(){
         String message = server.listen();
-        ConnectionRequest request = (ConnectionRequest) helper.deserialization(message);
+        ConnectionRequest request = (ConnectionRequest) JsonHelper.deserialization(message);
         return request.getSenderUsername();
+    }
+
+    /**
+     * Method used to deserialize the specific events BoxSelectedEvent and WorkerSelectedEvent
+     * @param message is the  String to deserialize
+     * @return the Event received
+     */
+    public Object deserialization(String message){
+        try {
+            byte b[] = Base64.decode(message);
+            ByteArrayInputStream bi = new ByteArrayInputStream(b);
+            ObjectInputStream si = new ObjectInputStream(bi);
+            return si.readObject();
+        } catch (Exception e) {
+            System.out.println("Not valid message");
+            return null;
+        }
+
     }
 
 }

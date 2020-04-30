@@ -3,6 +3,7 @@ import it.polimi.ingsw.server.model.exceptions.NotValidBoxException;
 import it.polimi.ingsw.server.model.exceptions.NotValidLevelException;
 import it.polimi.ingsw.server.model.exceptions.WorkerNotExistException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  */
 
 
-public class Box{
+public class Box implements Serializable {
     private int level;
     private final int positionX;
     private final int positionY;

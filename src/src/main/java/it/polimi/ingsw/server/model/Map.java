@@ -3,11 +3,13 @@ package it.polimi.ingsw.server.model;
 import it.polimi.ingsw.server.model.exceptions.InvalidIndicesException;
 import it.polimi.ingsw.server.model.exceptions.NotValidBoxException;
 
+import java.io.Serializable;
+
 /**
  * @author Tommaso Lunardon
  */
 
-public class Map {
+public class Map implements Serializable {
 
     private Box[][] map;
 

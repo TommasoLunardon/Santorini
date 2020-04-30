@@ -8,11 +8,11 @@ import it.polimi.ingsw.network.events.Event;
  */
 
 
-public class JsonHelper {
+public final class JsonHelper {
 
     public JsonHelper(){};
 
-    public String serialization(Event event){
+    public static String serialization(Event event){
 
         if(event == null){
             throw new NullPointerException();}
@@ -27,7 +27,7 @@ public class JsonHelper {
 
 
 
-    public Object deserialization(String input){
+    public static Object deserialization(String input){
         if(input == null){
             throw new NullPointerException();
         }

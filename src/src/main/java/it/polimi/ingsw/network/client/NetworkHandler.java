@@ -1,6 +1,7 @@
 
 package it.polimi.ingsw.network.client;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import it.polimi.ingsw.network.JsonHelper;
 import it.polimi.ingsw.network.events.Event;
 import it.polimi.ingsw.network.events.VCEvent;
@@ -13,7 +14,9 @@ import it.polimi.ingsw.network.events.mvevents.*;
 import it.polimi.ingsw.server.model.Game;
 import it.polimi.ingsw.server.model.Player;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -49,7 +52,7 @@ public class NetworkHandler implements VCEventSender {
 
     @Override
     public void send(VCEvent event) throws IOException {
-        String m = helper.serialization(event);
+        String m = event.toString();
         Message message = new Message(m);
 
         connection.sendClientMessage(message);
@@ -59,7 +62,7 @@ public class NetworkHandler implements VCEventSender {
     public String receiveCardSelectionEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        CardSelectionEvent event = (CardSelectionEvent) helper.deserialization(message.getContent());
+        CardSelectionEvent event = (CardSelectionEvent) JsonHelper.deserialization(message.getContent());
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
         }
@@ -72,7 +75,7 @@ public class NetworkHandler implements VCEventSender {
     public String receiveCommunicationEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        CommunicationEvent event = (CommunicationEvent) helper.deserialization(message.getContent());
+        CommunicationEvent event = (CommunicationEvent) JsonHelper.deserialization(message.getContent());
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
         }
@@ -85,7 +88,7 @@ public class NetworkHandler implements VCEventSender {
     public Object[] receiveGameCreatedEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        GameCreatedEvent event = (GameCreatedEvent) helper.deserialization(message.getContent());
+        GameCreatedEvent event = (GameCreatedEvent) JsonHelper.deserialization(message.getContent());
         Object[] conditions = new Object[2];
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
@@ -101,7 +104,7 @@ public class NetworkHandler implements VCEventSender {
     public Game receiveGameUpdatingEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        GameUpdatingEvent event = (GameUpdatingEvent) helper.deserialization(message.getContent());
+        GameUpdatingEvent event = (GameUpdatingEvent) deserialization(message.getContent());
 
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
@@ -116,7 +119,7 @@ public class NetworkHandler implements VCEventSender {
     public ArrayList<String> receiveGodCardsSelectedEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        GodCardsSelectedEvent event = (GodCardsSelectedEvent) helper.deserialization(message.getContent());
+        GodCardsSelectedEvent event = (GodCardsSelectedEvent) JsonHelper.deserialization(message.getContent());
 
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
@@ -132,7 +135,7 @@ public class NetworkHandler implements VCEventSender {
     public boolean receiveInvalidConstructionEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        InvalidConstructionEvent event = (InvalidConstructionEvent) helper.deserialization(message.getContent());
+        InvalidConstructionEvent event = (InvalidConstructionEvent) JsonHelper.deserialization(message.getContent());
 
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
@@ -147,7 +150,7 @@ public class NetworkHandler implements VCEventSender {
     public Exception receiveInvalidInputEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        InvalidInputEvent event = (InvalidInputEvent) helper.deserialization(message.getContent());
+        InvalidInputEvent event = (InvalidInputEvent) JsonHelper.deserialization(message.getContent());
 
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
@@ -163,7 +166,7 @@ public class NetworkHandler implements VCEventSender {
     public boolean receiveInvalidMovementEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        InvalidMovementEvent event = (InvalidMovementEvent) helper.deserialization(message.getContent());
+        InvalidMovementEvent event = (InvalidMovementEvent) JsonHelper.deserialization(message.getContent());
 
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
@@ -178,7 +181,7 @@ public class NetworkHandler implements VCEventSender {
     public boolean receiveLoserPlayerEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        LoserPlayerEvent event = (LoserPlayerEvent) helper.deserialization(message.getContent());
+        LoserPlayerEvent event = (LoserPlayerEvent) JsonHelper.deserialization(message.getContent());
 
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
@@ -192,7 +195,7 @@ public class NetworkHandler implements VCEventSender {
     public void receiveMatchStartsEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        MatchStartsEvent event = (MatchStartsEvent) helper.deserialization(message.getContent());
+        MatchStartsEvent event = (MatchStartsEvent) JsonHelper.deserialization(message.getContent());
 
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
@@ -206,7 +209,8 @@ public class NetworkHandler implements VCEventSender {
     public Player receivePlayerJoinedEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        PlayerJoinedEvent event = (PlayerJoinedEvent) helper.deserialization(message.getContent());
+        PlayerJoinedEvent event = (PlayerJoinedEvent) deserialization(message.getContent());
+
 
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
@@ -220,7 +224,7 @@ public class NetworkHandler implements VCEventSender {
     public String receiveStarterSelectionEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        StarterSelectionEvent event = (StarterSelectionEvent) helper.deserialization(message.getContent());
+        StarterSelectionEvent event = (StarterSelectionEvent) JsonHelper.deserialization(message.getContent());
 
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
@@ -236,13 +240,31 @@ public class NetworkHandler implements VCEventSender {
     public boolean receiveWinnerPlayerEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
-        WinnerPlayerEvent event = (WinnerPlayerEvent) helper.deserialization(message.getContent());
+        WinnerPlayerEvent event = (WinnerPlayerEvent) JsonHelper.deserialization(message.getContent());
 
         if(!event.getTarget().equals(ID)){
             throw new InvalidSenderException();
         }
         else{
             return true;
+        }
+
+    }
+
+    /**
+     * Method used to deserialize the specific events GameUpdatingEvent and PlayerJoinedEvent
+     * @param message is the  String to deserialize
+     * @return the Event received
+     */
+    public Object deserialization(String message){
+        try {
+            byte b[] = Base64.decode(message);
+            ByteArrayInputStream bi = new ByteArrayInputStream(b);
+            ObjectInputStream si = new ObjectInputStream(bi);
+            return si.readObject();
+        } catch (Exception e) {
+            System.out.println("Not valid message");
+            return null;
         }
 
     }

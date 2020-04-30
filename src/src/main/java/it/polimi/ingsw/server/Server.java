@@ -190,7 +190,7 @@ public class Server implements Runnable {
 
         if(game.getNumPlayers() == 2){
 
-            String m = "You need to change your username";
+            String m = "Sorry but the game is already full";
             CommunicationEvent event = new CommunicationEvent(users.get(2),m);
             virtualView.send(event);
             //METHODS DISCONNECT NEEDS TO BE IMPLEMENTED (JING)
@@ -211,7 +211,6 @@ public class Server implements Runnable {
 
 
             //Each player chooses its card
-
             controller.godSelection();
 
             //First Player gets the remaining card
@@ -222,7 +221,6 @@ public class Server implements Runnable {
 
 
             //Selection of the Starting Player
-
             controller.starterSelection();
         }
 
@@ -245,7 +243,6 @@ public class Server implements Runnable {
 
 
         //Starts the turns alternation between players
-
         controller.turns();
 
 

@@ -1,13 +1,14 @@
 package it.polimi.ingsw.server.model;
 import it.polimi.ingsw.server.model.exceptions.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * @author Tommaso Lunardon
  */
 
-public class Worker {
+public class Worker implements Serializable {
 
     private Box box;
     private final Player player;

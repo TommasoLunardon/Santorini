@@ -98,32 +98,38 @@ public class Controller{
      * Method used to insert all users in the game as players
      */
     public void playersEnter(){
-        while (game.isGameFull()) {
-            for (int i = 0; i < game.getNumPlayers(); i++) {
-                String ID = users.get(i);
-                int age = 0;
-                PlayerColor color = null;
-                String m3 = "Please insert your data, colors available are: " + game.getAvailableColors();
+        while (!game.isGameFull()) {
+            for (int i = 0; i < users.size(); i++) {
+                boolean entered = false;
+                while(!entered) {
+                    String ID = users.get(i);
+                    setActive(ID);
+                    int age = 0;
+                    PlayerColor color = null;
+                    String m3 = "Please insert your data, colors available are: " + game.getAvailableColors();
 
-                CommunicationEvent event = new CommunicationEvent(game.getIDs().get(i),m3);
-                game.notify(event);
+                    CommunicationEvent event = new CommunicationEvent(ID, m3);
+                    game.notify(event);
 
-                try {
-                    Object[] data = view.receivePlayerDataEnteredEvent(game.getIDs().get(i));
-                } catch (InvalidSenderException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(i), e);
-                    game.notify(ev);
-                }
+                    try {
+                        Object[] data = view.receivePlayerDataEnteredEvent(game.getIDs().get(i));
+                        age = (int) data[0];
+                        color = (PlayerColor) data[1];
+                    } catch (InvalidSenderException e) {
+                        InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(i), e);
+                        game.notify(ev);
+                    }
 
 
-                try {
-                    game.addPlayer(ID, age, color);
-                    PlayerJoinedEvent event2 = new PlayerJoinedEvent(game.getIDs().get(i), getGame());
-                    game.notify(event2);
+                    try {
+                        game.addPlayer(ID, age, color);
+                        PlayerJoinedEvent event2 = new PlayerJoinedEvent(game.getIDs().get(i), game.getPlayers().get(game.getPlayers().size() - 1));
+                        game.notify(event2);
 
-                } catch (InvalidInputException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(i), e);
-                    game.notify(ev);
+                    } catch (InvalidInputException e) {
+                        InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(i), e);
+                        game.notify(ev);
+                    }
                 }
             }
 
@@ -137,6 +143,7 @@ public class Controller{
         boolean cardsAssigned = false;
         while (!cardsAssigned) {
             ArrayList<String> cards = new ArrayList<>();
+            setActive(users.get(0));
 
             String m4 = "Please select the cards, gods available are: " + game.availableGods;
             CommunicationEvent event = new CommunicationEvent(game.getIDs().get(0),m4);
@@ -162,13 +169,14 @@ public class Controller{
     }
 
     /**
-     * Method used to assign a card to each player
+     * Method used to assign a card to each player except the game creator
      */
     public void godSelection(){
         for (int j = game.getNumPlayers() - 1; j > 0; j--) {
             boolean done = false;
+            setActive(game.getIDs().get(j));
             while (!done) {
-                String m5 = "Select your Card" + "Cards available are: " + game.getGods();
+                String m5 = "Select your Card, " + "cards available are: " + game.getGods();
                 CommunicationEvent event = new CommunicationEvent(game.getIDs().get(j),m5);
                 game.notify(event);
 
@@ -196,6 +204,7 @@ public class Controller{
         }
     }
 
+    //Mettere messaggio extra per comunicare che il nome non è valido?
     /**
      * Method used to select the starting player
      */
@@ -203,7 +212,8 @@ public class Controller{
         boolean control = false;
         while (!control) {
             String starterID = null;
-            String m6 = "Select the Starter " + game.getIDs();
+            setActive(game.getIDs().get(0));
+            String m6 = "Select the Starter, players in the game are: " + game.getIDs();
             CommunicationEvent event3 = new CommunicationEvent(game.getIDs().get(0),m6);
             game.notify(event3);
 
@@ -233,17 +243,16 @@ public class Controller{
 
     }
 
-    //
-
     /**
      * Method used to place the workers in the map
-     * @throws InvalidInputException if the boxes selected aren't valid //** DA CONTROLLARE
      */
-    public void workersPlacement() throws InvalidInputException {
+    public void workersPlacement(){
         for(int j = 0; j < game.getPlayers().size(); j++){
             boolean checkPlacement = false;
             Player player = game.getPlayers().get(j);
             String ID = player.getPlayerID();
+            setActive(ID);
+
             while(!checkPlacement){
                 Box box1 = null;
                 Box box2 = null;
@@ -269,7 +278,8 @@ public class Controller{
 
                 try{
                     game.placeWorkers(player,box1,box2);
-                } catch (InvalidBoxException e) {
+                    checkPlacement = true;
+                } catch (InvalidBoxException | InvalidInputException e) {
                     InvalidInputEvent ev = new InvalidInputEvent(ID, e);
                     game.notify(ev);
                 }
@@ -285,10 +295,10 @@ public class Controller{
 
     /**
      * Method used to perform the turns alternation between players
-     * @throws InvalidInputException //DA CONTROLLARE
-     * @throws WorkerNotExistException // DA CONTROLLARE
+     * @throws InvalidInputException is never thrown because the player must belong to the game
+     * @throws WorkerNotExistException Is already checked by the client while getting the input
      */
-    public void turns() throws InvalidInputException, WorkerNotExistException {
+    public void turns() throws WorkerNotExistException, InvalidInputException {
         match:
         while (game.getPlayers().size() > 1) {
             for (int j = 0; j < game.getPlayers().size(); j++) {
@@ -297,12 +307,14 @@ public class Controller{
 
                 Player player = game.getPlayers().get(j);
                 String ID = player.getPlayerID();
+                setActive(ID);
 
                 if (!player.canMove()) {
                     game.removePlayer(player);
                     LoserPlayerEvent event = new LoserPlayerEvent(player.getPlayerID());
                     game.notify(event);
                     game.gameUpdate();
+                    break;
                 }
 
                 Worker selectedWorker = null;
@@ -324,41 +336,38 @@ public class Controller{
                 while (!checkMovement) {
                     //****** 3 SWITCH CASES (Standard, Prometheus, Arthemis) *****//
 
-
                     if (player instanceof PlayerArthemis) {
-                        if(askForSpecialAction(ID)){
+                        boolean check = askForSpecialAction(ID);
+                        if(check){
                             checkMovement = moveArthemis(player,ID,selectedWorker);
                         }else{
                             checkMovement = standardMove(player,ID,selectedWorker);
                         }
-
                     }
                     if (player instanceof PlayerPrometheus) {
-                        if(askForSpecialAction(ID)){
+                        boolean check = askForSpecialAction(ID);
+                        if(check){
                             checkMovement = movePrometheus(player,ID,selectedWorker);
                         }else{
                             checkMovement = standardMove(player,ID,selectedWorker);
                         }
 
                     }
-
                     else{
                         checkMovement = standardMove(player,ID,selectedWorker);
                     }
 
                 }
 
-
-
                 if (player.isWinner()) {
-                    WinnerPlayerEvent event = new WinnerPlayerEvent(player.getPlayerID());
+                    WinnerPlayerEvent event = new WinnerPlayerEvent(ID);
                     game.notify(event);
 
                     for (int i = 0; i < game.getIDs().size(); i++) {
 
                         if (!game.getIDs().get(i).equals(ID)) {
                             LoserPlayerEvent e = new LoserPlayerEvent(game.getIDs().get(i));
-                            game.notify(event);
+                            game.notify(e);
                         }
                     }
                     break match;
@@ -370,15 +379,16 @@ public class Controller{
                     game.notify(event);
                     game.removePlayer(player);
                     game.gameUpdate();
+                    break;
                 }
 
 
                 while (!checkConstruction) {
                     //****** 4 SWITCH CASES (Standard, Ephaestus, Demeter, Atlas) *****//
 
-
                     if (player instanceof PlayerAtlas) {
-                        if(askForSpecialAction(ID)){
+                        boolean check = askForSpecialAction(ID);
+                        if(check){
                             checkConstruction = buildAtlas(player,ID,selectedWorker);
                         }else{
                             checkConstruction = standardBuild(player,ID,selectedWorker);
@@ -386,7 +396,8 @@ public class Controller{
 
                     }
                     if (player instanceof PlayerEphaestus) {
-                        if(askForSpecialAction(ID)){
+                        boolean check = askForSpecialAction(ID);
+                        if(check){
                             checkConstruction = buildEphaestus(player,ID,selectedWorker);
                         }else{
                             checkConstruction = standardBuild(player,ID,selectedWorker);
@@ -395,7 +406,8 @@ public class Controller{
                     }
 
                     if (player instanceof PlayerDemeter) {
-                        if(askForSpecialAction(ID)){
+                        boolean check = askForSpecialAction(ID);
+                        if(check){
                             checkConstruction = buildDemeter(player,ID,selectedWorker);
                         }else{
                             checkConstruction = standardBuild(player,ID,selectedWorker);
@@ -526,7 +538,7 @@ public class Controller{
         CommunicationEvent event = new CommunicationEvent(ID,m8);
         game.notify(event);
 
-        Box box1 = null;
+        Box box1;
         try {
             box1 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
@@ -538,7 +550,7 @@ public class Controller{
         CommunicationEvent event2 = new CommunicationEvent(ID,m9);
         game.notify(event2);
 
-        Box box2 = null;
+        Box box2;
         try {
             box2 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
@@ -573,7 +585,7 @@ public class Controller{
         CommunicationEvent event = new CommunicationEvent(ID,m9);
         game.notify(event);
 
-        Box box2 = null;
+        Box box2;
         try {
             box2 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
@@ -609,7 +621,7 @@ public class Controller{
         CommunicationEvent event = new CommunicationEvent(ID,m8);
         game.notify(event);
 
-        Box box1 = null;
+        Box box1;
         try {
             box1 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
@@ -621,7 +633,7 @@ public class Controller{
         CommunicationEvent event2 = new CommunicationEvent(ID,m9);
         game.notify(event2);
 
-        Box box2 = null;
+        Box box2;
         try {
             box2 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
@@ -656,7 +668,7 @@ public class Controller{
         CommunicationEvent event = new CommunicationEvent(ID,m9);
         game.notify(event);
 
-        Box box2 = null;
+        Box box2;
         try {
             box2 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
@@ -689,7 +701,7 @@ public class Controller{
         CommunicationEvent event = new CommunicationEvent(ID,m9);
         game.notify(event);
 
-        Box box1 = null;
+        Box box1;
         try {
             box1 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
@@ -701,12 +713,13 @@ public class Controller{
         CommunicationEvent event4 = new CommunicationEvent(ID,m10);
         game.notify(event4);
 
-        Box box2 = null;
+        Box box2;
         try {
             box2 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID, e);
             game.notify(ev);
+            return false;
         }
 
 
@@ -733,6 +746,26 @@ public class Controller{
 
         }
 
+
+    }
+
+
+    /**
+     * Method to communicate that a player is active, and all others are inactive
+     * @param ID is the username that is active
+     */
+    public void setActive(String ID){
+        String active = "Your are active now";
+        String inactive = "Please wait for the opponent to finish its action";
+
+        CommunicationEvent activeEvent = new CommunicationEvent(ID, active);
+        game.notify(activeEvent);
+        for(int i = 0; i < users.size(); i++){
+            if(!users.get(i).equals(ID)){
+                CommunicationEvent inactiveEvent = new CommunicationEvent(users.get(i), inactive);
+                game.notify(inactiveEvent);
+            }
+        }
 
     }
 

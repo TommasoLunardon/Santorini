@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.events;
 
+import it.polimi.ingsw.network.JsonHelper;
+
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -10,6 +12,11 @@ import java.io.Serializable;
 
 
 public abstract class Event implements Serializable {
+
+
+    public String toString(){
+        return JsonHelper.serialization(this);
+    }
 
     public void manage(EventSender eventSender){
         eventSender.send(this);
