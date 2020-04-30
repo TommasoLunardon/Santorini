@@ -22,6 +22,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import java.util.stream.Collectors;
 
 
 /*
@@ -68,8 +69,13 @@ public class Server implements Runnable {
     }
 
     public void disconnect(String user){
-        //DEVE ESSERE IMPLEMENTATO
-        //ELIMINA CONNESSIONE ED ELIMINA L'ID DALLA LISTA USERS E DALLA MAP!
+        if (clients.get(user) != null) {
+            LOGGER.log(Level.INFO, "{0} disconnect from server!", user);
+            synchronized (clientsLock) {
+                clients.remove(user);
+            }
+            LOGGER.log(Level.INFO, "{0} removed from client list!", user);
+        }
     }
 
 
@@ -87,7 +93,6 @@ public class Server implements Runnable {
             String message = "You need to change your username";
             CommunicationEvent event = new CommunicationEvent(user,message);
             virtualView.send(event);
-            //METHODS DISCONNECT NEEDS TO BE IMPLEMENTED (JING)
             disconnect(user);
         }
 
