@@ -3,8 +3,6 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.network.events.mvevents.*;
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.network.server.ServerConnection;
-import it.polimi.ingsw.network.server.SocketConnection;
-import it.polimi.ingsw.network.server.SocketServer;
 import it.polimi.ingsw.network.server.VirtualView;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.controller.exceptions.InvalidSenderException;
@@ -12,8 +10,8 @@ import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.exceptions.*;
 
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,7 +21,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import java.util.stream.Collectors;
 
 
 /*
@@ -34,9 +31,9 @@ import java.util.stream.Collectors;
 public class Server implements Runnable {
 
     private final Object clientsLock = new Object();
-    private final Socket socket = new Socket();
+    private Socket socket = new Socket();
     private static Map<String, ServerConnection> clients;
-    private int socketPort;
+    public static final int socketPort = 1111;
     public static final Logger LOGGER = Logger.getLogger("Server");
     private Message message;
     private ObjectInputStream in;
@@ -65,10 +62,15 @@ public class Server implements Runnable {
     }
 
     private void startServer() {
-        SocketServer serverSocket = new SocketServer(this, socketPort);
-        serverSocket.start();
-
-        LOGGER.info("Socket Server Started");
+        try {
+            ServerSocket serverSocket = new ServerSocket(socketPort);
+            while (true) {
+                serverSocket.accept();
+                new Thread(this).start();
+            }
+        } catch (Exception e) {
+            LOGGER.severe(e.getMessage());
+        }
     }
 
     public void disconnect(String user){
@@ -127,11 +129,20 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
-                message = (Message) in.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                Logger.getGlobal().warning(e.getMessage());
+        try {
+            DataInputStream input = new DataInputStream(socket.getInputStream());
+            message = (Message) in.readObject();
+            input.close();
+        } catch (Exception e) {
+            Logger.getGlobal().warning(e.getMessage());
+        } finally {
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (Exception e) {
+                    socket = null;
+                    Logger.getGlobal().warning(e.getMessage());
+                }
             }
         }
     }
@@ -280,7 +291,8 @@ public class Server implements Runnable {
 
     public static void main(String[] args) throws InvalidInputException, WorkerNotExistException, IOException {
 
-        new Server();
+        Server server = new Server();
+        server.startServer();
 
     }
 
