@@ -22,6 +22,7 @@ public class SocketServer extends Thread {
     public void start() {
         try {
             serverSocket = new ServerSocket(port);
+            serverSocket.setSoTimeout(20000);
         } catch (IOException e) {
             Logger.getGlobal().warning(e.getMessage());
         }

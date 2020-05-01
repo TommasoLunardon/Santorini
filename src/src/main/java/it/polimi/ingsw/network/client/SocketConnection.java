@@ -35,6 +35,7 @@ public class SocketConnection extends Client implements Runnable {
     public void startConnection() throws IOException {
         socket = new java.net.Socket(getUsername(), getPort());
         out = new ObjectOutputStream(socket.getOutputStream());
+        socket.setSoTimeout(20000);
         in = new ObjectInputStream(socket.getInputStream());
 
         String m = helper.serialization(new ConnectionRequest(getUsername()));

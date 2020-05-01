@@ -6,8 +6,8 @@ import it.polimi.ingsw.network.JsonHelper;
 import it.polimi.ingsw.network.events.Event;
 import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
-import it.polimi.ingsw.network.events.vcevents.*;
-import it.polimi.ingsw.network.events.vcevents.CardSelectedEvent;
+import it.polimi.ingsw.network.events.mvevents.MVPingEvent;
+import it.polimi.ingsw.network.events.vcevents.VCPingEvent;
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.server.controller.exceptions.InvalidSenderException;
 import it.polimi.ingsw.network.events.mvevents.*;
@@ -17,9 +17,7 @@ import it.polimi.ingsw.server.model.Player;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 /**
  * Class Network Handler handles the client's communications with the server.
@@ -27,10 +25,16 @@ import java.util.Observer;
 
 public class NetworkHandler implements VCEventSender {
 
-    public final JsonHelper helper = new JsonHelper();
     private Client view;
     private SocketConnection connection;
     private String ID;
+
+    private TimerTask timerTask;
+    private TimerTask timerTaskReceive;
+    int counter = 0;
+
+    long startTime = 0;
+    long offsetTime = 10000;
 
 
     public NetworkHandler(){}
@@ -266,6 +270,71 @@ public class NetworkHandler implements VCEventSender {
             System.out.println("Not valid message");
             return null;
         }
+
+    }
+
+    /**
+     * Method used to check that the clients are still connected to the server.
+     */
+    public void sendPing(){
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                VCPingEvent event = new VCPingEvent(view.getUsername());
+                try {
+                    send(event);
+                } catch (IOException e) {
+                    System.out.println("Error");
+                }
+                counter++;
+            }
+        };
+
+        try {
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(timerTask, startTime, offsetTime);
+        } catch (Exception e) {
+            System.out.println("Error");
+        }
+
+    }
+
+    /**
+     * Method used to check that the clients are still connected to the server.
+     */
+    public void receivePing(){
+
+        timerTaskReceive = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    receivePingEvent();
+                } catch (InvalidSenderException e) {
+                    System.out.println("Error");
+                }
+                counter++;
+            }
+        };
+
+        try {
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(timerTaskReceive, startTime, offsetTime);
+        } catch (Exception e) {
+            System.out.println("Error");
+        }
+
+    }
+
+    private void receivePingEvent() throws InvalidSenderException {
+        connection.run();
+        Message message = connection.getMessage();
+        WinnerPlayerEvent event = (WinnerPlayerEvent) JsonHelper.deserialization(message.getContent());
+
+        if(!event.getTarget().equals(ID)){
+            throw new InvalidSenderException();
+        }
+
 
     }
 

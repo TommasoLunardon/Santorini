@@ -7,6 +7,7 @@ import it.polimi.ingsw.network.server.SocketConnection;
 import it.polimi.ingsw.network.server.SocketServer;
 import it.polimi.ingsw.network.server.VirtualView;
 import it.polimi.ingsw.server.controller.Controller;
+import it.polimi.ingsw.server.controller.exceptions.InvalidSenderException;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.exceptions.*;
 
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 
 /*
    Class Server used to perform an entire game of Santorini with clients connected to the server
-   Needs to be completed with the game lobby, management of connections and disconnections, and setting of Active/ Inactive Players
+   Needs to be completed with the management of "PING" Messages
  */
 
 public class Server implements Runnable {
@@ -42,9 +43,11 @@ public class Server implements Runnable {
 
 
     private ArrayList<String> users;
-    private static Game game;
     private static Controller controller;
     private static VirtualView virtualView;
+
+    //Game used for multiple matches
+    private static Game baseGame;
 
 
     private void initLogger() {
@@ -141,15 +144,8 @@ public class Server implements Runnable {
     }
 
     public static Game getGame() {
-        Game g = game;
-        return g;
+        return controller.getGame();
     }
-
-
-    public void kickPlayer(){
-
-    }
-
 
 
     /**
@@ -166,95 +162,118 @@ public class Server implements Runnable {
 
         virtualView = new VirtualView();
         controller = new Controller(virtualView);
-        virtualView.setController(controller);
         virtualView.setServer(this);
-        controller.setUsers(users);
-
 
         //***** LOBBY *****//
-
         //Let up to three players connect to the server
         while(users.size() < 3){
             login();
         }
+        controller.setUsers(users);
 
 
         //Message to players waiting for the game creation
         String message = "Please wait, the host is creating the game";
         for (int i = 1; i < users.size(); i++) {
-            CommunicationEvent event = new CommunicationEvent(game.getIDs().get(i), message);
+            CommunicationEvent event = new CommunicationEvent(users.get(i), message);
             virtualView.send(event);
         }
-
 
         //Insertion of Game Settings and Creation of the Game
         controller.gameCreation();
 
-        //Game Created, all players are notified
-        game.gameUpdate();
-
-        if(game.getNumPlayers() == 2){
+        if(getGame().getNumPlayers() == 2){
 
             String m = "Sorry but the game is already full";
             CommunicationEvent event = new CommunicationEvent(users.get(2),m);
             virtualView.send(event);
-            //METHODS DISCONNECT NEEDS TO BE IMPLEMENTED (JING)
             disconnect(users.get(2));
+
+            controller.setUsers(users);
 
         }
 
 
         //Players enter the game until the game is full
-
         controller.playersEnter();
-        game.gameUpdate();
 
-        if (game.isWithGods()) {
+        //Base game for restarting the match
+        baseGame =  getGame();
 
-            //Selection of God Cards
-            controller.cardsSelection();
+        boolean restart = true;
+        //Starting Point for multiple matches with the same settings
+        while(restart) {
+            controller.setGame(baseGame);
+
+            if (getGame().isWithGods()) {
+
+                //Selection of God Cards
+                controller.cardsSelection();
+
+                //Each player chooses its card
+                controller.godSelection();
+
+                //First Player gets the remaining card
+                String card = getGame().getGods().get(0);
+                getGame().chooseCard(getGame().getPlayers().get(0), card);
+                CardSelectionEvent event = new CardSelectionEvent(getGame().getIDs().get(0), card);
+                virtualView.send(event);
 
 
-            //Each player chooses its card
-            controller.godSelection();
+                //Selection of the Starting Player
+                controller.starterSelection();
+            }
 
-            //First Player gets the remaining card
-            String card = game.getGods().get(0);
-            game.chooseCard(game.getPlayers().get(0), card);
-            CardSelectionEvent event = new CardSelectionEvent(game.getIDs().get(0), card);
-            game.notify(event);
+            //Game without gods ----> starts the youngest player
+            if (!getGame().isWithGods()) {
+                int min = getGame().getMinAge();
+                for (int i = 0; i < getGame().getNumPlayers(); i++) {
+                    if (getGame().getPlayers().get(i).getPlayerAge() == min) {
+                        getGame().chooseStarter(getGame().getPlayers().get(i));
+                        StarterSelectionEvent event = new StarterSelectionEvent(getGame().getIDs().get(0), getGame());
+                        virtualView.send(event);
+
+                        break;
+                    }
+                }
+            }
+
+            //Placement of Workers//
+            controller.workersPlacement();
+
+            //Starts the turns alternation between players
+            controller.turns();
 
 
-            //Selection of the Starting Player
-            controller.starterSelection();
-        }
+            String gameover = "Game over, thanks for playing Santorini!";
+            for (int i = 0; i < getGame().getIDs().size(); i++) {
+                CommunicationEvent event = new CommunicationEvent(getGame().getIDs().get(i), gameover);
+                virtualView.send(event);
+            }
 
-        //Game without gods ----> starts the youngest player
-        if (!game.isWithGods()) {
-            int min = game.getMinAge();
-            for (int i = 0; i < game.getNumPlayers(); i++) {
-                if (game.getPlayers().get(i).getPlayerAge() == min) {
-                    game.chooseStarter(game.getPlayers().get(i));
-                    StarterSelectionEvent event = new StarterSelectionEvent(game.getIDs().get(0), getGame());
-                    game.notify(event);
+            //Ask for another match
+            boolean received = false;
+            while (!received) {
+                controller.setActive(users.get(0));
+                String restartSelection = "Do you want to restart?";
+                CommunicationEvent event = new CommunicationEvent(users.get(0), restartSelection);
+                virtualView.send(event);
 
-                    break;
+                try {
+                    restart = virtualView.receiveRestartConfirmationEvent(users.get(0));
+                    received = true;
+                } catch (InvalidSenderException e) {
+                    InvalidInputEvent ev = new InvalidInputEvent(users.get(0), e);
+                    virtualView.send(ev);
                 }
             }
         }
-
-        //***** PLACEMENT OF WORKERS *******//
-        controller.workersPlacement();
-
-
-        //Starts the turns alternation between players
-        controller.turns();
-
-
-        String goodbye = "Game over, thanks for playing Santorini!";
-        for (int i = 0; i < game.getIDs().size(); i++) {
-            CommunicationEvent event = new CommunicationEvent(game.getIDs().get(i), goodbye);
-            game.notify(event);
+        //End of the Game all clients are disconnected
+        String goodbye = "The host decided to conclude the matches";
+        for (int i = 0; i < getGame().getIDs().size(); i++) {
+            CommunicationEvent event = new CommunicationEvent(getGame().getIDs().get(i), goodbye);
+            virtualView.send(event);
+            disconnect(getGame().getIDs().get(i));
         }
     }
 

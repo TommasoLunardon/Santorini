@@ -3,7 +3,7 @@ package it.polimi.ingsw.network.server;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import it.polimi.ingsw.network.JsonHelper;
 import it.polimi.ingsw.network.events.*;
-import it.polimi.ingsw.network.events.mvevents.*;
+import it.polimi.ingsw.network.events.mvevents.MVPingEvent;
 import it.polimi.ingsw.network.events.vcevents.*;
 import it.polimi.ingsw.network.messages.ConnectionRequest;
 import it.polimi.ingsw.network.messages.Message;
@@ -17,6 +17,8 @@ import it.polimi.ingsw.server.model.Worker;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -26,6 +28,13 @@ import java.util.ArrayList;
 public class VirtualView implements MVEventSender {
     private Controller controller;
     private Server server;
+
+    private TimerTask timerTask;
+    private TimerTask timerTaskReceive;
+    int counter = 0;
+
+    long startTime = 0;
+    long offsetTime = 10000;
 
 
 
@@ -40,11 +49,7 @@ public class VirtualView implements MVEventSender {
         this.controller = controller;
     }
 
-    public void removeController(){
-        this.controller = null;
-    }
-
-
+    
 
     @Override
     public void send(Event event) {
@@ -184,6 +189,17 @@ public class VirtualView implements MVEventSender {
         }
     }
 
+    public boolean receiveRestartConfirmationEvent(String ID) throws InvalidSenderException {
+        String message = server.listen();
+        RestartConfirmationEvent event = (RestartConfirmationEvent) JsonHelper.deserialization(message);
+        if(!event.getOrigin().equals(ID)){
+            throw new InvalidSenderException();
+        }
+        else{
+            return event.getCondition();
+        }
+    }
+
 
 
     public String receiveConnectionRequest(){
@@ -207,6 +223,68 @@ public class VirtualView implements MVEventSender {
             System.out.println("Not valid message");
             return null;
         }
+
+    }
+
+    /**
+     * Method used to check that the clients are still connected to the server.
+     */
+    public void sendPing(String ID){
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                MVPingEvent event = new MVPingEvent(ID);
+                send(event);
+                counter++;
+            }
+        };
+
+        try {
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(timerTask, startTime, offsetTime);
+        } catch (Exception e) {
+            System.out.println("Error");
+        }
+
+    }
+
+    /**
+     * Method used to check that the clients are still connected to the server.
+     */
+    public void receivePing(String ID){
+
+        timerTaskReceive = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    receivePingEvent(ID);
+                } catch (InvalidSenderException e) {
+                    System.out.println("Error");
+                }
+
+                counter++;
+            }
+        };
+
+        try {
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(timerTaskReceive, startTime, offsetTime);
+        } catch (Exception e) {
+            System.out.println("Error");
+        }
+
+    }
+
+    private void receivePingEvent(String ID) throws InvalidSenderException {
+        String message = server.listen();
+        VCPingEvent event = (VCPingEvent) JsonHelper.deserialization(message);
+
+        if(!event.getOrigin().equals(ID)){
+            throw new InvalidSenderException();
+
+        }
+
 
     }
 

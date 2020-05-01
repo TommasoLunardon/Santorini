@@ -22,9 +22,9 @@ public class Controller{
 
 
 
+
     public Game getGame(){
-        Game g = game;
-        return g;
+        return game;
     }
 
     public void setGame(Game g){
@@ -49,7 +49,7 @@ public class Controller{
 
             String ID = users.get(0);
             int numPlayers = 0;
-            boolean withGods = false;
+            boolean withGods;
             String m1 = "Please insert the number of Players";
             CommunicationEvent event = new CommunicationEvent(ID,m1);
             view.send(event);
@@ -70,7 +70,7 @@ public class Controller{
                     withGods = view.receiveWithGodsSelectedEvent(ID);
                     game = new Game(numPlayers, withGods);
                     game.setVirtualView(view);
-                    this.setGame(game);
+                    game.gameUpdate();
                 } catch (InvalidSenderException e) {
                     InvalidInputEvent ev = new InvalidInputEvent(ID, e);
                     game.notify(ev);
@@ -82,7 +82,7 @@ public class Controller{
                 withGods = true;
                 game = new Game(numPlayers, withGods);
                 game.setVirtualView(view);
-                this.setGame(game);
+                game.gameUpdate();
 
             } else {
                 InvalidInputEvent ev = new InvalidInputEvent(ID, new InvalidInputException());
@@ -125,6 +125,7 @@ public class Controller{
                         game.addPlayer(ID, age, color);
                         PlayerJoinedEvent event2 = new PlayerJoinedEvent(game.getIDs().get(i), game.getPlayers().get(game.getPlayers().size() - 1));
                         game.notify(event2);
+                        entered = true;
 
                     } catch (InvalidInputException e) {
                         InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(i), e);
@@ -132,8 +133,8 @@ public class Controller{
                     }
                 }
             }
-
         }
+        game.gameUpdate();
     }
 
     /**
@@ -204,7 +205,6 @@ public class Controller{
         }
     }
 
-    //Mettere messaggio extra per comunicare che il nome non è valido?
     /**
      * Method used to select the starting player
      */
@@ -462,7 +462,7 @@ public class Controller{
      * @return true if the movement was performed
      */
     public boolean standardMove(Player player, String ID, Worker selectedWorker) {
-        String m8 = "Please Select one box";
+        String m8 = "Please Select one box to move";
         CommunicationEvent event = new CommunicationEvent(ID,m8);
         game.notify(event);
 
@@ -496,7 +496,7 @@ public class Controller{
      * @return true if the construction was performed
      */
     public boolean standardBuild(Player player, String ID, Worker selectedWorker) {
-        String m9 = "Please Select one box";
+        String m9 = "Please Select one box to build";
         CommunicationEvent event = new CommunicationEvent(ID,m9);
         game.notify(event);
 
@@ -534,7 +534,7 @@ public class Controller{
      * @return true if the movement was performed
      */
     public boolean moveArthemis(Player player, String ID, Worker selectedWorker){
-        String m8 = "Please Select the first box";
+        String m8 = "Please Select one box to move";
         CommunicationEvent event = new CommunicationEvent(ID,m8);
         game.notify(event);
 
@@ -546,7 +546,7 @@ public class Controller{
             game.notify(ev);
             return false;
         }
-        String m9 = "Please Select the second box";
+        String m9 = "Please Select one box to move";
         CommunicationEvent event2 = new CommunicationEvent(ID,m9);
         game.notify(event2);
 
@@ -581,7 +581,7 @@ public class Controller{
      * @return true if the construction was performed
      */
     public boolean buildAtlas(Player player, String ID, Worker selectedWorker){
-        String m9 = "Please Select one box";
+        String m9 = "Please Select one box to build";
         CommunicationEvent event = new CommunicationEvent(ID,m9);
         game.notify(event);
 
@@ -617,7 +617,7 @@ public class Controller{
      * @return true if the construction was performed
      */
     public boolean buildDemeter(Player player, String ID, Worker selectedWorker){
-        String m8 = "Please Select the first box";
+        String m8 = "Please Select one box to build";
         CommunicationEvent event = new CommunicationEvent(ID,m8);
         game.notify(event);
 
@@ -629,7 +629,7 @@ public class Controller{
             game.notify(ev);
             return false;
         }
-        String m9 = "Please Select the second box";
+        String m9 = "Please Select one box to build";
         CommunicationEvent event2 = new CommunicationEvent(ID,m9);
         game.notify(event2);
 
@@ -664,7 +664,7 @@ public class Controller{
      * @return true if the construction was performed
      */
     public boolean buildEphaestus(Player player, String ID, Worker selectedWorker){
-        String m9 = "Please Select one box";
+        String m9 = "Please Select one box to build";
         CommunicationEvent event = new CommunicationEvent(ID,m9);
         game.notify(event);
 
@@ -697,7 +697,7 @@ public class Controller{
      * @return true if the movement was performed
      */
     public boolean movePrometheus(Player player, String ID, Worker selectedWorker){
-        String m9 = "Please Select the first box";
+        String m9 = "Please Select one box to build";
         CommunicationEvent event = new CommunicationEvent(ID,m9);
         game.notify(event);
 
@@ -709,7 +709,7 @@ public class Controller{
             game.notify(ev);
             return false;
         }
-        String m10 = "Please Select the second box";
+        String m10 = "Please Select one box to move";
         CommunicationEvent event4 = new CommunicationEvent(ID,m10);
         game.notify(event4);
 
