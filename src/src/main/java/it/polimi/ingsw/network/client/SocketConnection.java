@@ -8,10 +8,11 @@ import it.polimi.ingsw.network.messages.ConnectionRequest;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
 
 
-public class SocketConnection extends Client implements Runnable {
+public class SocketConnection extends ClientConnection implements Runnable {
 
     private transient java.net.Socket socket;
     private transient ObjectInputStream in;
@@ -33,7 +34,7 @@ public class SocketConnection extends Client implements Runnable {
     @Override
     public void startConnection() throws IOException {
         socket = new java.net.Socket(getUsername(), getPort());
-        //socket.setSoTimeout(20000);
+        socket.setSoTimeout(20000);
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
 
@@ -41,6 +42,9 @@ public class SocketConnection extends Client implements Runnable {
         Message message = new Message(m);
 
         sendClientMessage(message);
+
+        run();
+        System.out.println(message);
 
         messageReceiver = new Thread(this);
         messageReceiver.start();
@@ -64,9 +68,12 @@ public class SocketConnection extends Client implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 message = (Message) in.readObject();
+            } catch (SocketTimeoutException e){
+                System.out.println("Sorry but the connection went down and the game ended");
+                disconnect();
             } catch (IOException | ClassNotFoundException e) {
                 Logger.getGlobal().warning(e.getMessage());
-                //disconnect();
+                disconnect();
             }
 
         }
@@ -76,7 +83,7 @@ public class SocketConnection extends Client implements Runnable {
      * The disconnect method interrupts the thread
      *
      */
-    private void disconnect() {
+    public void disconnect() {
         try {
             close();
         } catch (IOException e) {

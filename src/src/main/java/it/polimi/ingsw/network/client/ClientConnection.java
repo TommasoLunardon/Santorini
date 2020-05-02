@@ -5,11 +5,11 @@ import it.polimi.ingsw.network.messages.Message;
 import java.io.IOException;
 import java.net.Socket;
 
-public abstract class Client {
+public abstract class ClientConnection {
     private final String username;
     private final int port;
 
-    public Client(String username, int port) {
+    public ClientConnection(String username, int port) {
         this.username = username;
         this.port = port;
     }

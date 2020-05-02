@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
 
 
@@ -78,10 +78,16 @@ public class SocketConnection implements Runnable, ServerConnection {
 
                         if (request != null && !server.getUsers().contains(username)) {
                             server.login(username, this);
+                            Message logSuccessfull = new Message("You logged in successfully");
+                            sendServerMessage(logSuccessfull);
+                        }else{
+                           Message logDenied = new Message("Your username is already taken");
+                           sendServerMessage(logDenied);
+
                         }
                     }
                 }
-            } catch(IOException e){
+            }catch(IOException e){
                 disconnect();
             } catch(ClassNotFoundException e){
                 Server.LOGGER.severe(e.getMessage());

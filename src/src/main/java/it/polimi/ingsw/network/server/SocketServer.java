@@ -1,18 +1,19 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.network.events.mvevents.CommunicationEvent;
 import it.polimi.ingsw.network.messages.Message;
-import it.polimi.ingsw.server.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
 public class SocketServer extends Thread {
 
-    //private static Server server;
     private final int port;
     private ServerSocket serverSocket;
 
@@ -21,11 +22,11 @@ public class SocketServer extends Thread {
     private  Map < String, ServerConnection> clients;
 
     public SocketServer(int port) {
-        //this.server = server;
         this.port = port;
 
         clientsConnections = new ArrayList<>();
         users = new ArrayList<>();
+        clients = new HashMap<>();
     }
 
     public ArrayList<String> getUsers(){
@@ -37,6 +38,7 @@ public class SocketServer extends Thread {
     public void start() {
         try {
             serverSocket = new ServerSocket(port);
+            serverSocket.setSoTimeout(20000);
         } catch (IOException e) {
             Logger.getGlobal().warning(e.getMessage());
         }
@@ -52,7 +54,14 @@ public class SocketServer extends Thread {
                 SocketConnection client = new SocketConnection(this, newClientConnection );
                 clientsConnections.add(client);
                 client.run();
-            } catch (IOException e) {
+            } catch (SocketTimeoutException e) {
+                for(int i = 0; i< users.size(); i++){
+                    String disconnection = "Sorry but the connection went down and the game ended";
+                    Message message = new Message(disconnection);
+                    sendMessage(users.get(i), message);
+                    disconnect(users.get(i));
+                }
+            }catch (IOException e) {
                 Logger.getGlobal().warning(e.getMessage());
             }
         }

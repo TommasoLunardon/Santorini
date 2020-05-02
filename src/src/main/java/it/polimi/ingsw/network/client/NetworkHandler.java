@@ -6,7 +6,6 @@ import it.polimi.ingsw.network.JsonHelper;
 import it.polimi.ingsw.network.events.Event;
 import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
-import it.polimi.ingsw.network.events.mvevents.MVPingEvent;
 import it.polimi.ingsw.network.events.vcevents.VCPingEvent;
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.server.controller.exceptions.InvalidSenderException;
@@ -17,6 +16,7 @@ import it.polimi.ingsw.server.model.Player;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.SocketTimeoutException;
 import java.util.*;
 
 /**
@@ -25,7 +25,6 @@ import java.util.*;
 
 public class NetworkHandler implements VCEventSender {
 
-    private Client view;
     private SocketConnection connection;
     private String ID;
 
@@ -39,17 +38,10 @@ public class NetworkHandler implements VCEventSender {
 
     public NetworkHandler(){}
 
-    /**
-     *  Client connects to the network handler
-     * @param client SocketConnection used to connect
-     * @param ID Username of the client
-     * @param view client's view
-     */
-    public void clientConnects(SocketConnection client, String ID, Client view){
-        connection = client;
-        this.ID = ID;
+    public void setConnection(SocketConnection con){
+        this.connection = con;
+        ID = con.getUsername();
     }
-
 
     @Override
     public void send(Event event) {}
@@ -280,7 +272,7 @@ public class NetworkHandler implements VCEventSender {
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                VCPingEvent event = new VCPingEvent(view.getUsername());
+                VCPingEvent event = new VCPingEvent(connection.getUsername());
                 try {
                     send(event);
                 } catch (IOException e) {
