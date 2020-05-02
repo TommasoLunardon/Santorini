@@ -109,8 +109,6 @@ public class Server implements Runnable {
         LOGGER.log(Level.INFO, "Send: {0}, {1}", new Object[]{username, message});
     }
 
-    //Method used to receive messages from clients, it will continue to listen until will get a message.
-
     /**
      * //Method used to receive messages from clients, it will continue to listen until will get a message.
      * @return the received message
@@ -263,7 +261,6 @@ public class Server implements Runnable {
             disconnect(getGame().getIDs().get(i));
         }
     }
-
 
     public static void main(String[] args) throws InvalidInputException, WorkerNotExistException, IOException {
 
