@@ -18,7 +18,6 @@ public class SocketConnection extends Client implements Runnable {
     private transient ObjectOutputStream out;
     private transient Thread messageReceiver;
     private Message message;
-    public final JsonHelper helper = new JsonHelper();
 
     public SocketConnection(String username, int port) {
         super(username, port);
@@ -34,11 +33,11 @@ public class SocketConnection extends Client implements Runnable {
     @Override
     public void startConnection() throws IOException {
         socket = new java.net.Socket(getUsername(), getPort());
+        //socket.setSoTimeout(20000);
         out = new ObjectOutputStream(socket.getOutputStream());
-        socket.setSoTimeout(20000);
         in = new ObjectInputStream(socket.getInputStream());
 
-        String m = helper.serialization(new ConnectionRequest(getUsername()));
+        String m = JsonHelper.serialization(new ConnectionRequest(getUsername()));
         Message message = new Message(m);
 
         sendClientMessage(message);
@@ -67,7 +66,7 @@ public class SocketConnection extends Client implements Runnable {
                 message = (Message) in.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 Logger.getGlobal().warning(e.getMessage());
-                disconnect();
+                //disconnect();
             }
 
         }

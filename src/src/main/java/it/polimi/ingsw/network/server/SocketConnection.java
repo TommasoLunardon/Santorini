@@ -8,12 +8,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Logger;
 
 
 /**
  *
- * The SocketConnection class implements a socket that receive the message.
+ * The SocketConnection class implements a socket that receives the message.
  *
  */
 
@@ -26,9 +27,12 @@ public class SocketConnection implements Runnable, ServerConnection {
     private ObjectOutputStream out;
     private boolean active;
     private Thread listener;
+    private SocketServer server;
+    private String username;
 
-    public SocketConnection(SocketServer socketServer, Socket socket) {
+    public SocketConnection(SocketServer socketServer, Socket socket){
 
+        this.server = socketServer;
         this.socket = socket;
         this.active = true;
 
@@ -47,6 +51,13 @@ public class SocketConnection implements Runnable, ServerConnection {
         listener = new Thread(this);
         listener.start();
     }
+
+
+    public SocketServer getServer(){
+        return server;
+    }
+
+
     /**
      *
      * run method continue to listen the input and send the messages to the server in case of message
@@ -63,9 +74,10 @@ public class SocketConnection implements Runnable, ServerConnection {
                     if (message.getContent().equals("CONNECTION")) {
 
                         ConnectionRequest request = (ConnectionRequest) in.readObject();
+                        username = request.getSenderUsername();
 
-                        if (request != null) {
-                            SocketServer.login();
+                        if (request != null && !server.getUsers().contains(username)) {
+                            server.login(username, this);
                         }
                     }
                 }
@@ -101,9 +113,21 @@ public class SocketConnection implements Runnable, ServerConnection {
             out.reset();
         } catch (IOException e) {
             Logger.getGlobal().warning(e.getMessage());
+            server.disconnect(username);
             disconnect();
         }
     }
+
+
+    public Message receiveMessage() throws IOException, ClassNotFoundException {
+        while (!Thread.currentThread().isInterrupted()) {
+            synchronized (inLock) {
+                return (Message) in.readObject();
+            }
+        }
+        throw new IOException();
+    }
+
 
     @Override
     public void disconnect() {

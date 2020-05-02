@@ -7,13 +7,17 @@ import it.polimi.ingsw.network.server.SocketConnection;
 import it.polimi.ingsw.network.server.SocketServer;
 import it.polimi.ingsw.network.server.VirtualView;
 import it.polimi.ingsw.server.controller.Controller;
+import it.polimi.ingsw.server.controller.exceptions.ClientNotFoundException;
 import it.polimi.ingsw.server.controller.exceptions.InvalidSenderException;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.exceptions.*;
+import jdk.swing.interop.SwingInterOpUtils;
 
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -34,13 +38,9 @@ import java.util.stream.Collectors;
 public class Server implements Runnable {
 
     private final Object clientsLock = new Object();
-    private final Socket socket = new Socket();
-    private static Map<String, ServerConnection> clients;
-    private int socketPort;
+    private static SocketServer socketServer;
+    private static final int socketPort = 1111;
     public static final Logger LOGGER = Logger.getLogger("Server");
-    private Message message;
-    private ObjectInputStream in;
-
 
     private ArrayList<String> users;
     private static Controller controller;
@@ -59,88 +59,87 @@ public class Server implements Runnable {
             fh.setFormatter(new SimpleFormatter());
 
             LOGGER.addHandler(fh);
+            System.out.println("ok");
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
     }
 
     private void startServer() {
-        SocketServer serverSocket = new SocketServer(this, socketPort);
-        serverSocket.start();
+        try {
+            socketServer = new SocketServer(socketPort);
+            socketServer.start();
+            LOGGER.info("Socket Server Started");
+        } catch (Exception e) {
+            LOGGER.severe(e.getMessage());
+        }
 
-        LOGGER.info("Socket Server Started");
     }
 
     public void disconnect(String user){
-        if (clients.get(user) != null) {
-            LOGGER.log(Level.INFO, "{0} disconnect from server!", user);
-            synchronized (clientsLock) {
-                clients.remove(user);
-            }
-            LOGGER.log(Level.INFO, "{0} removed from client list!", user);
+        if(!users.contains(user)){
+            System.out.println("You are trying to disconnect a user that doesn't exist!");
+        }else{
+            socketServer.disconnect(user);
+            users = socketServer.getUsers();
         }
     }
-
 
     /**
      * Login method Adds player to the server
      */
     public synchronized void login() {
-        String user = virtualView.receiveConnectionRequest();
-
-        clients.put(user, (ServerConnection) socket);
-        this.users.add(user);
-        LOGGER.log(Level.INFO, "{0} connected to server!", user);
-
-        if (users.contains(user)){
-            String message = "You need to change your username";
-            CommunicationEvent event = new CommunicationEvent(user,message);
-            virtualView.send(event);
-            disconnect(user);
-        }
-
+        socketServer.run();
+        users = socketServer.getUsers();
     }
 
     /**
      * The sendMessage method sends a message to client
-     *
      * @param username username of the client who will receive the message
      * @param message  message to send
      */
     public void sendMessage(String username, Message message) {
         synchronized (clientsLock) {
-            for (Map.Entry<String, ServerConnection> client : clients.entrySet()) {
-                if (client.getKey().equals(username) && client.getValue() != null && client.getValue().isActive()) {
-                    try {
-                        client.getValue().sendServerMessage(message);
-                    } catch (IOException e) {
-                        LOGGER.severe(e.getMessage());
-                    }
-                    break;
+            if(users.contains(username)) {
+                socketServer.sendMessage(username, message);
+            }else{
+                System.out.println("You are trying to reach a non existing user!");
+            }
+        }
+        LOGGER.log(Level.INFO, "Send: {0}, {1}", new Object[]{username, message});
+    }
+
+    //Method used to receive messages from clients, it will continue to listen until will get a message.
+
+    /**
+     * //Method used to receive messages from clients, it will continue to listen until will get a message.
+     * @return the received message
+     */
+    public String listen() {
+        boolean received = false;
+        String message = null;
+        while(!received) {
+            for (int i = 0; i < users.size(); i++) {
+                try {
+                    message = receive(users.get(i));
+                    received = true;
+                } catch (ClientNotFoundException e) {
+                    System.out.println(); e.toString();
                 }
             }
         }
-
-        LOGGER.log(Level.INFO, "Send: {0}, {1}", new Object[]{username, message});
-
-    }
-
-    @Override
-    public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
-                message = (Message) in.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                Logger.getGlobal().warning(e.getMessage());
-            }
-        }
+        return message;
     }
 
     /**
-     * The listen method return the message sent to server
+     * The receive method return the message sent to server by a specific user
      */
-    public String listen () {
-        return message.getContent();
+    public String receive(String ID) throws ClientNotFoundException {
+        try{
+            return socketServer.receiveMessage(ID).getContent();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new ClientNotFoundException();
+        }
     }
 
     public static Game getGame() {
@@ -151,48 +150,37 @@ public class Server implements Runnable {
     /**
      * The Server method starts with a new game
      */
-    public Server() throws IOException, InvalidInputException, WorkerNotExistException {
+    public Server() throws InvalidInputException, WorkerNotExistException {
         initLogger();
-        synchronized (clientsLock) {
-            clients = new HashMap<>();
-        }
         startServer();
-        in = new ObjectInputStream(socket.getInputStream());
-
+        users = new ArrayList<>();
 
         virtualView = new VirtualView();
         controller = new Controller(virtualView);
         virtualView.setServer(this);
 
-        //***** LOBBY *****//
-        //Let up to three players connect to the server
-        while(users.size() < 3){
+        //Waits for the first player to connect
+        while(users.size() < 1){
+            System.out.println("Waiting for users to connect...");
             login();
         }
         controller.setUsers(users);
 
-
-        //Message to players waiting for the game creation
-        String message = "Please wait, the host is creating the game";
-        for (int i = 1; i < users.size(); i++) {
-            CommunicationEvent event = new CommunicationEvent(users.get(i), message);
-            virtualView.send(event);
-        }
-
         //Insertion of Game Settings and Creation of the Game
         controller.gameCreation();
 
-        if(getGame().getNumPlayers() == 2){
+        while(users.size() < getGame().getNumPlayers()){
+            System.out.println("Waiting for users to connect...");
+            login();
+        }
+        controller.setUsers(users);
 
-            String m = "Sorry but the game is already full";
-            CommunicationEvent event = new CommunicationEvent(users.get(2),m);
-            virtualView.send(event);
-            disconnect(users.get(2));
-
-            controller.setUsers(users);
+        //Starts the continuous check of connections with ping messages
+        for(int i = 0 ; i < users.size(); i ++){
+            virtualView.sendPing(users.get(i));
+            virtualView.receivePing(users.get(i));
 
         }
-
 
         //Players enter the game until the game is full
         controller.playersEnter();
@@ -218,7 +206,6 @@ public class Server implements Runnable {
                 getGame().chooseCard(getGame().getPlayers().get(0), card);
                 CardSelectionEvent event = new CardSelectionEvent(getGame().getIDs().get(0), card);
                 virtualView.send(event);
-
 
                 //Selection of the Starting Player
                 controller.starterSelection();
@@ -284,4 +271,6 @@ public class Server implements Runnable {
 
     }
 
+    @Override
+    public void run() {}
 }

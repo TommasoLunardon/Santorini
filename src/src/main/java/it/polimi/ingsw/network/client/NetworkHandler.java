@@ -240,7 +240,6 @@ public class NetworkHandler implements VCEventSender {
     }
 
 
-    //Returns TRUE if the player has won
     public boolean receiveWinnerPlayerEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
