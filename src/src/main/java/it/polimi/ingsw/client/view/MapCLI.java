@@ -1,8 +1,6 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.client.view;
 import it.polimi.ingsw.server.model.PlayerColor;
 import it.polimi.ingsw.server.model.Worker;
-
-import java.util.ArrayList;
 
 /**
  * these class create a set of box orded in a matrix for simulate map conformation

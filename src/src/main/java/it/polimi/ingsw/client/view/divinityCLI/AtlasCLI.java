@@ -1,6 +1,4 @@
-package it.polimi.ingsw.view.divinityCLI;
-
-import it.polimi.ingsw.view.divinityCLI.DivinityCLI;
+package it.polimi.ingsw.client.view.divinityCLI;
 
 /**
  * create an Atlas instance for out stamp

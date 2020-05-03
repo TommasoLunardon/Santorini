@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.client.view;
 
 import it.polimi.ingsw.server.model.PlayerColor;
 

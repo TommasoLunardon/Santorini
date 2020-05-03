@@ -1,6 +1,7 @@
-package it.polimi.ingsw.view;
-import com.sun.tools.javac.main.Option;
+package it.polimi.ingsw.client.view;
 import it.polimi.ingsw.network.client.NetworkHandler;
+import it.polimi.ingsw.network.client.SocketConnection;
+import it.polimi.ingsw.network.client.View;
 import it.polimi.ingsw.network.events.vcevents.*;
 import it.polimi.ingsw.network.messages.ConnectionRequest;
 import it.polimi.ingsw.server.controller.exceptions.InvalidSenderException;
@@ -8,8 +9,7 @@ import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.Box;
 import it.polimi.ingsw.server.model.exceptions.InvalidIndicesException;
 import it.polimi.ingsw.server.model.exceptions.WorkerNotExistException;
-import it.polimi.ingsw.view.divinityCLI.*;
-import org.graalvm.compiler.phases.graph.ScopedPostOrderNodeIterator;
+import it.polimi.ingsw.client.view.divinityCLI.*;
 
 
 import java.io.IOException;
@@ -23,30 +23,47 @@ import java.util.Scanner;
  */
 
 public class PlayerInterfaceCLI {
-    //avviso per il server
-    private ArrayList<PlayerColor> vaildColors;
+
+    private ArrayList<PlayerColor> validColors;
     private MapCLI mapCLI;
     private Game game;
     private Player player;
     private String iD;
     private DivinityCLI divinityCLI;
-    private NetworkHandler networkHandler;
     private BoxCLI oldBoxCLI;
     private Worker workerMoved;
     private boolean blocked;
+
+    private NetworkHandler networkHandler;
+    private static Scanner input = new Scanner(System.in);
+    private static SocketConnection connection;
+    private static final int port = 1111;
+
     /**
      * Create Client's link to Server and begin player construction
      */
     public PlayerInterfaceCLI() {
 
-        System.out.println("Welcome To Santorini CLI");
-        Scanner scanner=new Scanner(System.in);
-        do {
-            System.out.print("Please, Insert Your ID (Might Be Change In The Future): ");
-            iD=scanner.nextLine();
-        }while (iD.contains(" "));
-        networkHandler = new NetworkHandler();
-        networkHandler.send(new ConnectionRequest(iD));
+        boolean connected = false;
+        while(!connected){
+
+            System.out.println("Insert your Username");
+
+            String username = input.nextLine();
+            connection= new SocketConnection(username, port);
+            networkHandler = new NetworkHandler();
+            networkHandler.setConnection(connection);
+
+
+            try{System.out.println(connection.getMessage().getContent());
+                if(connection.getMessage().getContent().equals("You logged in succcessfully")){
+                    connected = true;
+                }
+            }catch (NullPointerException e){
+                System.out.println("You need to connect");
+            }
+        }
+
         catchMVEvent();
     }
 
@@ -55,18 +72,17 @@ public class PlayerInterfaceCLI {
      * @deprecated fixare la parte dei colori
      */
     synchronized public void setPlayer() {
-        String avialableColor;
+        String availableColor;
         try {
             wait();
         } catch (InterruptedException ignored){}
         int age;
         System.out.println("Please, Insert Your Information");
-        Scanner in=new Scanner(System.in);
         System.out.print("\tInsert Your Age: ");
-        age = in.nextInt();
+        age = input.nextInt();
         while (age<0){
             System.out.print("\t\tPlease. Insert A Valid Age: ");
-            age = in.nextInt();
+            age = input.nextInt();
         }
         System.out.println("\tIn The End Select Your Color: Available Colours");
         /*metodo che stampa i colori*/
@@ -107,8 +123,8 @@ public class PlayerInterfaceCLI {
                 if (nameDivinity.equals("Prometheus")) {
                     divinityCLI = new PrometheusCLI();
                 }
-                if (nameDivinity.equals("Minotaur")||nameDivinity.equals("Asterios")) {
-                    divinityCLI = new ApolloCLI();
+                if (nameDivinity.equals("Minotaur")) {
+                    divinityCLI = new MinotaurCLI();
                 }
             }
             System.out.println("Your Divinity: " + divinityCLI.getName()+"\nDescription:" + divinityCLI.getDescription());
@@ -120,11 +136,11 @@ public class PlayerInterfaceCLI {
      * the real view's body catch all server communication and work consecutively
      */
     private void catchMVEvent() {
-        Scanner input=new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
         String communicationString;
         String supportString;
         boolean supportBoolean;
-        ArrayList<String> divinitysAviable;
+        ArrayList<String> godsAvailable;
         Object[] info;
         while (true) {
             try {
@@ -238,7 +254,7 @@ public class PlayerInterfaceCLI {
                                     ArrayList<String> divinitySelection = new ArrayList<String>();
                                     for (int i = 0; i < game.getNumPlayers(); i++) {
                                         do {
-                                            System.out.print("Select divinity #" + i + " : ");
+                                            System.out.println("Select divinity #" + i + " : ");
                                             selectedDivinity = input.nextLine();
                                         } while (!((selectedDivinity.equals("Apollo") || selectedDivinity.equals("Artemis") || selectedDivinity.equals("Athena") || selectedDivinity.equals("Atlas") || selectedDivinity.equals("Demeter") || selectedDivinity.equals("Hephaestus") || selectedDivinity.equals("Minotaur") || selectedDivinity.equals("Pan") || selectedDivinity.equals("Prometeus")) && !(divinitySelection.contains(selectedDivinity))));
                                         divinitySelection.add(selectedDivinity);
@@ -257,7 +273,7 @@ public class PlayerInterfaceCLI {
                     if (communicationString.substring(0, 30).equals("Do you want to play with gods?")) {
                             try {
                                 do {
-                                    System.out.print(communicationString + "<yes/no>: ");
+                                    System.out.println(communicationString + "<yes/no>: ");
                                     supportString = input.nextLine();
                                 } while (!(supportString.equals("yes") || supportString.equals("no") || supportString.equals("No") || supportString.equals("Yes")));
                                 supportBoolean = supportString.equals("yes") || supportString.equals("Yes");
@@ -414,7 +430,6 @@ public class PlayerInterfaceCLI {
                     if (communicationString.substring(0, 30).equals("Please Select one box to build")) {
                             printScreen();
                             int coordinateX, coordinateY;
-                            //Box box;
 
                             do {
                                 while (true) {
@@ -422,7 +437,7 @@ public class PlayerInterfaceCLI {
                                         do {
                                             System.out.print("Select a box where build:\n\t coordinate X:");
                                             coordinateX = input.nextInt();
-                                            System.out.print("\t coordinate Y:");
+                                            System.out.println("\t coordinate Y:");
                                             coordinateY = input.nextInt();
                                         } while (!(coordinateX >= 0 && coordinateX < 4 && coordinateY >= 0 && coordinateY < 5 && !game.getMap().getBox(coordinateX, coordinateY).hasWorker() && !game.getMap().getBox(coordinateX, coordinateY).hasDome() && game.getMap().getBox(coordinateX, coordinateY).getLevel() < 3));
 
@@ -511,7 +526,7 @@ public class PlayerInterfaceCLI {
                             do {
                                 try {
                                     supportString = networkHandler.receiveCommunicationEvent();
-// controllare che cio mi permetta di avere un ciclo ottimale
+
                                     if (supportString.equals("Your are active now") || supportString.equals("Please insert your data, colors available are: ")) {
                                         break;
                                     }
@@ -560,45 +575,22 @@ public class PlayerInterfaceCLI {
                     }
                     catch (InvalidSenderException c) {
                         try {
-                            divinitysAviable = networkHandler.receiveGodCardsSelectedEvent();
+                            godsAvailable = networkHandler.receiveGodCardsSelectedEvent();
                         }
                         catch (InvalidSenderException e) {
                             try {
                                 networkHandler.receiveLoserPlayerEvent();
                                 System.out.println("\t\t\t\tGAME OVER");
-                                 /*try {
-                                     do{
-                                         System.out.print("Want You Play Another Time? <yes/no>: ");
-                                         supportString=input.nextLine();
-                                     }
-                                     while(! (supportString.equals("yes")||supportString.equals("no")||supportString.equals("No")||supportString.equals("Yes")));
 
-                                     if (supportString.equals("yes") || supportString.equals("Yes")) {
-                                         networkHandler.send(new RestartConfirmationEvent(iD, true));
-                                     }
-                                     else{
-                                         networkHandler.send(new RestartConfirmationEvent(iD, false));
-                                         break;
-                                     }
-                                 }catch (IOException ignored){}*/
                                 }
                             catch (InvalidSenderException l) {
-                                    /*try {
-                                        communicationString = networkHandler.receiveStarterSelectionEvent();
-                                        do {
-                                            System.out.println("Select The Starter Player");
-                                            for (int i = 0; i<game.getPlayers().size();i++) {
 
-                                            }
-                                                supportString = input.nextLine();
-                                            }
-                                        } catch (InvalidSenderException g) {*/
                                             try {
                                                 networkHandler.receiveWinnerPlayerEvent();
                                                 System.out.println("\\t\\t\\t\\tYOU WIN :D");
                                                 try {
                                                     do {
-                                                        System.out.print("Want You Play Another Time? <yes/no>: ");
+                                                        System.out.print("Do you want to Play Another Time? <yes/no>: ");
                                                         supportString = input.nextLine();
                                                     }
                                                     while (!(supportString.equals("yes") || supportString.equals("no") || supportString.equals("No") || supportString.equals("Yes")));
@@ -620,7 +612,6 @@ public class PlayerInterfaceCLI {
         }
     }
 
-
     public void updateMapCLIToMap() {
         for (int x=0; x<5; x++){
             for (int y=0; y<5; y++){
@@ -641,171 +632,4 @@ public class PlayerInterfaceCLI {
         }
     }
 
-
-
-/*    public void build(Scanner in) {
-        System.out.println("You've Moved, Now You'Have To Build.");
-        int boxX, boxY;
-        try {
-            Box box = game.getMap().getBox(workerMoved.getBox().getPosition()[0], workerMoved.getBox().getPosition()[1]);
-            Box box1;
-            for (int y=3; y>0; y--){
-                if (y==3) System.out.print((box.getPosition()[1]+1)+" | ");
-                if (y==2) System.out.print((box.getPosition()[1])+" | ");
-                if (y==1) System.out.print((box.getPosition()[1]-1)+" | ");
-                for (int x=0; x<3; x++){
-                    box1=box.getNeighboursMatrix()[x][y];
-                    if (box.getNeighboursMatrix()[x][y]==null){
-                        System.out.print("\u001b[38;5;0m"+"█");
-                    }
-                    else{
-                        if (box1.getLevel()==3||box1.hasDome()) {
-                            System.out.print("\u001b[38;5;1m" + "█");
-                        }
-                        else {
-                            System.out.print("\u001b[48;5;34m" + "█");
-                        }
-                    }
-                }
-                System.out.print("\n");
-            }
-            System.out.println(" ______\n ");
-            if (box.getPosition()[0]-1>=0)
-                System.out.print((box.getPosition()[0]-1));
-            else System.out.print("-");
-            if (box.getPosition()[0]>=0)
-                System.out.print((box.getPosition()[0]));
-            else System.out.print("-");
-            if (box.getPosition()[0]+1>=0)
-                System.out.print((box.getPosition()[0]+1));
-            else System.out.print("-");
-            } catch (InvalidIndicesException ignore){}
-            while (true) {
-                System.out.print("Box Coordinates X:");
-                boxX = in.nextInt();
-                System.out.print("Box Coordinates Y:");
-                boxY = in.nextInt();
-                try {
-                    mapCLI.build(boxX, boxY);
-                    workerMoved = null;
-                    break;
-                } catch (InputFailedException e) {
-                    System.out.println("σφάλμα INSERT VALID INFOS");
-                }
-            }
-
-    }
-
-    /**
-     * Communicate to server player's worker, make an input check and print new position on the map
-     */
-  /*  public void move(Scanner in) {
-        int boxX, boxY;
-        int index;
-        Box box;
-        Worker worker;
-        try {
-            if (this.player.canMove()){
-                System.out.println("\nThese are your worker: ");
-                for (int i=0; i<player.getWorkers().size();i++){
-                    if (player.getWorkers().get(i).canMove()){
-                        System.out.println("\t (" + (player.getWorkers().get(i).getBox().getPosition()[0]) + (player.getWorkers().get(i).getBox().getPosition()[1]) + ") worker #" +i);
-                    }
-                }
-                do {
-                    System.out.print("Select Worker #: ");
-                    index = in.nextInt();
-                }while (index<0||index>3);
-                worker=player.getWorkers().get(index);
-                workerMoved=worker;
-                box=worker.getBox();
-                Box box1;
-                System.out.println("Now You Can Move In A Green Box");
-                for (int y=3; y>0; y--){
-                    if (y==3) System.out.print((box.getPosition()[1]+1)+" | ");
-                    if (y==2) System.out.print((box.getPosition()[1])+" | ");
-                    if (y==1) System.out.print((box.getPosition()[1]-1)+" | ");
-                    for (int x=0; x<3; x++){
-                        box1=box.getNeighboursMatrix()[x][y];
-                        if (box.getNeighboursMatrix()[x][y]==null){
-                            System.out.print("\u001b[38;5;0m"+"█");
-                        }
-                        else{
-                            if (!worker.canMove(box.getNeighboursMatrix()[x][y])) {
-                                System.out.print("\u001b[38;5;1m" + "█");
-                            }
-                            else {
-                                System.out.print("\u001b[48;5;34m" + "█");
-                            }
-                        }
-                    }
-                    System.out.print("\n");
-                }
-                System.out.println(" ______\n ");
-                if (box.getPosition()[0]-1>=0)
-                    System.out.print((box.getPosition()[0]-1));
-                else System.out.print("-");
-                if (box.getPosition()[0]>=0)
-                    System.out.print((box.getPosition()[0]));
-                else System.out.print("-");
-                if (box.getPosition()[0]+1>=0)
-                    System.out.print((box.getPosition()[0]+1));
-                else System.out.print("-");
-
-                while (true){
-                    System.out.print("Box Coordinates X:");
-                    boxX=in.nextInt();
-                    System.out.print("Box Coordinates Y:");
-                    boxY=in.nextInt();
-                    try {
-                        mapCLI.moveWorker(boxX,boxY,worker);
-                        break;
-                    }
-                    catch (InputFailedException e){
-                        System.out.println("σφάλμα INSERT VALID INFOS");
-                    }
-                }
-
-            }
-            else{
-                System.out.println("Sorry You Haven't Movable Worker So");
-                lose();
-                //segnala la sconfitta al server
-            }
-        } catch (WorkerNotExistException e) {
-            e.printStackTrace();
-        }
-
-    }*/
-
-    /*/**
-     * if this player is the first logged he must select number of player and type of the game
-     *//*
-    public void setTypeGame(){
-
-        int num;
-        int type;
-        boolean whitGods;
-        Scanner in=new Scanner(System.in);
-        do{
-            System.out.print("You Are The First Player, Select Number Of Players (Just 2 Or 3): ");
-            num=in.nextInt();
-            if (num<=3 && num>=2){
-                if (num==3){
-                    type=2;
-                }
-                else{
-                    System.out.println("Select Type Of Game:\n\t1-Not Whit Divinity\n\t2-Whit Divinity\n: ");
-                    type=in.nextInt();
-                    if (type==2||type==1){
-                        whitGods= type == 2;
-                        break;
-                    }
-                }
-            }
-        }while (true);
-        new NumPlayersSelectedEvent(iD,num);
-        new WithGodsSelectedEvent(iD,whitGods);
-    }
-*/
 }
