@@ -262,7 +262,6 @@ public class VirtualView implements MVEventSender {
                 } catch (InvalidSenderException e) {
                     System.out.println("Error");
                 }
-
                 counter++;
             }
         };

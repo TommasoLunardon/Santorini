@@ -248,7 +248,7 @@ public class Server implements Runnable {
                     restart = virtualView.receiveRestartConfirmationEvent(users.get(0));
                     received = true;
                 } catch (InvalidSenderException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(users.get(0), e);
+                    InvalidInputEvent ev = new InvalidInputEvent(users.get(0));
                     virtualView.send(ev);
                 }
             }

@@ -57,7 +57,7 @@ public class Controller{
             try {
                 numPlayers = view.receiveNumPlayersSelectedEvent(ID);
             } catch (InvalidSenderException e) {
-                InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+                InvalidInputEvent ev = new InvalidInputEvent(ID);
                 view.send(ev);
             }
 
@@ -72,7 +72,7 @@ public class Controller{
                     game.setVirtualView(view);
                     game.gameUpdate();
                 } catch (InvalidSenderException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+                    InvalidInputEvent ev = new InvalidInputEvent(ID);
                     game.notify(ev);
                 }
 
@@ -85,7 +85,7 @@ public class Controller{
                 game.gameUpdate();
 
             } else {
-                InvalidInputEvent ev = new InvalidInputEvent(ID, new InvalidInputException());
+                InvalidInputEvent ev = new InvalidInputEvent(ID);
                 game.notify(ev);
 
             }
@@ -116,7 +116,7 @@ public class Controller{
                         age = (int) data[0];
                         color = (PlayerColor) data[1];
                     } catch (InvalidSenderException e) {
-                        InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(i), e);
+                        InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(i));
                         game.notify(ev);
                     }
 
@@ -128,7 +128,7 @@ public class Controller{
                         entered = true;
 
                     } catch (InvalidInputException e) {
-                        InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(i), e);
+                        InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(i));
                         game.notify(ev);
                     }
                 }
@@ -153,7 +153,7 @@ public class Controller{
             try {
                 cards = view.receiveGodsSelectedEvent(game.getIDs().get(0));
             } catch (InvalidSenderException e) {
-                InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(0), e);
+                InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(0));
                 game.notify(ev);
             }
 
@@ -163,7 +163,7 @@ public class Controller{
                 GodCardsSelectedEvent event3 = new GodCardsSelectedEvent(game.getIDs().get(0), getGame());
                 game.notify(event3);
             } catch (InvalidInputException e) {
-                InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(0), e);
+                InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(0));
                 game.notify(ev);
             }
         }
@@ -186,7 +186,7 @@ public class Controller{
                 try {
                     card = view.receiveCardSelectedEvent(game.getIDs().get(j));
                 } catch (InvalidSenderException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(j), e);
+                    InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(j));
                     game.notify(ev);
                 }
 
@@ -197,7 +197,7 @@ public class Controller{
                     game.notify(event2);
 
                 } catch (InvalidInputException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(j), e);
+                    InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(j));
                     game.notify(ev);
 
                 }
@@ -220,7 +220,7 @@ public class Controller{
             try {
                 starterID = view.receiveStarterSelectedEvent(game.getIDs().get(0));
             } catch (InvalidSenderException e) {
-                InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(0), e);
+                InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(0));
                 game.notify(ev);
             }
 
@@ -234,7 +234,7 @@ public class Controller{
                         game.notify(ev);
 
                     } catch (InvalidInputException e) {
-                        InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(0), e);
+                        InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(0));
                         game.notify(ev);
                     }
                 }
@@ -262,7 +262,7 @@ public class Controller{
                 try {
                     box1 = view.receiveBoxSelectedEvent(ID);
                 } catch (InvalidSenderException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+                    InvalidInputEvent ev = new InvalidInputEvent(ID);
                     game.notify(ev);
                 }
 
@@ -272,7 +272,7 @@ public class Controller{
                 try {
                     box2 = view.receiveBoxSelectedEvent(ID);
                 } catch (InvalidSenderException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+                    InvalidInputEvent ev = new InvalidInputEvent(ID);
                     game.notify(ev);
                 }
 
@@ -280,7 +280,7 @@ public class Controller{
                     game.placeWorkers(player,box1,box2);
                     checkPlacement = true;
                 } catch (InvalidBoxException | InvalidInputException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+                    InvalidInputEvent ev = new InvalidInputEvent(ID);
                     game.notify(ev);
                 }
 
@@ -327,7 +327,7 @@ public class Controller{
                     try {
                         selectedWorker = view.receiveWorkerSelectedEvent(ID);
                     } catch (InvalidSenderException e) {
-                        InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+                        InvalidInputEvent ev = new InvalidInputEvent(ID);
                         game.notify(ev);
                     }
 
@@ -446,7 +446,7 @@ public class Controller{
                 gotResponse = true;
                 return response;
             } catch (InvalidSenderException e) {
-                InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+                InvalidInputEvent ev = new InvalidInputEvent(ID);
                 game.notify(ev);
             }
 
@@ -470,7 +470,7 @@ public class Controller{
         try {
             box = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
-            InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+            InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
@@ -504,7 +504,7 @@ public class Controller{
         try {
             box2 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
-            InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+            InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
@@ -542,7 +542,7 @@ public class Controller{
         try {
             box1 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
-            InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+            InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
@@ -554,7 +554,7 @@ public class Controller{
         try {
             box2 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
-            InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+            InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
@@ -589,7 +589,7 @@ public class Controller{
         try {
             box2 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
-            InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+            InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
@@ -625,7 +625,7 @@ public class Controller{
         try {
             box1 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
-            InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+            InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
@@ -637,7 +637,7 @@ public class Controller{
         try {
             box2 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
-            InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+            InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
@@ -672,7 +672,7 @@ public class Controller{
         try {
             box2 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
-            InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+            InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
@@ -705,7 +705,7 @@ public class Controller{
         try {
             box1 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
-            InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+            InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
@@ -717,7 +717,7 @@ public class Controller{
         try {
             box2 = view.receiveBoxSelectedEvent(ID);
         } catch (InvalidSenderException e) {
-            InvalidInputEvent ev = new InvalidInputEvent(ID, e);
+            InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }

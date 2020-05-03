@@ -5,11 +5,8 @@ import it.polimi.ingsw.network.events.MVEventSender;
 
 public class InvalidInputEvent extends MVEvent {
 
-    private Exception exc;
-
-    public InvalidInputEvent(String target, Exception e) {
+    public InvalidInputEvent(String target) {
         super(target);
-        this.exc = e;
     }
 
     @Override
@@ -17,8 +14,5 @@ public class InvalidInputEvent extends MVEvent {
         eventSender.send(this);
 
     }
-
-    public Exception getException() {
-        return exc;
-    }
 }
+

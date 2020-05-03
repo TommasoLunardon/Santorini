@@ -143,7 +143,7 @@ public class NetworkHandler implements VCEventSender {
     }
 
 
-    public Exception receiveInvalidInputEvent() throws InvalidSenderException {
+    public boolean receiveInvalidInputEvent() throws InvalidSenderException {
         connection.run();
         Message message = connection.getMessage();
         InvalidInputEvent event = (InvalidInputEvent) JsonHelper.deserialization(message.getContent());
@@ -152,7 +152,7 @@ public class NetworkHandler implements VCEventSender {
             throw new InvalidSenderException();
         }
         else{
-            return event.getException();
+            return true;
         }
 
     }
