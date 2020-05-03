@@ -8,95 +8,135 @@ import it.polimi.ingsw.server.model.PlayerColor;
  */
 
 public class BoxCLI {
-    private String [][] box;
+    private String[][] box;
     private int dimension;
     private int level;
     private boolean haveWorker;
     private PlayerColor playerColor;
+    private int coordinateX, coordinateY;
 
+    public int getLevel(){
+        return level;
+    }
     /**
      * @param dimension: number
      * @throws InputFailedException: the worst input insertion
      */
-    public BoxCLI( int dimension) throws InputFailedException {
-        if (dimension < 5 || (dimension-5) % 2 != 0 ){
+    public BoxCLI(int dimension, int coordinateX, int coordinateY) throws InputFailedException {
+        if (dimension < 5 || (dimension - 5) % 2 != 0) {
             throw new InputFailedException();
-        }
-        else{
-            this.dimension=dimension;
-            this.box= new String[dimension][dimension];
+        } else {
+            this.dimension = dimension;
+            this.coordinateX = coordinateX;
+            this.coordinateY = coordinateY;
+            this.box = new String[dimension][dimension];
             for (int x = 0; x < dimension; x++) {
                 for (int y = 0; y < dimension; y++) {
-                    if (y==0||x==0||x==dimension-1||y==dimension-1){
-                        this.box[x][y]="\u001b[48;5;0m"+"\u001b[38;5;326m"+"░";
-                    }
-                    else this.box[x][y]="\u001b[48;5;22m"+"\u001b[38;5;28m"+"▓";
+                    if (y == 0 || x == 0 || x == dimension - 1 || y == dimension - 1) {
+                        this.box[x][y] = "\u001b[48;5;0m" + "\u001b[38;5;326m" + "░";
+                    } else this.box[x][y] = "\u001b[48;5;22m" + "\u001b[38;5;28m" + "▓";
                 }
             }
         }
     }
+
+    /*public int getCoordinateX() {
+        return coordinateX;
+    }
+
+    public int getCoordinateY() {
+        return coordinateY;
+    }*/
 
     /**
      * @return return box's matrix
      */
-    public String[][] getBox(){
+    public String[][] getBox() {
         return box;
     }
 
     /**
-     *set a worker's figure in the box
+     * set a worker's figure in the box
+     *
      * @param color: worker's color
      * @throws InputFailedException: error in input
      */
     public void setWorker(PlayerColor color) throws InputFailedException {
-        int middle=dimension/2;
-        if (color.equals(PlayerColor.YELLOW)) {
-            box[middle][middle + 1]="\u001b[48;5;28m" +"\u001b[38;5;220m"+"O";
-            box[middle][middle]="\u001b[48;5;28m"+"\u001b[38;5;220m"+"█";
-            box[middle + 1][middle]="\u001b[48;5;28m" +"\u001b[38;5;220m"+"╜";
-            box[middle + 1][middle - 1]="\u001b[48;5;28m" +"\u001b[38;5;220m"+"∏";
-            box[middle - 1][middle]="\u001b[48;5;28m" +"\u001b[38;5;220m"+"╙";
-            playerColor=color;
+        int middle = dimension / 2;
+        if (level>0){
+            if (color.equals(PlayerColor.YELLOW)) {
+                box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "O";
+                box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "█";
+                box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╜";
+                box[middle + 1][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "∏";
+                box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╙";
+                playerColor = color;
+            }
+            else {
+                if (color.equals(PlayerColor.BLUE)) {
+                    box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "O";
+                    box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "█";
+                    box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╜";
+                    box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "∏";
+                    box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╙";
+                    playerColor = color;
+                }
+                else {
+                    if (color.equals(PlayerColor.RED)) {
+                        box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "O";
+                        box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "█";
+                        box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╜";
+                        box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "∏";
+                        box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╙";
+                        playerColor = color;
+                    } else throw new InputFailedException();
+                }
+            }
         }
         else {
-            if (color.equals(PlayerColor.BLUE)) {
-                box[middle][middle + 1] ="\u001b[48;5;28m" +"\u001b[38;5;21m"+"O";
-                box[middle][middle] = "\u001b[48;5;28m"+"\u001b[38;5;21m"+"█";
-                box[middle + 1][middle] ="\u001b[48;5;28m"+ "\u001b[38;5;21m"+"╜";
-                box[middle][middle - 1] ="\u001b[48;5;28m"+ "\u001b[38;5;21m"+"∏";
-                box[middle - 1][middle] ="\u001b[48;5;28m"+ "\u001b[38;5;21m"+"╙";
-                playerColor=color;
-            }
-            else{
-                if (color.equals(PlayerColor.RED)) {
-                    box[middle][middle + 1] = "\u001b[48;5;28m"+"\u001b[38;5;1m"+"O";
-                    box[middle][middle] = "\u001b[48;5;28m"+"\u001b[38;5;1m"+"█";
-                    box[middle + 1][middle] ="\u001b[48;5;28m"+"\u001b[38;5;1m"+"╜";
-                    box[middle][middle - 1] = "\u001b[48;5;28m"+"\u001b[38;5;1m"+"∏";
-                    box[middle - 1][middle] ="\u001b[48;5;28m" + "\u001b[38;5;1m"+"╙";
-                    playerColor=color;
+            if (color.equals(PlayerColor.YELLOW)) {
+                box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "O";
+                box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "█";
+                box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╜";
+                box[middle + 1][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "∏";
+                box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╙";
+                playerColor = color;
+            } else {
+                if (color.equals(PlayerColor.BLUE)) {
+                    box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "O";
+                    box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "█";
+                    box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╜";
+                    box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "∏";
+                    box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╙";
+                    playerColor = color;
+                } else {
+                    if (color.equals(PlayerColor.RED)) {
+                        box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "O";
+                        box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "█";
+                        box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╜";
+                        box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "∏";
+                        box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╙";
+                        playerColor = color;
+                    } else throw new InputFailedException();
                 }
-                else throw new InputFailedException();
             }
         }
         setBorder();
-        haveWorker=true;
+        haveWorker = true;
     }
 
     /**
-     * print on screen this box
+     *  print on screen correspondent box's line
+     * @param line: line to print
      */
-    public void printBox(){
-        for(int i=dimension;i>0;i--){
-            for(int j=dimension;j>0;j--){
-                System.out.print(box[j][i]);
-            }
-            System.out.print("\n");
+    public void printBox(int line){
+        for(int j=dimension;j>0;j--){
+            System.out.print(box[j][line]);
         }
     }
 
     /**
-     * set border's color
+     * set a grey border
      */
     private void setBorder(){
         for (int x = 0; x < dimension; x++) {
@@ -109,13 +149,12 @@ public class BoxCLI {
     }
 
     /**
-     * modify box to a box bulding a structure
+     *  modify box to a box bulding a structure
      */
-    public void buildStructure() throws InputFailedException {
+    public void buildStructure() {
         if (level>=0 && level<=4) {
             for (int x = 0; x < dimension; x++) {
                 for (int y = 0; y < dimension; y++) {
-
                     /* now color in the darkest grey the level's border and in white others box */
                     if ((level == 0) && (y == 1 || x == 1 || x == dimension - 2 || y == dimension - 2)) {
                         this.box[x][y] = "\u001b[48;5;240m" + "\u001b[38;5;240m" + "▓";
@@ -135,9 +174,16 @@ public class BoxCLI {
             setBorder();
             level++;
             if (haveWorker) {
-                setWorker(playerColor);
+                try {
+                    setWorker(playerColor);
+                }catch (InputFailedException ignored){}
             }
         }
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+        setBoxWhitOutWorker();
     }
 
     /**
@@ -204,13 +250,20 @@ public class BoxCLI {
     /**
      * set box' color to green
      */
-    public void leftWorker(){
-        for (int x=0; x<dimension;x++){
-            for (int y=0; y<dimension;y++) {
-                if (x != 0 && y != 0) {
-                    box[x][y] = "\u001b[48;5;22m"+"\u001b[38;5;28m"+"▓";
+    public void setBoxWhitOutWorker() {
+        if (level==0){
+            /*set grass*/
+            for (int x=0; x<dimension;x++){
+                for (int y=0; y<dimension;y++) {
+                    if (x != 0 && y != 0) {
+                        box[x][y] = "\u001b[48;5;22m"+"\u001b[38;5;28m"+"▓";
+                    }
                 }
             }
+        }
+        else {
+            this.level=this.level-1;
+            buildStructure();
         }
         haveWorker=false;
         playerColor=null;

@@ -42,7 +42,7 @@ public class Game implements Serializable{
         this.numPlayers = numPlayers;
         minAge = 120;
         gameGods = new ArrayList<>();
-        String[] g = {"Apollo", "Arthemis", "Athena", "Atlas", "Demeter", "Ephaestus", "Minotaur", "Pan", "prometheus"};
+        String[] g = {"Apollo", "Arthemis", "Athena", "Atlas", "Demeter", "Ephaestus", "Minotaur", "Pan", "Prometheus"};
         availableGods.addAll(Arrays.asList(g));
         pairs = new ArrayList<>();
         IDs = new ArrayList<>();

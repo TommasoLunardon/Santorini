@@ -2,6 +2,8 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.server.model.PlayerColor;
 import it.polimi.ingsw.server.model.Worker;
 
+import java.util.ArrayList;
+
 /**
  * these class create a set of box orded in a matrix for simulate map conformation
  * @author Gabriele Gatti
@@ -9,18 +11,19 @@ import it.polimi.ingsw.server.model.Worker;
 
 public class MapCLI {
     private BoxCLI[][] map;
-
+    private int dimension;//box's dimention's
     /**
-     * @param dimension box's dimensions
      * @throws InputFailedException for insertion of a wrong dimension
      */
-    public MapCLI(int dimension) throws InputFailedException {
+    public MapCLI() throws InputFailedException {
+        dimension=5;
         this.map = new BoxCLI[5][5];
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 5; y++) {
-                this.map[x][y] = new BoxCLI(dimension);
+                this.map[x][y] = new BoxCLI(dimension, x, y);
             }
         }
+        this.dimension=dimension;
     }
 
     /**
@@ -63,19 +66,19 @@ public class MapCLI {
      */
     public void moveWorker(int boxXgo, int boxYgo, Worker worker) throws InputFailedException {
         map[boxXgo][boxYgo].setWorker(worker.getPlayer().getColor());
-        map[worker.getBox().getPosition()[0]][worker.getBox().getPosition()[1]].leftWorker();
+        map[worker.getBox().getPosition()[0]][worker.getBox().getPosition()[1]].setBoxWhitOutWorker();
     }
 
     /**
      * map's screen printing
      */
-    public void printMap(){
-        System.out.print("\t\t\t\t\t\t");
-        for(int i=0; i< 5.;i++){
-            for(int j=0 ; j<5 ; j++){
-                System.out.print(map[j][i]);
+    public void printMap() {
+        for (int boxY=5*dimension; boxY>0; boxY--){
+            for (int i=5*dimension; i>0; i--){
+                for (int boxX= 5; boxX>0; boxX--){
+                    map[boxX][boxY].printBox(i);
+                }
             }
-            System.out.print("\n\t\t\t\t\t\t");
         }
     }
 
@@ -84,7 +87,7 @@ public class MapCLI {
      * @param y box's coordinate Y
      * @return box(x,y)n
      */
-    public BoxCLI getBxCLI(int x, int y) {
+    public BoxCLI getBoxCLI(int x, int y) {
         return map[x][y];
     }
 }
