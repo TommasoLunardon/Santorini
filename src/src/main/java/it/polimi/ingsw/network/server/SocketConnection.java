@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
+
+import static it.polimi.ingsw.network.JsonHelper.deserialization;
 
 
 /**
@@ -26,7 +27,6 @@ public class SocketConnection implements Runnable, ServerConnection {
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private boolean active;
-    private Thread listener;
     private SocketServer server;
     private String username;
 
@@ -48,8 +48,6 @@ public class SocketConnection implements Runnable, ServerConnection {
             Server.LOGGER.severe(e.toString());
         }
 
-        listener = new Thread(this);
-        listener.start();
     }
 
 
@@ -65,26 +63,27 @@ public class SocketConnection implements Runnable, ServerConnection {
      */
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted())
+        while(!Thread.currentThread().isInterrupted()) {
             try {
                 synchronized (inLock) {
 
-                    Message message = (Message) in.readObject();
+                    Message m = (Message) in.readObject();
+                    ConnectionRequest request = (ConnectionRequest) deserialization(m.getContent());
+                    username = request.getSenderUsername();
+                    System.out.println("Connection request received");
 
-                    if (message.getContent().equals("CONNECTION")) {
+                    if (!server.getUsers().contains(username)) {
+                        server.login(username, this);
+                        Message logSuccessfull = new Message("You logged in successfully");
+                        sendServerMessage(logSuccessfull);
+                        System.out.println("Server sent Log response");
+                        break;
 
-                        ConnectionRequest request = (ConnectionRequest) in.readObject();
-                        username = request.getSenderUsername();
+                    } else {
+                        Message logDenied = new Message("Your username is already taken");
+                        sendServerMessage(logDenied);
+                        break;
 
-                        if (request != null && !server.getUsers().contains(username)) {
-                            server.login(username, this);
-                            Message logSuccessfull = new Message("You logged in successfully");
-                            sendServerMessage(logSuccessfull);
-                        }else{
-                           Message logDenied = new Message("Your username is already taken");
-                           sendServerMessage(logDenied);
-
-                        }
                     }
                 }
             }catch(IOException e){
@@ -92,6 +91,7 @@ public class SocketConnection implements Runnable, ServerConnection {
             } catch(ClassNotFoundException e){
                 Server.LOGGER.severe(e.getMessage());
             }
+        }
     }
 
     /**
@@ -126,12 +126,14 @@ public class SocketConnection implements Runnable, ServerConnection {
 
 
     public Message receiveMessage() throws IOException, ClassNotFoundException {
-        while (!Thread.currentThread().isInterrupted()) {
+        if (!Thread.currentThread().isInterrupted()) {
             synchronized (inLock) {
-                return (Message) in.readObject();
+                Message m = (Message) in.readObject();
+                return m;
             }
+        }else {
+            throw new IOException();
         }
-        throw new IOException();
     }
 
 
@@ -146,7 +148,6 @@ public class SocketConnection implements Runnable, ServerConnection {
                 Logger.getGlobal().warning(e.getMessage());
             }
 
-            listener.interrupt(); // Interrupts the thread
             active = false;
         }
 

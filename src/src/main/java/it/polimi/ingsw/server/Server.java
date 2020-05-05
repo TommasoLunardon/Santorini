@@ -39,7 +39,7 @@ public class Server implements Runnable {
 
     private final Object clientsLock = new Object();
     private static SocketServer socketServer;
-    private static final int socketPort = 1111;
+    private static final int socketPort = 65535;
     public static final Logger LOGGER = Logger.getLogger("Server");
 
     private ArrayList<String> users;
@@ -106,7 +106,7 @@ public class Server implements Runnable {
                 System.out.println("You are trying to reach a non existing user!");
             }
         }
-        LOGGER.log(Level.INFO, "Send: {0}, {1}", new Object[]{username, message});
+        LOGGER.log(Level.INFO, "Send: {0}, {1}", new Object[]{username, message.getContent()});
     }
 
     /**
@@ -114,15 +114,18 @@ public class Server implements Runnable {
      * @return the received message
      */
     public String listen() {
+        System.out.println("Waiting for response...");
         boolean received = false;
         String message = null;
         while(!received) {
-            for (int i = 0; i < users.size(); i++) {
+            for (String user : users) {
                 try {
-                    message = receive(users.get(i));
+                    message = receive(user);
                     received = true;
+                    break;
                 } catch (ClientNotFoundException e) {
-                    System.out.println(); e.toString();
+                    System.out.println("Exc during listen");
+                    System.out.println(e.toString());
                 }
             }
         }
@@ -135,7 +138,11 @@ public class Server implements Runnable {
     public String receive(String ID) throws ClientNotFoundException {
         try{
             return socketServer.receiveMessage(ID).getContent();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
+            System.out.println("IO");
+            throw new ClientNotFoundException();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Client");
             throw new ClientNotFoundException();
         }
     }
@@ -148,7 +155,7 @@ public class Server implements Runnable {
     /**
      * The Server method starts with a new game
      */
-    public Server() throws InvalidInputException, WorkerNotExistException {
+    public Server() throws InvalidInputException, WorkerNotExistException{
         initLogger();
         startServer();
         users = new ArrayList<>();
@@ -158,27 +165,33 @@ public class Server implements Runnable {
         virtualView.setServer(this);
 
         //Waits for the first player to connect
+        System.out.println("Waiting for users to connect...");
         while(users.size() < 1){
-            System.out.println("Waiting for users to connect...");
-            login();
+            try{
+                login();
+            }catch (NullPointerException e){
+                System.out.println("Login went wrong");
+            }
         }
         controller.setUsers(users);
 
         //Insertion of Game Settings and Creation of the Game
         controller.gameCreation();
 
+        System.out.println("Waiting for users to connect...");
         while(users.size() < getGame().getNumPlayers()){
-            System.out.println("Waiting for users to connect...");
             login();
         }
         controller.setUsers(users);
 
         //Starts the continuous check of connections with ping messages
-        for(int i = 0 ; i < users.size(); i ++){
+        /*for(int i = 0 ; i < users.size(); i ++){
             virtualView.sendPing(users.get(i));
             virtualView.receivePing(users.get(i));
 
         }
+
+         */
 
         //Players enter the game until the game is full
         controller.playersEnter();
@@ -262,12 +275,12 @@ public class Server implements Runnable {
         }
     }
 
-    public static void main(String[] args) throws InvalidInputException, WorkerNotExistException, IOException {
+    public static void main(String[] args) throws InvalidInputException, WorkerNotExistException{
 
         new Server();
-
     }
 
     @Override
     public void run() {}
+
 }

@@ -106,6 +106,7 @@ public class VirtualView implements MVEventSender {
     public int receiveNumPlayersSelectedEvent(String ID) throws InvalidSenderException {
 
         String message = server.listen();
+        System.out.println("Ended listening");
         NumPlayersSelectedEvent event = (NumPlayersSelectedEvent) JsonHelper.deserialization(message);
         if(!event.getOrigin().equals(ID)){
             throw new InvalidSenderException();

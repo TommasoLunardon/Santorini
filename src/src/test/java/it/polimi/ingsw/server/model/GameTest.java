@@ -46,6 +46,7 @@ class GameTest {
     void addPlayer1() throws InvalidInputException {
         game.addPlayer("aaa", 15, PlayerColor.RED);
 
+        System.out.println(game.getAvailableColors());
         assertEquals(game.getPlayers().get(0).getColor(), PlayerColor.RED);
         assertEquals("aaa", game.getPlayers().get(0).getPlayerID());
         assertEquals(15,game.getPlayers().get(0).getPlayerAge());
@@ -175,6 +176,7 @@ class GameTest {
         ArrayList<String> gods = new ArrayList<>();
         gods.addAll(Arrays.asList(new String[]{"Apollo", "Arthemis"}));
         game.selectGodCards(gods);
+
 
         game.chooseCard(game.getPlayers().get(0),"Apollo");
 

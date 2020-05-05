@@ -50,199 +50,14 @@ public class NetworkHandler implements VCEventSender {
     public void send(VCEvent event) throws IOException {
         String m = event.toString();
         Message message = new Message(m);
-
         connection.sendClientMessage(message);
     }
 
 
-    public String receiveCardSelectionEvent() throws InvalidSenderException {
+    public Message receiveMessage(){
         connection.run();
         Message message = connection.getMessage();
-        CardSelectionEvent event = (CardSelectionEvent) JsonHelper.deserialization(message.getContent());
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            return event.getSelectedGod();
-        }
-
-    }
-
-    public String receiveCommunicationEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        CommunicationEvent event = (CommunicationEvent) JsonHelper.deserialization(message.getContent());
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            return event.getMessage();
-        }
-
-    }
-
-    public Object[] receiveGameCreatedEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        GameCreatedEvent event = (GameCreatedEvent) JsonHelper.deserialization(message.getContent());
-        Object[] conditions = new Object[2];
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            conditions[0] = event.getNum();
-            conditions[1] = event.getWithGods();
-            return conditions;
-        }
-
-    }
-
-    public Game receiveGameUpdatingEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        GameUpdatingEvent event = (GameUpdatingEvent) deserialization(message.getContent());
-
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            return event.getGame();
-        }
-
-    }
-
-
-    public ArrayList<String> receiveGodCardsSelectedEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        GodCardsSelectedEvent event = (GodCardsSelectedEvent) JsonHelper.deserialization(message.getContent());
-
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            return event.getSelectedCards();
-        }
-
-    }
-
-
-    //Returns TRUE when received
-    public boolean receiveInvalidConstructionEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        InvalidConstructionEvent event = (InvalidConstructionEvent) JsonHelper.deserialization(message.getContent());
-
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            return true;
-        }
-
-    }
-
-
-    public boolean receiveInvalidInputEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        InvalidInputEvent event = (InvalidInputEvent) JsonHelper.deserialization(message.getContent());
-
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            return true;
-        }
-
-    }
-
-
-    //Returns TRUE when received
-    public boolean receiveInvalidMovementEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        InvalidMovementEvent event = (InvalidMovementEvent) JsonHelper.deserialization(message.getContent());
-
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            return true;
-        }
-
-    }
-
-    //Returns TRUE when received
-    public boolean receiveLoserPlayerEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        LoserPlayerEvent event = (LoserPlayerEvent) JsonHelper.deserialization(message.getContent());
-
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            return true;
-        }
-
-    }
-
-    public void receiveMatchStartsEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        MatchStartsEvent event = (MatchStartsEvent) JsonHelper.deserialization(message.getContent());
-
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            System.out.println("The match starts!");
-        }
-
-    }
-
-    public Player receivePlayerJoinedEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        PlayerJoinedEvent event = (PlayerJoinedEvent) deserialization(message.getContent());
-
-
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            return event.getP();
-        }
-
-    }
-
-    public String receiveStarterSelectionEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        StarterSelectionEvent event = (StarterSelectionEvent) JsonHelper.deserialization(message.getContent());
-
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            return event.getStarter();
-        }
-
-    }
-
-
-    public boolean receiveWinnerPlayerEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        WinnerPlayerEvent event = (WinnerPlayerEvent) JsonHelper.deserialization(message.getContent());
-
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-        else{
-            return true;
-        }
+        return message;
 
     }
 
@@ -258,7 +73,6 @@ public class NetworkHandler implements VCEventSender {
             ObjectInputStream si = new ObjectInputStream(bi);
             return si.readObject();
         } catch (Exception e) {
-            System.out.println("Not valid message");
             return null;
         }
 

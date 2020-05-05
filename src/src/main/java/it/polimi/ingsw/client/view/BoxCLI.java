@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.PlayerColor;
  * @author Gabriele Gatti
  */
 
-public class BoxCLI {
+public class BoxCLI extends Box {
     private String[][] box;
     private int dimension;
     private int level;
@@ -19,8 +19,8 @@ public class BoxCLI {
         return level;
     }
     /**
-     * @param dimension: number
-     * @throws InputFailedException: the worst input insertion
+     * @param dimension: box' s level
+     * @throws InputFailedException: if the level isn't valid
      */
     public BoxCLI(int dimension, int coordinateX, int coordinateY) throws InputFailedException {
         if (dimension < 5 || (dimension - 5) % 2 != 0) {
@@ -40,13 +40,6 @@ public class BoxCLI {
         }
     }
 
-    /*public int getCoordinateX() {
-        return coordinateX;
-    }
-
-    public int getCoordinateY() {
-        return coordinateY;
-    }*/
 
     /**
      * @return return box's matrix

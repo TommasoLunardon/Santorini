@@ -8,6 +8,8 @@ import it.polimi.ingsw.network.messages.ConnectionRequest;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
 
@@ -17,7 +19,6 @@ public class SocketConnection extends ClientConnection implements Runnable {
     private transient java.net.Socket socket;
     private transient ObjectInputStream in;
     private transient ObjectOutputStream out;
-    private transient Thread messageReceiver;
     private Message message;
 
     public SocketConnection(String username, int port) {
@@ -33,8 +34,9 @@ public class SocketConnection extends ClientConnection implements Runnable {
      */
     @Override
     public void startConnection() throws IOException {
-        socket = new java.net.Socket(getUsername(), getPort());
-        socket.setSoTimeout(20000);
+        String host = InetAddress.getLocalHost().getHostName();
+        socket = new Socket(host, getPort());
+        //socket.setSoTimeout(20000);
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
 
@@ -42,12 +44,6 @@ public class SocketConnection extends ClientConnection implements Runnable {
         Message message = new Message(m);
 
         sendClientMessage(message);
-
-        run();
-        System.out.println(message);
-
-        messageReceiver = new Thread(this);
-        messageReceiver.start();
 
     }
     /**
@@ -65,17 +61,18 @@ public class SocketConnection extends ClientConnection implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
+        if (!Thread.currentThread().isInterrupted()) {
             try {
                 message = (Message) in.readObject();
             } catch (SocketTimeoutException e){
                 System.out.println("Sorry but the connection went down and the game ended");
                 disconnect();
             } catch (IOException | ClassNotFoundException e) {
+                 System.out.println("Exception during Sock. Con. run()");
                 Logger.getGlobal().warning(e.getMessage());
                 disconnect();
-            }
 
+            }
         }
     }
     /**
@@ -101,8 +98,6 @@ public class SocketConnection extends ClientConnection implements Runnable {
         if (!socket.isClosed()) {
             socket.close();
         }
-        messageReceiver.interrupt();
-
         in = null;
         out = null;
     }

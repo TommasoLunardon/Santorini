@@ -1,11 +1,11 @@
-package it.polimi.ingsw.client.view.divinityCLI;
+package it.polimi.ingsw.client.view.divinities;
 
 /**
  * create an Atlas instance for out stamp
  * @author Gabriele Gatti
  */
-public class AtlasCLI extends DivinityCLI {
-    public AtlasCLI(){
+public class Atlas extends Divinity {
+    public Atlas(){
         super("Atlas","Your worker can build a dome in every level,\n ground too");
     }
 }

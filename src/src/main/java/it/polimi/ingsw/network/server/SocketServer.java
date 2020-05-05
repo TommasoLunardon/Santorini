@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.network.events.mvevents.CommunicationEvent;
 import it.polimi.ingsw.network.messages.Message;
 
 import java.io.IOException;
@@ -38,7 +37,7 @@ public class SocketServer extends Thread {
     public void start() {
         try {
             serverSocket = new ServerSocket(port);
-            serverSocket.setSoTimeout(20000);
+            //serverSocket.setSoTimeout(20000);
         } catch (IOException e) {
             Logger.getGlobal().warning(e.getMessage());
         }
@@ -50,10 +49,11 @@ public class SocketServer extends Thread {
             Socket newClientConnection;
             try {
                 newClientConnection = serverSocket.accept();
-                Logger.getGlobal().info("New client connected.");
+                Logger.getGlobal().info("New client tried to connect.");
                 SocketConnection client = new SocketConnection(this, newClientConnection );
                 clientsConnections.add(client);
                 client.run();
+                break;
             } catch (SocketTimeoutException e) {
                 for(int i = 0; i< users.size(); i++){
                     String disconnection = "Sorry but the connection went down and the game ended";
@@ -74,6 +74,8 @@ public class SocketServer extends Thread {
     }
 
     public void disconnect(String username){
+        SocketConnection client = (SocketConnection) clients.get(username);
+        client.disconnect();
         clientsConnections.remove(clients.get(username));
         users.remove(username);
         clients.remove(username);

@@ -34,8 +34,6 @@ public class Game implements Serializable{
     //Game creation, deciding the game's settings
     public Game(int numPlayers, boolean withGods){
 
-        //NB 3 PLAYERS ---> WITHGODS = TRUE
-
         this.withGods = withGods;
         this.map = new Map();
         players = new ArrayList<>();
@@ -53,8 +51,7 @@ public class Game implements Serializable{
     }
 
     public ArrayList<String> getAvailableColors() {
-        ArrayList<String> a = availableColors;
-        return a;
+         return availableColors;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -110,7 +107,7 @@ public class Game implements Serializable{
         players.add(player);
         IDs.add(player.getPlayerID());
         pairs.add(new Pair(player, player.getPlayerID()));
-        availableColors.remove(player.getColor().toString());
+        availableColors.remove(color.toString());
         if(age<minAge){ minAge = age;}
 
     }

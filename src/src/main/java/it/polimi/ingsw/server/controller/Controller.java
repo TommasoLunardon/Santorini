@@ -50,6 +50,9 @@ public class Controller{
             String ID = users.get(0);
             int numPlayers = 0;
             boolean withGods;
+           String active = "Your are active now";
+            CommunicationEvent activation = new CommunicationEvent(ID,active);
+            view.send(activation);
             String m1 = "Please insert the number of Players";
             CommunicationEvent event = new CommunicationEvent(ID,m1);
             view.send(event);
@@ -65,7 +68,7 @@ public class Controller{
 
                 String m2 = "Do you want to play with gods?";
                 CommunicationEvent event2 = new CommunicationEvent(ID,m2);
-                game.notify(event2);
+                view.send(event2);
                 try {
                     withGods = view.receiveWithGodsSelectedEvent(ID);
                     game = new Game(numPlayers, withGods);
@@ -84,12 +87,7 @@ public class Controller{
                 game.setVirtualView(view);
                 game.gameUpdate();
 
-            } else {
-                InvalidInputEvent ev = new InvalidInputEvent(ID);
-                game.notify(ev);
-
             }
-
 
         }
     }
@@ -101,9 +99,10 @@ public class Controller{
         while (!game.isGameFull()) {
             for (int i = 0; i < users.size(); i++) {
                 boolean entered = false;
+                String ID = users.get(i);
+                setActive(ID);
+
                 while(!entered) {
-                    String ID = users.get(i);
-                    setActive(ID);
                     int age = 0;
                     PlayerColor color = null;
                     String m3 = "Please insert your data, colors available are: " + game.getAvailableColors();
@@ -112,28 +111,29 @@ public class Controller{
                     game.notify(event);
 
                     try {
-                        Object[] data = view.receivePlayerDataEnteredEvent(game.getIDs().get(i));
+                        Object[] data = view.receivePlayerDataEnteredEvent(users.get(i));
                         age = (int) data[0];
                         color = (PlayerColor) data[1];
                     } catch (InvalidSenderException e) {
-                        InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(i));
+                        InvalidInputEvent ev = new InvalidInputEvent(users.get(i));
                         game.notify(ev);
                     }
 
 
                     try {
                         game.addPlayer(ID, age, color);
-                        PlayerJoinedEvent event2 = new PlayerJoinedEvent(game.getIDs().get(i), game.getPlayers().get(game.getPlayers().size() - 1));
+                        PlayerJoinedEvent event2 = new PlayerJoinedEvent(users.get(i), game.getPlayers().get(game.getPlayers().size() - 1));
                         game.notify(event2);
                         entered = true;
 
                     } catch (InvalidInputException e) {
-                        InvalidInputEvent ev = new InvalidInputEvent(game.getIDs().get(i));
+                        InvalidInputEvent ev = new InvalidInputEvent(users.get(i));
                         game.notify(ev);
                     }
                 }
             }
         }
+
         game.gameUpdate();
     }
 

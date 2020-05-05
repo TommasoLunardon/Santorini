@@ -7,9 +7,9 @@ import it.polimi.ingsw.server.model.Worker;
  * @author Gabriele Gatti
  */
 
-public class MapCLI {
+public class MapCLI extends Map {
     private BoxCLI[][] map;
-    private int dimension;//box's dimention's
+    private int dimension;
     /**
      * @throws InputFailedException for insertion of a wrong dimension
      */

@@ -18,7 +18,7 @@ public class Message implements Serializable {
 
     /**
      *
-     * Constructs a message with a player and a message.
+     * Constructs a message
      *
      * @param messageContent the message.
      *
