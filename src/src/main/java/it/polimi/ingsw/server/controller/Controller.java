@@ -7,20 +7,19 @@ import it.polimi.ingsw.server.controller.exceptions.InvalidSenderException;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.exceptions.*;
 
+import java.io.Serializable;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-
 
 /**
  * Class Controller is assigned to a VirtualView and to a Model (GAME), it helps the server in performing the actions
  *  needed to play a Santorini Game.
  */
-public class Controller{
+public class Controller implements Serializable {
 
     private Game game;
     private VirtualView view;
     private ArrayList<String> users;
-
-
 
 
     public Game getGame(){
@@ -40,17 +39,15 @@ public class Controller{
         view.setController(this);
     }
 
-
     /**
      * Method used to get the game settings and create the game
      */
-    public void gameCreation(){
+    public void gameCreation() throws SocketTimeoutException {
         while (getGame() == null) {
-
             String ID = users.get(0);
             int numPlayers = 0;
             boolean withGods;
-           String active = "Your are active now";
+            String active = "Your are active now";
             CommunicationEvent activation = new CommunicationEvent(ID,active);
             view.send(activation);
             String m1 = "Please insert the number of Players";
@@ -82,8 +79,7 @@ public class Controller{
 
             }
             if (numPlayers == 3) {
-                withGods = true;
-                game = new Game(numPlayers, withGods);
+                game = new Game(numPlayers, true);
                 game.setVirtualView(view);
                 game.gameUpdate();
 
@@ -95,52 +91,49 @@ public class Controller{
     /**
      * Method used to insert all users in the game as players
      */
-    public void playersEnter(){
-        while (!game.isGameFull()) {
-            for (int i = 0; i < users.size(); i++) {
-                boolean entered = false;
-                String ID = users.get(i);
-                setActive(ID);
+    public void playersEnter() throws SocketTimeoutException {
+        while (!game.isGameFull()){
+            for (String user : users) {
+                 boolean entered = false;
+                 setActive(user);
 
-                while(!entered) {
-                    int age = 0;
-                    PlayerColor color = null;
-                    String m3 = "Please insert your data, colors available are: " + game.getAvailableColors();
+            while (!entered) {
+                int age = 0;
+                PlayerColor color = null;
+                String m3 = "Please insert your data, colors available are: " + game.getAvailableColors();
 
-                    CommunicationEvent event = new CommunicationEvent(ID, m3);
-                    game.notify(event);
+                CommunicationEvent event = new CommunicationEvent(user, m3);
+                game.notify(event);
 
-                    try {
-                        Object[] data = view.receivePlayerDataEnteredEvent(users.get(i));
-                        age = (int) data[0];
-                        color = (PlayerColor) data[1];
-                    } catch (InvalidSenderException e) {
-                        InvalidInputEvent ev = new InvalidInputEvent(users.get(i));
-                        game.notify(ev);
-                    }
+                try {
+                    Object[] data = view.receivePlayerDataEnteredEvent(user);
+                    age = (int) data[0];
+                    color = (PlayerColor) data[1];
+                } catch (InvalidSenderException e) {
+                    InvalidInputEvent ev = new InvalidInputEvent(user);
+                    game.notify(ev);
+                }
 
+                try {
+                    game.addPlayer(user, age, color);
+                    PlayerJoinedEvent event2 = new PlayerJoinedEvent(user, game.getPlayers().get(game.getPlayers().size() - 1));
+                    game.notify(event2);
+                    entered = true;
 
-                    try {
-                        game.addPlayer(ID, age, color);
-                        PlayerJoinedEvent event2 = new PlayerJoinedEvent(users.get(i), game.getPlayers().get(game.getPlayers().size() - 1));
-                        game.notify(event2);
-                        entered = true;
-
-                    } catch (InvalidInputException e) {
-                        InvalidInputEvent ev = new InvalidInputEvent(users.get(i));
-                        game.notify(ev);
-                    }
+                } catch (InvalidInputException e) {
+                    InvalidInputEvent ev = new InvalidInputEvent(user);
+                    game.notify(ev);
                 }
             }
         }
-
+    }
         game.gameUpdate();
     }
 
     /**
      * Method used to choose the god cards for the game
      */
-    public void cardsSelection(){
+    public void cardsSelection() throws SocketTimeoutException {
         boolean cardsAssigned = false;
         while (!cardsAssigned) {
             ArrayList<String> cards = new ArrayList<>();
@@ -172,7 +165,7 @@ public class Controller{
     /**
      * Method used to assign a card to each player except the game creator
      */
-    public void godSelection(){
+    public void godSelection() throws SocketTimeoutException {
         for (int j = game.getNumPlayers() - 1; j > 0; j--) {
             boolean done = false;
             setActive(game.getIDs().get(j));
@@ -180,7 +173,6 @@ public class Controller{
                 String m5 = "Select your Card, " + "cards available are: " + game.getGods();
                 CommunicationEvent event = new CommunicationEvent(game.getIDs().get(j),m5);
                 game.notify(event);
-
 
                 String card = null;
                 try {
@@ -208,7 +200,7 @@ public class Controller{
     /**
      * Method used to select the starting player
      */
-    public void starterSelection(){
+    public void starterSelection() throws SocketTimeoutException {
         boolean control = false;
         while (!control) {
             String starterID = null;
@@ -246,7 +238,7 @@ public class Controller{
     /**
      * Method used to place the workers in the map
      */
-    public void workersPlacement(){
+    public void workersPlacement() throws SocketTimeoutException {
         for(int j = 0; j < game.getPlayers().size(); j++){
             boolean checkPlacement = false;
             Player player = game.getPlayers().get(j);
@@ -260,8 +252,12 @@ public class Controller{
                 CommunicationEvent event3 = new CommunicationEvent(ID,m7);
                 game.notify(event3);
                 try {
-                    box1 = view.receiveBoxSelectedEvent(ID);
-                } catch (InvalidSenderException e) {
+                    int[] received = view.receiveBoxSelectedEvent(ID);
+                    int x1 = received[0];
+                    int y1 = received[1];
+                    box1 = game.getMap().getBox(x1,y1);
+                    System.out.println("Message receive, box created");
+                } catch (InvalidSenderException | InvalidIndicesException e) {
                     InvalidInputEvent ev = new InvalidInputEvent(ID);
                     game.notify(ev);
                 }
@@ -270,14 +266,18 @@ public class Controller{
                 CommunicationEvent event4 = new CommunicationEvent(ID,m8);
                 game.notify(event4);
                 try {
-                    box2 = view.receiveBoxSelectedEvent(ID);
-                } catch (InvalidSenderException e) {
+                    int[] received = view.receiveBoxSelectedEvent(ID);
+                    int x2 = received[0];
+                    int y2 = received[1];
+                    box2 = game.getMap().getBox(x2,y2);
+                } catch (InvalidSenderException | InvalidIndicesException e) {
                     InvalidInputEvent ev = new InvalidInputEvent(ID);
                     game.notify(ev);
                 }
 
                 try{
                     game.placeWorkers(player,box1,box2);
+                    game.gameUpdate();
                     checkPlacement = true;
                 } catch (InvalidBoxException | InvalidInputException e) {
                     InvalidInputEvent ev = new InvalidInputEvent(ID);
@@ -290,15 +290,12 @@ public class Controller{
 
     }
 
-
-
-
     /**
      * Method used to perform the turns alternation between players
      * @throws InvalidInputException is never thrown because the player must belong to the game
-     * @throws WorkerNotExistException Is already checked by the client while getting the input
+     * @throws WorkerNotExistException if the worker doesn't belong to the game (Already checked when accepting the client's input)
      */
-    public void turns() throws WorkerNotExistException, InvalidInputException {
+    public void turns() throws WorkerNotExistException, InvalidInputException, SocketTimeoutException {
         match:
         while (game.getPlayers().size() > 1) {
             for (int j = 0; j < game.getPlayers().size(); j++) {
@@ -311,7 +308,7 @@ public class Controller{
 
                 if (!player.canMove()) {
                     game.removePlayer(player);
-                    LoserPlayerEvent event = new LoserPlayerEvent(player.getPlayerID());
+                    LoserPlayerEvent event = new LoserPlayerEvent(ID);
                     game.notify(event);
                     game.gameUpdate();
                     break;
@@ -325,7 +322,8 @@ public class Controller{
                     game.notify(event3);
 
                     try {
-                        selectedWorker = view.receiveWorkerSelectedEvent(ID);
+                        int selected = view.receiveWorkerSelectedEvent(ID);
+                        selectedWorker = player.getWorkers().get(selected);
                     } catch (InvalidSenderException e) {
                         InvalidInputEvent ev = new InvalidInputEvent(ID);
                         game.notify(ev);
@@ -433,43 +431,45 @@ public class Controller{
      * @param ID is the username of the player to ask
      * @return true if the player asked for a special action
      */
-    public boolean askForSpecialAction(String ID){
+    private boolean askForSpecialAction(String ID) throws SocketTimeoutException {
+        boolean response = false;
         boolean gotResponse = false;
         while (!gotResponse) {
             String m = "Do you want to use your God special power?";
             CommunicationEvent event = new CommunicationEvent(ID,m);
             game.notify(event);
 
-            boolean response;
             try {
                 response = view.receiveUseofSpecialPowerEvent(ID);
                 gotResponse = true;
-                return response;
             } catch (InvalidSenderException e) {
                 InvalidInputEvent ev = new InvalidInputEvent(ID);
                 game.notify(ev);
             }
 
         }
-        return false;
+        return response;
     }
 
     /**
      * Method to perform the Standard Player Movement
-     * @param player
-     * @param ID
-     * @param selectedWorker
+     * @param player is the player performing the turn
+     * @param ID is the player's ID
+     * @param selectedWorker is the worker used to perform the turn
      * @return true if the movement was performed
      */
-    public boolean standardMove(Player player, String ID, Worker selectedWorker) {
+    private boolean standardMove(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
         String m8 = "Please Select one box to move";
         CommunicationEvent event = new CommunicationEvent(ID,m8);
         game.notify(event);
 
-        Box box = null;
+        Box box;
         try {
-            box = view.receiveBoxSelectedEvent(ID);
-        } catch (InvalidSenderException e) {
+            int[] received = view.receiveBoxSelectedEvent(ID);
+            int x = received[0];
+            int y = received[1];
+            box = game.getMap().getBox(x,y);
+        } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
@@ -490,27 +490,30 @@ public class Controller{
 
     /**
      * Method to perform the Standard Player Construction
-     * @param player
-     * @param ID
-     * @param selectedWorker
+     * @param player is the player performing the turn
+     * @param ID is the player's ID
+     * @param selectedWorker is the worker used to perform the turn
      * @return true if the construction was performed
      */
-    public boolean standardBuild(Player player, String ID, Worker selectedWorker) {
+    private boolean standardBuild(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
         String m9 = "Please Select one box to build";
         CommunicationEvent event = new CommunicationEvent(ID,m9);
         game.notify(event);
 
-        Box box2 = null;
+        Box box;
         try {
-            box2 = view.receiveBoxSelectedEvent(ID);
-        } catch (InvalidSenderException e) {
+            int[] received = view.receiveBoxSelectedEvent(ID);
+            int x = received[0];
+            int y = received[1];
+            box = game.getMap().getBox(x,y);
+        } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
 
         try {
-            player.build(selectedWorker, box2);
+            player.build(selectedWorker, box);
             game.gameUpdate();
             return true;
 
@@ -528,20 +531,23 @@ public class Controller{
 
     /**
      * Method used to perform the special Arthemis Movement when required
-     * @param player
-     * @param ID
-     * @param selectedWorker
+     * @param player is the player performing the turn
+     * @param ID is the player's ID
+     * @param selectedWorker is the worker used to perform the turn
      * @return true if the movement was performed
      */
-    public boolean moveArthemis(Player player, String ID, Worker selectedWorker){
+    private boolean moveArthemis(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
         String m8 = "Please Select one box to move";
         CommunicationEvent event = new CommunicationEvent(ID,m8);
         game.notify(event);
 
-        Box box1;
+        Box box;
         try {
-            box1 = view.receiveBoxSelectedEvent(ID);
-        } catch (InvalidSenderException e) {
+            int[] received = view.receiveBoxSelectedEvent(ID);
+            int x = received[0];
+            int y = received[1];
+            box = game.getMap().getBox(x,y);
+        } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
@@ -552,8 +558,11 @@ public class Controller{
 
         Box box2;
         try {
-            box2 = view.receiveBoxSelectedEvent(ID);
-        } catch (InvalidSenderException e) {
+            int[] received = view.receiveBoxSelectedEvent(ID);
+            int x = received[0];
+            int y = received[1];
+            box2 = game.getMap().getBox(x,y);
+        } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
@@ -561,7 +570,7 @@ public class Controller{
 
         try {
             PlayerArthemis player1 = (PlayerArthemis) player;
-            player1.moveArthemis(box1, box2, selectedWorker);
+            player1.moveArthemis(box, box2, selectedWorker);
             game.gameUpdate();
             return true;
 
@@ -575,20 +584,23 @@ public class Controller{
 
     /**
      * Method used to perform the special Atlas Construction when required
-     * @param player
-     * @param ID
-     * @param selectedWorker
+     * @param player is the player performing the turn
+     * @param ID is the player's ID
+     * @param selectedWorker is the worker used to perform the turn
      * @return true if the construction was performed
      */
-    public boolean buildAtlas(Player player, String ID, Worker selectedWorker){
+    private boolean buildAtlas(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
         String m9 = "Please Select one box to build";
         CommunicationEvent event = new CommunicationEvent(ID,m9);
         game.notify(event);
 
-        Box box2;
+        Box box;
         try {
-            box2 = view.receiveBoxSelectedEvent(ID);
-        } catch (InvalidSenderException e) {
+            int[] received = view.receiveBoxSelectedEvent(ID);
+            int x = received[0];
+            int y = received[1];
+            box = game.getMap().getBox(x,y);
+        } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
@@ -596,7 +608,7 @@ public class Controller{
 
         try {
             PlayerAtlas player1 = (PlayerAtlas) player;
-            player1.buildAtlas(box2, selectedWorker);
+            player1.buildAtlas(box, selectedWorker);
             game.gameUpdate();
             return true;
 
@@ -611,20 +623,23 @@ public class Controller{
 
     /**
      * Method used to perform the special Demeter Construction when required
-     * @param player
-     * @param ID
-     * @param selectedWorker
+     * @param player is the player performing the turn
+     * @param ID is the player's ID
+     * @param selectedWorker is the worker used to perform the turn
      * @return true if the construction was performed
      */
-    public boolean buildDemeter(Player player, String ID, Worker selectedWorker){
+    private boolean buildDemeter(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
         String m8 = "Please Select one box to build";
         CommunicationEvent event = new CommunicationEvent(ID,m8);
         game.notify(event);
 
-        Box box1;
+        Box box;
         try {
-            box1 = view.receiveBoxSelectedEvent(ID);
-        } catch (InvalidSenderException e) {
+            int[] received = view.receiveBoxSelectedEvent(ID);
+            int x = received[0];
+            int y = received[1];
+            box = game.getMap().getBox(x,y);
+        } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
@@ -635,8 +650,10 @@ public class Controller{
 
         Box box2;
         try {
-            box2 = view.receiveBoxSelectedEvent(ID);
-        } catch (InvalidSenderException e) {
+            int x = view.receiveBoxSelectedEvent(ID)[0];
+            int y = view.receiveBoxSelectedEvent(ID)[1];
+            box2 = game.getMap().getBox(x,y);
+        } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
@@ -644,7 +661,7 @@ public class Controller{
 
         try {
             PlayerDemeter player1 = (PlayerDemeter) player;
-            player1.buildDemeter(selectedWorker, box1, box2);
+            player1.buildDemeter(selectedWorker, box, box2);
             game.gameUpdate();
             return true;
 
@@ -658,20 +675,23 @@ public class Controller{
 
     /**
      * Method used to perform the special Ephaestus Construction when required
-     * @param player
-     * @param ID
-     * @param selectedWorker
+     * @param player is the player performing the turn
+     * @param ID is the player's ID
+     * @param selectedWorker is the worker used to perform the turn
      * @return true if the construction was performed
      */
-    public boolean buildEphaestus(Player player, String ID, Worker selectedWorker){
+    private boolean buildEphaestus(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
         String m9 = "Please Select one box to build";
         CommunicationEvent event = new CommunicationEvent(ID,m9);
         game.notify(event);
 
-        Box box2;
+        Box box;
         try {
-            box2 = view.receiveBoxSelectedEvent(ID);
-        } catch (InvalidSenderException e) {
+            int[] received = view.receiveBoxSelectedEvent(ID);
+            int x = received[0];
+            int y = received[1];
+            box = game.getMap().getBox(x,y);
+        } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
@@ -679,7 +699,7 @@ public class Controller{
 
         try {
             PlayerEphaestus player1 = (PlayerEphaestus) player;
-            player1.buildEphaestus(selectedWorker, box2);
+            player1.buildEphaestus(selectedWorker, box);
             game.gameUpdate();
             return true;
         } catch (WrongConstructionException e) {
@@ -691,20 +711,23 @@ public class Controller{
 
     /**
      * Method used to perform the special Prometheus Movement when required
-     * @param player
-     * @param ID
-     * @param selectedWorker
+     * @param player is the player performing the turn
+     * @param ID is the player's ID
+     * @param selectedWorker is the worker used to perform the turn
      * @return true if the movement was performed
      */
-    public boolean movePrometheus(Player player, String ID, Worker selectedWorker){
+    private boolean movePrometheus(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
         String m9 = "Please Select one box to build";
         CommunicationEvent event = new CommunicationEvent(ID,m9);
         game.notify(event);
 
-        Box box1;
+        Box box;
         try {
-            box1 = view.receiveBoxSelectedEvent(ID);
-        } catch (InvalidSenderException e) {
+            int[] received = view.receiveBoxSelectedEvent(ID);
+            int x = received[0];
+            int y = received[1];
+            box = game.getMap().getBox(x,y);
+        } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
@@ -715,8 +738,10 @@ public class Controller{
 
         Box box2;
         try {
-            box2 = view.receiveBoxSelectedEvent(ID);
-        } catch (InvalidSenderException e) {
+            int x = view.receiveBoxSelectedEvent(ID)[0];
+            int y = view.receiveBoxSelectedEvent(ID)[1];
+            box2 = game.getMap().getBox(x,y);
+        } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
@@ -727,12 +752,12 @@ public class Controller{
             Box startingBox = selectedWorker.getBox();
             int startingLevel = startingBox.getLevel();
 
-            player.build(selectedWorker, box1);
+            player.build(selectedWorker, box);
             player.move(selectedWorker,box2);
 
             if(box2.getLevel()>startingLevel){
-                box1.setLevel(box1.getLevel()-1);
-                box1.setDome(false);
+                box.setLevel(box.getLevel()-1);
+                box.setDome(false);
                 player.move(selectedWorker, startingBox);
                 throw new InvalidMovementException();
             }
@@ -754,15 +779,15 @@ public class Controller{
      * Method to communicate that a player is active, and all others are inactive
      * @param ID is the username that is active
      */
-    public void setActive(String ID){
+    public void setActive(String ID) throws SocketTimeoutException {
         String active = "Your are active now";
         String inactive = "Please wait for the opponent to finish its action";
 
         CommunicationEvent activeEvent = new CommunicationEvent(ID, active);
         game.notify(activeEvent);
-        for(int i = 0; i < users.size(); i++){
-            if(!users.get(i).equals(ID)){
-                CommunicationEvent inactiveEvent = new CommunicationEvent(users.get(i), inactive);
+        for (String user : users) {
+            if (!user.equals(ID)) {
+                CommunicationEvent inactiveEvent = new CommunicationEvent(user, inactive);
                 game.notify(inactiveEvent);
             }
         }

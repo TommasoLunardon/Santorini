@@ -41,7 +41,7 @@ public class Box implements Serializable {
 
     /**
      *
-     * @param box
+     * @param box is the box compared with this box
      * @return true <==> this.box and box are equal
      */
     public boolean equals(Box box) throws NullPointerException{
@@ -66,8 +66,7 @@ public class Box implements Serializable {
      * @return current box's level
      */
     public int getLevel() {
-        int l = level;
-        return l;
+        return level;
     }
 
     /**
@@ -75,15 +74,14 @@ public class Box implements Serializable {
      * @return position (x,y) of the box in the map's matrix
      */
     public int[] getPosition(){
-        int[] pos = {positionX , positionY};
-        return pos;
+        return new int[]{positionX , positionY};
     }
 
     /**
      *
      * @return the box's neighbours in matrix form ( Box[3][3]), where the current box is in position (1)(1)
      */
-    public Box[][] getNeighboursMatrix(){
+    Box[][] getNeighboursMatrix(){
 
         Box[][] neighboursMatrix = new Box[3][3];
 
@@ -94,38 +92,37 @@ public class Box implements Serializable {
 
         try{
         if (left)  neighboursMatrix[0][1] = (map.getBox(positionX -1, positionY));} catch (Exception e) {
-            System.out.println(e);;
+            System.out.println(e);
         }
         try{
         if (right)  neighboursMatrix[2][1] = (map.getBox(positionX +1, positionY));}catch (Exception e) {
-            System.out.println(e);;
+            System.out.println(e);
         }
         try{
         if (up)  neighboursMatrix[1][2] = (map.getBox(positionX , positionY +1));}catch (Exception e){
-            System.out.println(e);;
+            System.out.println(e);
         }
         try{
         if (down) neighboursMatrix[1][0] = (map.getBox(positionX, positionY-1));}catch (Exception e){
-            System.out.println(e);;
+            System.out.println(e);
         }
 
         try{
         if (left && down) neighboursMatrix[0][0] = (map.getBox(positionX - 1, positionY-1));}catch (Exception e){
-            System.out.println(e);;
+            System.out.println(e);
         }
         try{
         if (left && up)  neighboursMatrix[0][2] = (map.getBox(positionX -1, positionY +1));}catch (Exception e){
-            System.out.println(e);;
+            System.out.println(e);
         }
         try{
         if (right && down)  neighboursMatrix[2][0] = (map.getBox(positionX +1, positionY-1));}catch (Exception e){
-            System.out.println(e);;
+            System.out.println(e);
         }
         try{
         if (right && up)  neighboursMatrix[2][2] = (map.getBox(positionX +1, positionY +1));}catch (Exception e){
-            System.out.println(e);;
+            System.out.println(e);
         }
-
 
         return neighboursMatrix;
     }
@@ -135,7 +132,7 @@ public class Box implements Serializable {
      *
      * @return the box's neighbours in an ArrayList
      */
-    public ArrayList<Box> getNeighbours() {
+    ArrayList<Box> getNeighbours() {
         ArrayList<Box> neighbours = new ArrayList<Box>();
 
         boolean left = (positionX - 1 >= 0);
@@ -248,7 +245,7 @@ public class Box implements Serializable {
     /**
      * removes the previous worker from the box
      */
-    public void removeWorker(){
+    void removeWorker(){
         this.hasWorker = false;
         this.worker = null;
     }

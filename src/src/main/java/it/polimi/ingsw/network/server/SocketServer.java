@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.server;
 
+import com.google.gson.JsonSyntaxException;
+import it.polimi.ingsw.network.events.vcevents.VCPingEvent;
 import it.polimi.ingsw.network.messages.Message;
 
 import java.io.IOException;
@@ -10,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import static it.polimi.ingsw.network.JsonHelper.deserialization;
 
 public class SocketServer extends Thread {
 
@@ -29,15 +33,14 @@ public class SocketServer extends Thread {
     }
 
     public ArrayList<String> getUsers(){
-        ArrayList<String> u = users;
-        return u;
+        return users;
     }
 
 
     public void start() {
         try {
             serverSocket = new ServerSocket(port);
-            //serverSocket.setSoTimeout(20000);
+            serverSocket.setSoTimeout(20000);
         } catch (IOException e) {
             Logger.getGlobal().warning(e.getMessage());
         }
@@ -54,20 +57,14 @@ public class SocketServer extends Thread {
                 clientsConnections.add(client);
                 client.run();
                 break;
-            } catch (SocketTimeoutException e) {
-                for(int i = 0; i< users.size(); i++){
-                    String disconnection = "Sorry but the connection went down and the game ended";
-                    Message message = new Message(disconnection);
-                    sendMessage(users.get(i), message);
-                    disconnect(users.get(i));
-                }
             }catch (IOException e) {
                 Logger.getGlobal().warning(e.getMessage());
+
             }
         }
     }
 
-    public void login(String username, SocketConnection connection){
+    void login(String username, SocketConnection connection){
         users.add(username);
         clients.put(username, connection);
 
@@ -87,9 +84,18 @@ public class SocketServer extends Thread {
         client.sendServerMessage(message);
     }
 
-    public Message receiveMessage(String user) throws IOException, ClassNotFoundException {
+    public Message receiveMessage(String user){
+        boolean notPing = false;
         SocketConnection client = (SocketConnection) clients.get(user);
-        return client.receiveMessage();
+        while (!notPing) {
+            try {
+                client.run();
+                VCPingEvent ping = (VCPingEvent) deserialization(client.getMessage().getContent());
+            } catch (ClassCastException | JsonSyntaxException ignored) {
+                notPing = true;
+            }
+        }
+        return client.getMessage();
 
     }
 

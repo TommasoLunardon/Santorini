@@ -4,6 +4,7 @@ import it.polimi.ingsw.network.events.MVEvent;
 import it.polimi.ingsw.network.events.MVEventSender;
 import it.polimi.ingsw.server.model.Game;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 public class GodCardsSelectedEvent extends MVEvent {
@@ -16,7 +17,7 @@ public class GodCardsSelectedEvent extends MVEvent {
     }
 
     @Override
-    public void manage(MVEventSender eventSender) {
+    public void manage(MVEventSender eventSender) throws SocketTimeoutException {
         eventSender.send(this);
 
     }

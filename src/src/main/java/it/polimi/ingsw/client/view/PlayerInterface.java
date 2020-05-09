@@ -12,9 +12,6 @@ import it.polimi.ingsw.server.model.exceptions.InvalidIndicesException;
 import it.polimi.ingsw.server.model.exceptions.WorkerNotExistException;
 import it.polimi.ingsw.client.view.divinities.*;
 
-
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -31,17 +28,16 @@ public class PlayerInterface {
     private Player player;
     private String iD;
     private Divinity divinity;
-    private Worker workerMoved;
+    private int firstboxX , firstboxY;
 
     private NetworkHandler networkHandler;
-    private static Scanner input;
-    private static SocketConnection connection;
+    private Scanner input;
     private static final int port = 65535;
 
     /**
      * Create Client's connection to the Server and starts game
      */
-    public PlayerInterface() throws FileNotFoundException {
+    public PlayerInterface(){
 
         input = new Scanner(System.in);
         boolean connected = false;
@@ -50,7 +46,8 @@ public class PlayerInterface {
             System.out.println("Insert your Username");
 
             String username = input.nextLine();
-            connection= new SocketConnection(username, port);
+            System.out.println("Please wait, we are trying to connect you to the server");
+            SocketConnection connection = new SocketConnection(username, port);
             networkHandler = new NetworkHandler();
             networkHandler.setConnection(connection);
             try {
@@ -71,51 +68,16 @@ public class PlayerInterface {
             }
         }
 
-       /* networkHandler.sendPing();
-        networkHandler.receivePing();
-
-        */
         catchMVEvent();
     }
 
     /**
      * Method used to update the screen
      */
-    public void printScreen(){
-        String nameDivinity;
+    private void printScreen(){
         map.printMap();
-        if (game.isWithGods()){
-            if(divinity ==null) {
-                nameDivinity = ((PlayerDivinity) player).getGodName();
-                if (nameDivinity.equals("Apollo")) {
-                    divinity = new Apollo();
-                }
-                if (nameDivinity.equals("Artemis")) {
-                    divinity = new Artemis();
-                }
-                if (nameDivinity.equals("Athena")) {
-                    divinity = new Athena();
-                }
-                if (nameDivinity.equals("Atlas")) {
-                    divinity = new Atlas();
-                }
-                if (nameDivinity.equals("Demeter")) {
-                    divinity = new Demeter();
-                }
-                if (nameDivinity.equals("Hephaestus")) {
-                    divinity = new Hephaestus();
-                }
-                if (nameDivinity.equals("Pan")) {
-                    divinity = new Pan();
-                }
-                if (nameDivinity.equals("Prometheus")) {
-                    divinity = new Prometheus();
-                }
-                if (nameDivinity.equals("Minotaur")) {
-                    divinity = new Minotaur();
-                }
-            }
-            System.out.println("Your Divinity: " + divinity.getName()+"\nDescription:" + divinity.getDescription());
+        if (!(divinity == null)) {
+            System.out.println("Your Divinity: " + divinity.getName() + "\nDescription:" + divinity.getDescription());
         }
     }
 
@@ -125,404 +87,332 @@ public class PlayerInterface {
     private void catchMVEvent() {
         String communicationString;
         boolean supportBoolean;
-        ArrayList<String> godsAvailable;
+
+        networkHandler.sendPing();
+
 
         while (true) {
                 Message receivedMessage = networkHandler.receiveMessage();
 
                 try{
                     CommunicationEvent event = (CommunicationEvent) JsonHelper.deserialization(receivedMessage.getContent());
-                    communicationString = event.getMessage();
+                    if (event != null) {
+                        communicationString = event.getMessage();
 
-                    if(!event.getTarget().equalsIgnoreCase(iD)){
+                        if (event.getTarget().equalsIgnoreCase(iD)) {
 
-                    }else {
+                            if (communicationString.equals("Please wait for the opponent to finish its action")) {
+                                System.out.println("Please wait for your turn");
 
-                        if (communicationString.equals("Please wait for the opponent to finish its action")) {
-                            System.out.print("Please wait for your turn");
-                            //wait(10000);
-
-                        }
-                        if (communicationString.equals("Please insert the number of Players")) {
-                            int numPla;
-                            try {
-                                do {
-                                    System.out.print(communicationString + " <2/3> : ");
-                                    numPla = input.nextInt();
-                                } while (!(numPla == 2 || numPla == 3));
-                                networkHandler.send(new NumPlayersSelectedEvent(iD, numPla));
-                            } catch (IOException ignored) {}
-                        }
-                        if (communicationString.contains("Please insert your data, colors available are:")) {
-                            int age;
-                            String color;
-                            do {
+                            }
+                            if (communicationString.equals("Please insert the number of Players")) {
+                                try{
+                                    int numPla = 0;
+                                    while (!(numPla == 2 || numPla == 3)){
+                                        System.out.print(communicationString + " <2/3> : ");
+                                        try {
+                                            numPla = Integer.parseInt(input.next());
+                                        }catch (NumberFormatException e){
+                                            System.out.println("Please insert a valid number");
+                                            numPla = 0;
+                                        }
+                                    }
+                                    networkHandler.send(new NumPlayersSelectedEvent(iD, numPla));
+                                } catch (IOException ignored) {
+                                }
+                            }
+                            if (communicationString.contains("Please insert your data, colors available are:")) {
+                                int age = 0;
+                                String color = "";
+                                    try {
+                                        while ((age <= 0 || age > 120)) {
+                                            System.out.println("Please, insert your age: ");
+                                            try {
+                                                age = Integer.parseInt(input.next());
+                                            }catch(NumberFormatException e){
+                                                System.out.println("Please insert a valid input");
+                                            }
+                                        }
+                                        while (!(color.equalsIgnoreCase("Yellow") || color.equalsIgnoreCase("Blue") || color.equalsIgnoreCase("Red"))) {
+                                            System.out.println("Select a color, " + communicationString.substring(25));
+                                            color = input.next();
+                                        }
+                                        PlayerColor colorPlayer = null;
+                                        if (color.equalsIgnoreCase("Yellow")) {
+                                            colorPlayer = PlayerColor.YELLOW;
+                                        }
+                                        if (color.equalsIgnoreCase("Blue")) {
+                                            colorPlayer = PlayerColor.BLUE;
+                                        }
+                                        if (color.equalsIgnoreCase("Red")) {
+                                            colorPlayer = PlayerColor.RED;
+                                        }
+                                        networkHandler.send(new PlayerDataEnteredEvent(iD, age, colorPlayer));
+                                    } catch (IOException ignored) {
+                                    }
+                            }
+                            if (communicationString.contains("Please select the cards, gods available are:")) {
+                                System.out.println(communicationString.subSequence(0, 43));
+                                String selectedCard;
+                                    findDivinity(communicationString);
+                                    try {
+                                        ArrayList<String> divinitySelection = new ArrayList<>();
+                                        for (int i = 0; i < game.getNumPlayers(); i++) {
+                                            do {
+                                                System.out.println("Select divinity #" + i + " : ");
+                                                selectedCard = input.next();
+                                            } while (!((selectedCard.equals("Apollo") || selectedCard.equals("Artemis") || selectedCard.equals("Athena") || selectedCard.equals("Atlas") || selectedCard.equals("Demeter") || selectedCard.equals("Hephaestus") || selectedCard.equals("Minotaur") || selectedCard.equals("Pan") || selectedCard.equals("Prometeus")) && !(divinitySelection.contains(selectedCard))));
+                                            divinitySelection.add(selectedCard);
+                                        }
+                                        networkHandler.send(new GodsSelectedEvent(iD, divinitySelection));
+                                    } catch (IOException ignored) {
+                                    }
+                            }
+                            if (communicationString.equals("Do you want to play with gods?")) {
                                 try {
-                                    do {
-                                        System.out.println("\tPlease, insert your age: ");
-                                        age = 12; //For test purposes
+                                    String response = "";
+                                    while (!(response.equalsIgnoreCase("yes") || response.equalsIgnoreCase("no"))) {
 
-                                    } while ((age <= 0 || age > 120));
-                                    System.out.println("Select a color, " + communicationString.substring(25));
-                                    do {
-                                        color = input.nextLine();
-                                        System.out.println(color);
-                                    } while (!(color.equalsIgnoreCase("Yellow") || color.equalsIgnoreCase("Blue") || color.equalsIgnoreCase("Red")));
-                                    PlayerColor colorPlayer = null;
-                                    if(color.equalsIgnoreCase("Yellow")) {
-                                        colorPlayer = PlayerColor.YELLOW;
+                                        System.out.print("Do you want to play with gods? (Please answer with yes or no): ");
+                                        response = input.next();
                                     }
-                                    if(color.equalsIgnoreCase("Blue")) {
-                                        colorPlayer = PlayerColor.BLUE;
-                                    }
-                                    if(color.equalsIgnoreCase("Red")){
-                                        colorPlayer = PlayerColor.RED;
-                                    }
-                                    networkHandler.send(new PlayerDataEnteredEvent(iD, age, colorPlayer));
-                                    System.out.println("Data sent");
-                                    break;
-                                } catch (IOException ignored) {}
+                                    supportBoolean = response.equalsIgnoreCase("yes");
+                                    networkHandler.send(new WithGodsSelectedEvent(iD, supportBoolean));
+                                } catch (IOException ignored) {
+                                }
+                            }
+                            if (communicationString.contains("Select your Card, cards available are:")) {
+                                String selectedDivinity = "Not Selected";
 
-                            } while (true);
-                        }
-                        if (communicationString.contains("Please select the cards, gods available are:")) {
-                            System.out.println(communicationString.subSequence(0, 43));
-                            String selectedDivinity;
-                            do {
-                                if (communicationString.contains("Apollo")) {
-                                    divinity = new Apollo();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Artemis")) {
-                                    divinity = new Artemis();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Athena")) {
-                                    divinity = new Athena();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Atlas")) {
-                                    divinity = new Atlas();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Demeter")) {
-                                    divinity = new Demeter();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Hephaestus")) {
-                                    divinity = new Hephaestus();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Minotaur")) {
-                                    divinity = new Minotaur();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Pan")) {
-                                    divinity = new Pan();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Prometheus")) {
-                                    divinity = new Prometheus();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                try {
-                                    ArrayList<String> divinitySelection = new ArrayList<>();
-                                    for (int i = 0; i < game.getNumPlayers(); i++) {
-                                        do {
-                                            System.out.println("Select divinity #" + i + " : ");
-                                            selectedDivinity = input.nextLine();
-                                        } while (!((selectedDivinity.equals("Apollo") || selectedDivinity.equals("Artemis") || selectedDivinity.equals("Athena") || selectedDivinity.equals("Atlas") || selectedDivinity.equals("Demeter") || selectedDivinity.equals("Hephaestus") || selectedDivinity.equals("Minotaur") || selectedDivinity.equals("Pan") || selectedDivinity.equals("Prometeus")) && !(divinitySelection.contains(selectedDivinity))));
-                                        divinitySelection.add(selectedDivinity);
-                                    }
-                                    networkHandler.send(new GodsSelectedEvent(iD, divinitySelection));
-                                    break;
-                                } catch (IOException ignored) {}
-                            } while (true);
-                        }
-                        if (communicationString.equals("Do you want to play with gods?")) {
-                            try { boolean gotResponse = false;
-                                while(!gotResponse) {
+                                    findDivinity(communicationString);
+                                    try {
+                                        while (!(communicationString.contains(selectedDivinity))) {
+                                            System.out.print("Select you divinity: ");
+                                            selectedDivinity = input.next();
+                                        }
 
-                                        System.out.println("Do you want to play with gods? (Please answer with yes or no): ");
-                                        String s = input.nextLine();
-
-                                     if(s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("no"));
-                                    {
-                                        supportBoolean = s.equalsIgnoreCase("yes");
-                                        networkHandler.send(new WithGodsSelectedEvent(iD, supportBoolean));
-                                        gotResponse = true;
-                                    }
-                                }
-
-                            } catch (IOException ignored) {}
-                        }
-                        if (communicationString.contains("Select your Card, cards available are:")) {
-                            String selectedDivinity;
-                            ArrayList<String> godSelected = new ArrayList<>();
-
-                            do {
-                                if (communicationString.contains("Apollo")) {
-                                    divinity = new Apollo();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-
-                                if (communicationString.contains("Artemis")) {
-                                    divinity = new Artemis();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Athena")) {
-                                    divinity = new Athena();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Atlas")) {
-                                    divinity = new Atlas();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Demeter")) {
-                                    divinity = new Demeter();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Hephaestus")) {
-                                    divinity = new Hephaestus();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Minotaur")) {
-                                    divinity = new Minotaur();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Pan")) {
-                                    divinity = new Pan();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                if (communicationString.contains("Prometheus")) {
-                                    divinity = new Prometheus();
-                                    System.out.println(divinity.getName());
-                                    System.out.println(divinity.getDescription());
-                                }
-                                try {
-                                    do {
-                                        System.out.print("Select you divinity: ");
-                                        selectedDivinity = input.nextLine();
-                                    } while (!(communicationString.contains(selectedDivinity)));
-                                    godSelected.add(selectedDivinity);
-                                    switch (selectedDivinity) {
-                                        case "Apollo":
+                                        if(selectedDivinity.equalsIgnoreCase("Apollo")) {
                                             divinity = new Apollo();
-                                        case "Artemis":
-                                            divinity = new Artemis();
-                                        case "Athena":
+                                            }
+                                        if(selectedDivinity.equalsIgnoreCase("Arthemis")) {
+                                            divinity = new Arthemis();
+                                        }
+                                        if(selectedDivinity.equalsIgnoreCase("Athena")) {
                                             divinity = new Athena();
-                                        case "Atlas":
+                                        }
+                                        if(selectedDivinity.equalsIgnoreCase("Atlas")) {
                                             divinity = new Atlas();
-                                        case "Demeter":
+                                        }
+                                        if(selectedDivinity.equalsIgnoreCase("Demeter")) {
                                             divinity = new Demeter();
-                                        case "Hephaestus":
+                                        }
+                                        if(selectedDivinity.equalsIgnoreCase("Hephaestus")) {
                                             divinity = new Hephaestus();
-                                        case "Minotaur":
+                                        }
+                                        if(selectedDivinity.equalsIgnoreCase("Minotaur")) {
                                             divinity = new Minotaur();
-                                        case "Pan":
+                                        }
+                                        if(selectedDivinity.equalsIgnoreCase("Pan")) {
                                             divinity = new Pan();
-                                        default:
+                                        }
+                                        if(selectedDivinity.equalsIgnoreCase("Prometheus")) {
                                             divinity = new Prometheus();
-                                    }
-                                    networkHandler.send(new GodsSelectedEvent(iD, godSelected));
-                                    break;
-                                } catch (IOException ignored) {}
+                                        }
 
-                            } while (true);
-                        }
-                        if (communicationString.contains("Select the Starter, players in the game are:")) {
-                            String playerSelect;
-                            try {
-                                do {
-                                    System.out.println("\tSelect the starter, IDs available are:");
-                                    for (int i = 0; i < game.getNumPlayers(); i++) {
-                                        System.out.println("\t\t>" + game.getIDs().get(i));
+                                        networkHandler.send(new CardSelectedEvent(iD, selectedDivinity));
+                                    } catch (IOException ignored) {
                                     }
-                                    System.out.print("\tSelect player using his ID: ");
-                                    playerSelect = input.nextLine();
-                                } while (!(game.getIDs().contains(playerSelect)));
-                                networkHandler.send(new StarterSelectedEvent(iD, playerSelect));
-                            } catch (IOException ignored) {
                             }
-                        }
-                        if (communicationString.equals("Please Select the first box")) {
-                            int coordinateX, coordinateY;
-                            map.printMap();
-                            do {
-                                printScreen();
-                                try {
-                                    do {
-                                        System.out.print("Select your first worker's starting box (only empty boxes can be chosen)\n\tcoordinates X: ");
-                                        coordinateX = input.nextInt();
-                                        System.out.println("\tcoordinate Y:");
-                                        coordinateY = input.nextInt();
-                                    } while (!((coordinateX >= 0 && coordinateX < 5) && (coordinateY >= 0 && coordinateY < 5) && !(game.getMap().getBox(coordinateX, coordinateY).hasWorker())));
-                                    networkHandler.send(new BoxSelectedEvent(iD, game.getMap().getBox(coordinateX, coordinateY)));
-                                    break;
-                                } catch (IOException | InvalidIndicesException ignored) {}
-
-                            } while (true);
-                        }
-                        if (communicationString.equals("Please Select the second box")) {
-                            int coordinateX, coordinateY;
-                            map.printMap();
-                            do {
-                                printScreen();
-                                try {
-                                    do {
-                                        System.out.print("Select your second worker's starting box (only empty boxes can be chosen)\n\tcoordinates X: ");
-                                        coordinateX = input.nextInt();
-                                        System.out.println("\tcoordinates Y:");
-                                        coordinateY = input.nextInt();
-                                    } while (!((coordinateX >= 0 && coordinateX < 5) && (coordinateY >= 0 && coordinateY < 5) && !(game.getMap().getBox(coordinateX, coordinateY).hasWorker())));
-                                    networkHandler.send(new BoxSelectedEvent(iD, game.getMap().getBox(coordinateX, coordinateY)));
-                                    break;
-                                } catch (IOException | InvalidIndicesException ignored) {}
-
-                            } while (true);
-                        }
-                        if (communicationString.equals("Please Select one box to build")) {
-                            printScreen();
-                            int coordinateX, coordinateY;
-
-                            while (true) {
-                                try {
-                                    do {
-                                        System.out.print("Select a box to build in :\n\t coordinate X:");
-                                        coordinateX = input.nextInt();
-                                        System.out.println("\t coordinate Y:");
-                                        coordinateY = input.nextInt();
-
-                                    } while (!(coordinateX >= 0 && coordinateX < 5 && coordinateY >= 0 && coordinateY < 5 && !game.getMap().getBox(coordinateX, coordinateY).hasWorker() && !game.getMap().getBox(coordinateX, coordinateY).hasDome() && game.getMap().getBox(coordinateX, coordinateY).getLevel() < 3));
-
-                                    networkHandler.send(new BoxSelectedEvent(iD, game.getMap().getBox(coordinateX, coordinateY)));
-                                    break;
-                                } catch (IOException | InvalidIndicesException ignored) {}
+                            if (communicationString.contains("Select the Starter, players in the game are:")) {
+                                String playerSelect = "Not selected";
+                                    try {
+                                        while (!(game.getIDs().contains(playerSelect))) {
+                                            System.out.println("\tSelect the starter, IDs available are:");
+                                            for (int i = 0; i < game.getNumPlayers(); i++) {
+                                                System.out.println("\t\t>" + game.getIDs().get(i));
+                                            }
+                                            System.out.print("\tSelect player using his ID: ");
+                                            playerSelect = input.next();
+                                        }
+                                        networkHandler.send(new StarterSelectedEvent(iD, playerSelect));
+                                    } catch (IOException ignored) {
+                                    }
                             }
-                        }
-                        if (communicationString.equals("Please Select one box to move")) {
-                            printScreen();
 
-                            int coordinateX, coordinateY;
+                            if (communicationString.equals("Please Select the first box")) {
 
-                            do {
-                                do {
-                                    System.out.print("Select a box to move the worker  \n\tcoordinate X: ");
-                                    coordinateX = input.nextInt();
-                                    System.out.print("\tcoordinate Y: ");
-                                    coordinateY = input.nextInt();
-                                } while (!(coordinateX >= 0 && coordinateX < 5 && coordinateY >= 0 && coordinateY < 5));
+                                    printScreen();
+                                    try {
+                                        int coordinateX = -1;
+                                        int coordinateY = -1;
+
+                                        while (!((coordinateX >= 0 && coordinateX < 5) && (coordinateY >= 0 && coordinateY < 5) && !(game.getMap().getBox(coordinateX, coordinateY).hasWorker()))){
+                                           try {
+                                               System.out.print("Select your first worker's starting box (only empty boxes can be chosen)\n\tcoordinates X: ");
+                                               coordinateX = Integer.parseInt(input.next());
+                                               System.out.println("\tcoordinate Y:");
+                                               coordinateY = Integer.parseInt(input.next());
+                                           }catch (NumberFormatException e){
+                                               System.out.println("Please insert valid indices");
+                                           }
+                                        }
+                                        firstboxX = coordinateX;
+                                        firstboxY = coordinateY;
+                                        networkHandler.send(new BoxSelectedEvent(iD,coordinateX,coordinateY));
+                                    } catch (IOException | InvalidIndicesException ignored) {
+                                    }
+                            }
+                            if (communicationString.equals("Please Select the second box")) {
+
+                                    try {
+                                        int coordinateX = -1;
+                                        int coordinateY = -1;
+                                        do {
+                                            System.out.println("Select your second worker's starting box (only empty boxes can be chosen)\n\tcoordinates X: ");
+                                            try {
+                                                coordinateX = Integer.parseInt(input.next());
+                                                System.out.println("\tcoordinates Y:");
+                                                coordinateY = Integer.parseInt(input.next());
+                                            }catch (NumberFormatException e){
+                                                System.out.println("Please insert valid indices");
+                                            }
+                                        } while (!((coordinateX >= 0 && coordinateX < 5) && (coordinateY >= 0 && coordinateY < 5) && (coordinateX != firstboxX || coordinateY != firstboxY) && !(game.getMap().getBox(coordinateX, coordinateY).hasWorker())));
+
+                                        networkHandler.send(new BoxSelectedEvent(iD, coordinateX,coordinateY));
+                                    } catch (IOException | InvalidIndicesException ignored) {}
+                            }
+                            if (communicationString.equals("Please Select one box to build")) {
+                                printScreen();
+
+                                    try {
+                                        int coordinateX = -1;
+                                        int coordinateY = -1;
+                                        do {
+                                            try {
+                                                System.out.print("Select a box to build in :\n\t coordinate X:");
+                                                coordinateX = Integer.parseInt(input.next());
+                                                System.out.println("\t coordinate Y:");
+                                                coordinateY = Integer.parseInt(input.next());
+                                            }catch (NumberFormatException e){
+                                                System.out.println("Please insert valid indices");
+                                            }
+
+                                        } while (!(coordinateX >= 0 && coordinateX < 5 && coordinateY >= 0 && coordinateY < 5));
+
+                                        networkHandler.send(new BoxSelectedEvent(iD, coordinateX, coordinateY));
+                                    } catch (IOException ignored) {
+                                    }
+                            }
+                            if (communicationString.equals("Please Select one box to move")) {
+                                printScreen();
+
                                 try {
-                                    networkHandler.send(new BoxSelectedEvent(iD, game.getMap().getBox(coordinateX, coordinateY)));
-                                    break;
-                                } catch (InvalidIndicesException | IOException ignored) {}
+                                    int coordinateX = -1;
+                                    int coordinateY = -1;
+                                    do {
+                                        try {
+                                            System.out.print("Select a box to move in :\n\t coordinate X:");
+                                            coordinateX = Integer.parseInt(input.next());
+                                            System.out.println("\t coordinate Y:");
+                                            coordinateY = Integer.parseInt(input.next());
+                                        }catch (NumberFormatException e){
+                                            System.out.println("Please insert valid indices");
+                                        }
 
-                            } while (true);
-                        }
-                        if (communicationString.equals("Please Select one worker")) {
-                            int workerNum;
-                            System.out.println("It's your turn, please select your worker ");
-                            do {
-                                do {
-                                    System.out.println("These are your workers:");
-                                    for (int i = 0; i < player.getWorkers().size(); i++) {
-                                        System.out.println("\t> #" + i + " position (x: " + player.getWorkers().get(i).getBox().getPosition()[0] + ", y: " + player.getWorkers().get(i).getBox().getPosition()[1] + ")");
+                                    } while (!(coordinateX >= 0 && coordinateX < 5 && coordinateY >= 0 && coordinateY < 5));
+
+                                    networkHandler.send(new BoxSelectedEvent(iD, coordinateX, coordinateY));
+                                } catch (IOException ignored) {
+                                }
+                            }
+
+                            if (communicationString.equals("Please Select one worker")) {
+
+                                int workerNum = -1;
+                                Worker workerMoved;
+                                System.out.println("It's your turn, please select your worker ");
+
+                                        System.out.println("These are your workers:");
+                                        for (int i = 0; i < player.getWorkers().size(); i++) {
+                                            System.out.println("\t> #" + i + " position (x: " + player.getWorkers().get(i).getBox().getPosition()[0] + ", y: " + player.getWorkers().get(i).getBox().getPosition()[1] + ")");
+                                        }
+                                            while (!(workerNum == 0 || workerNum == 1 && player.getWorkers().get(workerNum).canMove())) {
+                                                try {
+                                                    System.out.print("Select your worker: ");
+                                                    workerNum = Integer.parseInt(input.next());
+                                                }catch(NumberFormatException e){
+                                                System.out.println("Please insert a valid value");
+                                                }
+                                            }
+
+                                    try {
+                                        networkHandler.send(new WorkerSelectedEvent(iD, workerNum));
+                                    } catch (IOException ignore) {
                                     }
-                                    System.out.print("Select your worker: ");
-                                    workerNum = input.nextInt();
-                                    workerMoved = player.getWorkers().get(workerNum);
-                                } while (workerNum < 0 || workerNum >= player.getWorkers().size() || !workerMoved.canMove());
-
+                            }
+                            if (communicationString.equals("Your are active now")) {
+                                System.out.println(communicationString);
+                            }
+                            if (communicationString.equals("Game over, thanks for playing Santorini!")) {
+                                System.out.println("\t\t\t\t" + communicationString);
+                            }
+                            if (communicationString.equals("Do you want to restart?")) {
                                 try {
-                                    networkHandler.send(new WorkerSelectedEvent(iD, workerMoved));
-                                } catch (IOException ignore) {}
+                                    boolean gotResponse = false;
+                                    while (!gotResponse) {
 
-                            } while (true);
-                        }
-                        if (communicationString.equals("Your are active now")) {
-                            System.out.println(communicationString);
-                        }
-                        if (communicationString.equals("Game over, thanks for playing Santorini!")) {
-                            System.out.println("\t\t\t\t" + communicationString);
-                        }
-                        if (communicationString.equals("Do you want to restart?")) {
-                            try { boolean gotResponse = false;
-                                while(!gotResponse) {
-
-                                    System.out.println("Do you want to restart? (Please answer with yes or no): ");
-                                    String s = input.nextLine();
-                                    System.out.println(s);
-                                    if(s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("no"));
-                                    {
-                                        supportBoolean = s.equalsIgnoreCase("yes");
-                                        networkHandler.send(new RestartConfirmationEvent(iD, supportBoolean));
-                                        gotResponse = true;
+                                        System.out.println("Do you want to restart? (Please answer with yes or no): ");
+                                        String s = input.nextLine();
+                                        System.out.println(s);
+                                        if (s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("no")) {
+                                            gotResponse = true;
+                                            supportBoolean = s.equalsIgnoreCase("yes");
+                                            networkHandler.send(new RestartConfirmationEvent(iD, supportBoolean));
+                                        }
                                     }
+
+                                } catch (IOException ignored) {
                                 }
+                            }
+                            if (communicationString.equals("Please wait, the host is creating the game")) {
+                                System.out.println(communicationString);
+                            }
+                            if (communicationString.equals("Sorry but the game is already full") || communicationString.equals("The host decided to conclude the matches")) {
+                                System.out.println(communicationString);
+                                break;
+                            }
+                            if (communicationString.equals("Do you want to use your God special power?")) {
+                                System.out.println("Your divinity:" + divinity.getName() + divinity.getDescription());
+                                try {
+                                    boolean gotResponse = false;
+                                    while (!gotResponse) {
 
-                            } catch (IOException ignored) {}
-                        }
-                        if (communicationString.equals("Please wait, the host is creating the game")) {
-                            System.out.println(communicationString);
-                        }
-                        if (communicationString.equals("Sorry but the game is already full") || communicationString.equals("The host decided to conclude the matches")) {
-                            System.out.println(communicationString);
-                            break;
-                        }
-                        if (communicationString.equals("Do you want to use your God special power?")) {
-                            System.out.println("Your divinity:" + divinity.getName() + divinity.getDescription());
-                            try { boolean gotResponse = false;
-                                while(!gotResponse) {
-
-                                    System.out.println("Do you want to user your god special power? (Please answer with yes or no): ");
-                                    String s = input.nextLine();
-                                    System.out.println(s);
-                                    if(s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("no"));
-                                    {
-                                        supportBoolean = s.equalsIgnoreCase("yes");
-                                        networkHandler.send(new UseofSpecialPowerEvent(iD, supportBoolean));
-                                        gotResponse = true;
+                                        System.out.println("Do you want to user your god special power? (Please answer with yes or no): ");
+                                        String s = input.nextLine();
+                                        System.out.println(s);
+                                        if (s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("no")) {
+                                            gotResponse = true;
+                                            supportBoolean = s.equalsIgnoreCase("yes");
+                                            networkHandler.send(new UseofSpecialPowerEvent(iD, supportBoolean));
+                                        }
                                     }
-                                }
 
-                            } catch (IOException ignored) {}
-                        }
-                        if (communicationString.equals("You need to change your username")) {
-                            System.out.println(communicationString);
-                        }
-                        if (communicationString.equals("The host decided to conclude the matches")) {
-                            System.out.println(communicationString);
-                            break;
+                                } catch (IOException ignored) {
+                                }
+                            }
+                            if (communicationString.equals("You need to change your username")) {
+                                System.out.println(communicationString);
+                            }
                         }
                     }
-
-
-            }catch (ClassCastException | JsonSyntaxException e) {}
+                }catch (ClassCastException | JsonSyntaxException ignored) {}
 
                 try {
                 CardSelectionEvent event = (CardSelectionEvent) JsonHelper.deserialization(receivedMessage.getContent());
-                if(event.getTarget().equalsIgnoreCase(iD)){
-                    System.out.println(event.getSelectedGod());
-                }
-            }catch (ClassCastException | JsonSyntaxException e) {}
+                    if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
+                        System.out.println(event.getSelectedGod());
+                    }
+                }catch (ClassCastException | JsonSyntaxException ignored) {}
 
                 try {
                 GameUpdatingEvent event = (GameUpdatingEvent) networkHandler.deserialization(receivedMessage.getContent());
@@ -531,7 +421,7 @@ public class PlayerInterface {
                     updateMap();
                     printScreen();
                     for(int i = 0; i< game.getPlayers().size(); i++){
-                        if(game.getPlayers().get(i).getPlayerID().equalsIgnoreCase(iD)){
+                        if(game.getPlayers().get(i).getPlayerID().equals(iD)){
                             player = game.getPlayers().get(i);
                             break;
                         }
@@ -539,39 +429,132 @@ public class PlayerInterface {
                 }
 
             }
-            catch (ClassCastException | JsonSyntaxException e) {}
+            catch (ClassCastException | JsonSyntaxException ignored) {}
 
                 try {
                 GodCardsSelectedEvent event = (GodCardsSelectedEvent) JsonHelper.deserialization(receivedMessage.getContent());
-                if(event.getTarget().equalsIgnoreCase(iD)){
-                    godsAvailable = event.getSelectedCards();
+                    if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
+                        System.out.println(event.getSelectedCards());
+                    }
                 }
-            }
-            catch (ClassCastException | JsonSyntaxException e) {}
+            catch (ClassCastException | JsonSyntaxException ignored) {}
 
                 try {
                 LoserPlayerEvent event = (LoserPlayerEvent) JsonHelper.deserialization(receivedMessage.getContent());
-                if(event.getTarget().equalsIgnoreCase(iD)) {
-                    System.out.println("\t\t\t\tGAME OVER");
+                    if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
+                        System.out.println("\t\t\t\tGAME OVER");
+                    }
                 }
-            }
-            catch (ClassCastException | JsonSyntaxException e) {}
+            catch (ClassCastException | JsonSyntaxException ignored) {}
 
                 try {
                 WinnerPlayerEvent event = (WinnerPlayerEvent) JsonHelper.deserialization(receivedMessage.getContent());
-                    if(event.getTarget().equalsIgnoreCase(iD)) {
+                    if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
                         System.out.println("\\t\\t\\t\\tYOU WIN");
                     }
-            }
-            catch (ClassCastException | JsonSyntaxException e) {}
+                }
+            catch (ClassCastException | JsonSyntaxException ignored) {}
 
+                try{
+                    InvalidInputEvent event = (InvalidInputEvent) JsonHelper.deserialization(receivedMessage.getContent());
+                    if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
+                        System.out.println("Something went wrong, please try again");
+                    }
+
+                }catch (ClassCastException | JsonSyntaxException ignored) {}
+
+            try{
+                InvalidMovementEvent event = (InvalidMovementEvent) JsonHelper.deserialization(receivedMessage.getContent());
+                if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
+                    System.out.println("Your move wasn't valid, please try again");
+                }
+
+            }catch (ClassCastException | JsonSyntaxException ignored) {}
+
+            try{
+                InvalidConstructionEvent event = (InvalidConstructionEvent) JsonHelper.deserialization(receivedMessage.getContent());
+                if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
+                    System.out.println("Your construction wasn't valid, please try again");
+                }
+
+
+            }catch (ClassCastException | JsonSyntaxException ignored) {}
+
+            try{
+                StarterSelectionEvent event = (StarterSelectionEvent) JsonHelper.deserialization(receivedMessage.getContent());
+                if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
+                    System.out.println(event.getStarter());
+                }
+
+            }catch (ClassCastException | JsonSyntaxException ignored) {}
+
+            try{
+                PlayerJoinedEvent event = (PlayerJoinedEvent) networkHandler.deserialization(receivedMessage.getContent());
+                if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
+                    System.out.println(event.getP().getPlayerID());
+                    System.out.println(event.getP().getPlayerAge());
+                    System.out.println(event.getP().getColor());
+                }
+
+            }catch (ClassCastException | JsonSyntaxException ignored) {}
+
+        }
+    }
+
+    private void findDivinity(String communicationString) {
+        if (communicationString.contains("Apollo")) {
+            Divinity div = new Apollo();
+            System.out.println(div.getName());
+            System.out.println(div.getDescription());
+        }
+
+        if (communicationString.contains("Arthemis")) {
+            Divinity div = new Arthemis();
+            System.out.println(div.getName());
+            System.out.println(div.getDescription());
+        }
+        if (communicationString.contains("Athena")) {
+            Divinity div = new Athena();
+            System.out.println(div.getName());
+            System.out.println(div.getDescription());
+        }
+        if (communicationString.contains("Atlas")) {
+            Divinity div = new Atlas();
+            System.out.println(div.getName());
+            System.out.println(div.getDescription());
+        }
+        if (communicationString.contains("Demeter")) {
+            Divinity div = new Demeter();
+            System.out.println(div.getName());
+            System.out.println(div.getDescription());
+        }
+        if (communicationString.contains("Hephaestus")) {
+            Divinity div = new Hephaestus();
+            System.out.println(div.getName());
+            System.out.println(div.getDescription());
+        }
+        if (communicationString.contains("Minotaur")) {
+            Divinity div = new Minotaur();
+            System.out.println(div.getName());
+            System.out.println(div.getDescription());
+        }
+        if (communicationString.contains("Pan")) {
+            Divinity div = new Pan();
+            System.out.println(div.getName());
+            System.out.println(div.getDescription());
+        }
+        if (communicationString.contains("Prometheus")) {
+            Divinity div = new Prometheus();
+            System.out.println(div.getName());
+            System.out.println(div.getDescription());
         }
     }
 
     /**
      * Method used to update the client's map.
      */
-    public void updateMap() {
+    private void updateMap(){
+        map = new MapCLI();
         for (int x=0; x<5; x++){
             for (int y=0; y<5; y++){
                 Box boxGame;
@@ -586,12 +569,12 @@ public class PlayerInterface {
                             boxCLI.buildDome();
                         }
                     }
-                }catch (InvalidIndicesException | WorkerNotExistException | InputFailedException ignore) {}
+                }catch (InvalidIndicesException | WorkerNotExistException ignore) {}
             }
         }
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args){
         new PlayerInterface();
     }
 

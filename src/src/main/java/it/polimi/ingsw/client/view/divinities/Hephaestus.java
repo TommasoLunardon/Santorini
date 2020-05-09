@@ -6,6 +6,6 @@ package it.polimi.ingsw.client.view.divinities;
  */
 public class Hephaestus extends Divinity {
     public Hephaestus(){
-        super("Hephaestus","Your worker can build an extra strucure \n(not a dome) but only upon a first bloc");
+        super("Hephaestus","Your worker can build an extra block \n(NOT DOME) upon the first block built");
     }
 }

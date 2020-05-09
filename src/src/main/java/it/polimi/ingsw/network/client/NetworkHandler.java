@@ -10,8 +10,6 @@ import it.polimi.ingsw.network.events.vcevents.VCPingEvent;
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.server.controller.exceptions.InvalidSenderException;
 import it.polimi.ingsw.network.events.mvevents.*;
-import it.polimi.ingsw.server.model.Game;
-import it.polimi.ingsw.server.model.Player;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,12 +26,10 @@ public class NetworkHandler implements VCEventSender {
     private SocketConnection connection;
     private String ID;
 
-    private TimerTask timerTask;
-    private TimerTask timerTaskReceive;
-    int counter = 0;
+    private int counter = 0;
 
-    long startTime = 0;
-    long offsetTime = 10000;
+    private long startTime = 10000;
+    private long offsetTime = 10000;
 
 
     public NetworkHandler(){}
@@ -47,7 +43,7 @@ public class NetworkHandler implements VCEventSender {
     public void send(Event event) {}
 
     @Override
-    public void send(VCEvent event) throws IOException {
+    public void send(VCEvent event) throws IOException, SocketTimeoutException {
         String m = event.toString();
         Message message = new Message(m);
         connection.sendClientMessage(message);
@@ -56,8 +52,7 @@ public class NetworkHandler implements VCEventSender {
 
     public Message receiveMessage(){
         connection.run();
-        Message message = connection.getMessage();
-        return message;
+        return connection.getMessage();
 
     }
 
@@ -68,7 +63,7 @@ public class NetworkHandler implements VCEventSender {
      */
     public Object deserialization(String message){
         try {
-            byte b[] = Base64.decode(message);
+            byte[] b = Base64.decode(message);
             ByteArrayInputStream bi = new ByteArrayInputStream(b);
             ObjectInputStream si = new ObjectInputStream(bi);
             return si.readObject();
@@ -83,14 +78,16 @@ public class NetworkHandler implements VCEventSender {
      */
     public void sendPing(){
 
-        timerTask = new TimerTask() {
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 VCPingEvent event = new VCPingEvent(connection.getUsername());
                 try {
                     send(event);
-                } catch (IOException e) {
-                    System.out.println("Error");
+                } catch (IOException e)
+                {
+                    System.out.println("Sorry but the connection went down and the game ended");
+                    System.exit(0);
                 }
                 counter++;
             }
@@ -100,47 +97,9 @@ public class NetworkHandler implements VCEventSender {
             Timer timer = new Timer();
             timer.scheduleAtFixedRate(timerTask, startTime, offsetTime);
         } catch (Exception e) {
-            System.out.println("Error");
+            System.out.println("Sorry but the connection went down and the game ended");
+            System.exit(0);
         }
 
     }
-
-    /**
-     * Method used to check that the clients are still connected to the server.
-     */
-    public void receivePing(){
-
-        timerTaskReceive = new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    receivePingEvent();
-                } catch (InvalidSenderException e) {
-                    System.out.println("Error");
-                }
-                counter++;
-            }
-        };
-
-        try {
-            Timer timer = new Timer();
-            timer.scheduleAtFixedRate(timerTaskReceive, startTime, offsetTime);
-        } catch (Exception e) {
-            System.out.println("Error");
-        }
-
-    }
-
-    private void receivePingEvent() throws InvalidSenderException {
-        connection.run();
-        Message message = connection.getMessage();
-        WinnerPlayerEvent event = (WinnerPlayerEvent) JsonHelper.deserialization(message.getContent());
-
-        if(!event.getTarget().equals(ID)){
-            throw new InvalidSenderException();
-        }
-
-
-    }
-
 }

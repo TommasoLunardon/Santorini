@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.server;
 
+import com.google.gson.JsonSyntaxException;
+import it.polimi.ingsw.network.events.vcevents.VCPingEvent;
 import it.polimi.ingsw.network.messages.ConnectionRequest;
 import it.polimi.ingsw.network.messages.Message;
 import it.polimi.ingsw.server.Server;
@@ -14,9 +16,7 @@ import static it.polimi.ingsw.network.JsonHelper.deserialization;
 
 
 /**
- *
  * The SocketConnection class implements a socket that receives the message.
- *
  */
 
 public class SocketConnection implements Runnable, ServerConnection {
@@ -29,8 +29,9 @@ public class SocketConnection implements Runnable, ServerConnection {
     private boolean active;
     private SocketServer server;
     private String username;
+    private Message lastReceived;
 
-    public SocketConnection(SocketServer socketServer, Socket socket){
+    SocketConnection(SocketServer socketServer, Socket socket){
 
         this.server = socketServer;
         this.socket = socket;
@@ -58,45 +59,53 @@ public class SocketConnection implements Runnable, ServerConnection {
 
     /**
      *
-     * run method continue to listen the input and send the messages to the server in case of message
+     * run method continues to listen for an input and sends the messages to the server
      *
      */
     @Override
     public void run() {
-        while(!Thread.currentThread().isInterrupted()) {
-            try {
-                synchronized (inLock) {
+        while (!Thread.currentThread().isInterrupted()) {
+            synchronized (inLock) {
+                try {
+                    lastReceived = (Message) in.readObject();
 
-                    Message m = (Message) in.readObject();
-                    ConnectionRequest request = (ConnectionRequest) deserialization(m.getContent());
-                    username = request.getSenderUsername();
-                    System.out.println("Connection request received");
+                    try {
+                        ConnectionRequest request = (ConnectionRequest) deserialization(lastReceived.getContent());
+                        if (request != null) {
+                            username = request.getSenderUsername();
+                            System.out.println("Connection request received");
 
-                    if (!server.getUsers().contains(username)) {
-                        server.login(username, this);
-                        Message logSuccessfull = new Message("You logged in successfully");
-                        sendServerMessage(logSuccessfull);
-                        System.out.println("Server sent Log response");
+                            if (!server.getUsers().contains(username)) {
+                                server.login(username, this);
+                                Message logSuccessfull = new Message("You logged in successfully");
+                                sendServerMessage(logSuccessfull);
+                                System.out.println("Server sent Log response");
+                                break;
+                            } else {
+                                Message logDenied = new Message("Your username is already taken");
+                                sendServerMessage(logDenied);
+                                break;
+                            }
+                        }
+                    }catch(ClassCastException | JsonSyntaxException e){
                         break;
-
-                    } else {
-                        Message logDenied = new Message("Your username is already taken");
-                        sendServerMessage(logDenied);
-                        break;
-
                     }
+                } catch (IOException | ClassNotFoundException e) {
+                    disconnect();
                 }
-            }catch(IOException e){
-                disconnect();
-            } catch(ClassNotFoundException e){
-                Server.LOGGER.severe(e.getMessage());
             }
         }
     }
 
+
+    public Message getMessage(){
+        return lastReceived;
+    }
+
+
     /**
      *
-     * The isActive method is used to check if the Socketconnection is active.
+     * The isActive method is used to check if the SocketConnection is active.
      *
      */
 
@@ -123,19 +132,6 @@ public class SocketConnection implements Runnable, ServerConnection {
             disconnect();
         }
     }
-
-
-    public Message receiveMessage() throws IOException, ClassNotFoundException {
-        if (!Thread.currentThread().isInterrupted()) {
-            synchronized (inLock) {
-                Message m = (Message) in.readObject();
-                return m;
-            }
-        }else {
-            throw new IOException();
-        }
-    }
-
 
     @Override
     public void disconnect() {

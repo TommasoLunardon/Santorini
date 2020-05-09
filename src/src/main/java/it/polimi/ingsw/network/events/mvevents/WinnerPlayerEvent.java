@@ -3,6 +3,8 @@ package it.polimi.ingsw.network.events.mvevents;
 import it.polimi.ingsw.network.events.MVEvent;
 import it.polimi.ingsw.network.events.MVEventSender;
 
+import java.net.SocketTimeoutException;
+
 public class WinnerPlayerEvent extends MVEvent {
 
     public WinnerPlayerEvent(String target) {
@@ -10,7 +12,7 @@ public class WinnerPlayerEvent extends MVEvent {
     }
 
     @Override
-    public void manage(MVEventSender eventSender) {
+    public void manage(MVEventSender eventSender) throws SocketTimeoutException {
         eventSender.send(this);
 
     }

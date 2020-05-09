@@ -1,15 +1,12 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.exceptions.*;
-
-import java.util.ArrayList;
 
 /**
  * @author Gabriele Gatti, Tommaso Lunardon
- * Subclass of Player, used to play games with Divinity Cards
+ * Abstract subclass of Player, used to play games with Divinity Cards
  */
 
-    public class PlayerDivinity extends Player{
+    public abstract class PlayerDivinity extends Player{
     private String godName;
     private Integer nPlayer;
 
@@ -20,7 +17,6 @@ import java.util.ArrayList;
     }
 
     /**
-     *
      * @return The name of the God's Card assigned to the player
      */
     public String getGodName(){
@@ -29,12 +25,10 @@ import java.util.ArrayList;
     }
 
     /**
-     *
      * @return the  accepted number of players in the game for the specific card used
      */
-    public Integer getnPlayer(){
-        int nPlayer1 = this.nPlayer;
-        return nPlayer1;
+    public int getnPlayer(){
+        return this.nPlayer;
     }
 }
 

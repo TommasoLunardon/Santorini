@@ -20,7 +20,7 @@ public class PlayerAthena extends PlayerDivinity {
              *Method to assign other players as Observers of Athena Condition
              * @param observersList is the list of players playing the same game as the one having Athena as god
              */
-            public void attach(ArrayList<PlayerNotAthena> observersList) {
+            void attach(ArrayList<PlayerNotAthena> observersList) {
                 for (int x = 0; x < observersList.size(); x++) {
                     observer.add(x, observersList.get(x));
                 }
@@ -48,11 +48,11 @@ public class PlayerAthena extends PlayerDivinity {
 
             /**
              * Method used to update the Athena Condition an notify the Observers
-             * @param condition
+             * @param condition is the updated AthenaCondition
              */
             private void notifyPlayers(boolean condition) {
-                for (int i = 0; i < observer.size(); i++) {
-                    observer.get(i).update(condition);
+                for (PlayerNotAthena playerNotAthena : observer) {
+                    playerNotAthena.update(condition);
                 }
             }
         }

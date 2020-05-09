@@ -10,7 +10,7 @@ public class PlayerArthemis extends PlayerNotAthena {
             }
 
             /**
-             * Method to perform the special movement available to player with Arthemis as God,
+             * Method to perform the special movement available to players with Arthemis as God,
              * in addition to the standard movement method
              * @param nextBox1 first box to move in
              * @param nextBox2 second box to move in

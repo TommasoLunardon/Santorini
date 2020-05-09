@@ -29,30 +29,30 @@ public class Worker implements Serializable {
     }
 
     /**
-     *
      * @return true <==> the worker can move to another box
      */
     public boolean canMove(){
         ArrayList<Box> neighbours = box.getNeighbours();
         boolean check = false;
-        for (int i = 0; i<neighbours.size(); i++){
-            if ( !neighbours.get(i).hasWorker() && !neighbours.get(i).hasDome() && !(neighbours.get(i).getLevel() > box.getLevel() +1)){
-                check = true;
-            }
+        for (Box neighbour : neighbours) {
+            try {
+                if (this.canMove(neighbour)) {
+                    check = true;
+                }
+            }catch(WorkerNotExistException ignored){}
         }
 
         return check;
     }
 
     /**
-     *
-     * @return true <==> the worker can build on another box
+     * @return true <==> the worker can build on some box
      */
     public boolean canBuild(){
         ArrayList<Box> neighbours = box.getNeighbours();
         boolean check = false;
-        for (int i = 0; i<neighbours.size(); i++){
-            if ( !neighbours.get(i).hasWorker() && !neighbours.get(i).hasDome()){
+        for (Box neighbour : neighbours) {
+            if (!neighbour.hasWorker() && !neighbour.hasDome()) {
                 check = true;
             }
         }
@@ -62,12 +62,13 @@ public class Worker implements Serializable {
     }
 
     /**
-     *
+     * Method used to move the worker
      * @param nextBox = box where the worker will move
      * @throws WrongMovementException if the Box selected isn't valid
      */
     public void move(Box nextBox) throws WrongMovementException{
         ArrayList<Box> neighbours = box.getNeighbours();
+        int oldLevel = box.getLevel();
 
         if (!neighbours.contains(nextBox) || nextBox.hasWorker() || nextBox.hasDome() || nextBox.getLevel() > box.getLevel() +1){
         throw new WrongMovementException();
@@ -78,14 +79,14 @@ public class Worker implements Serializable {
             this.box.removeWorker();
             this.setBox(nextBox);
 
-            if (getBox().getLevel() == 3 && box.getLevel() < 3){
+            if (getBox().getLevel() == 3 && oldLevel < 3){
                 this.isWinner = true;
             }
         }
     }
 
     /**
-     *
+     * Method used to perform the worker's construction
      * @param selectedBox = box in which the worker will build a new level
      * @throws WrongConstructionException if  the selected box isn't valid
      */
@@ -104,7 +105,6 @@ public class Worker implements Serializable {
     }
 
     /**
-     *
      * @return true <==> the worker reaches a winning condition
      */
     public boolean isWinner(){
@@ -112,7 +112,6 @@ public class Worker implements Serializable {
     }
 
     /**
-     *
      * @return true <==> the worker reaches a losing condition
      */
     public boolean isLoser(){
@@ -120,7 +119,6 @@ public class Worker implements Serializable {
     }
 
     /**
-     *
      * @return the box containing this worker
      */
     public Box getBox(){
@@ -129,7 +127,6 @@ public class Worker implements Serializable {
     }
 
     /**
-     *
      * @return the Player to whom this worker belongs
      */
     public Player getPlayer(){
@@ -138,7 +135,6 @@ public class Worker implements Serializable {
     }
 
     /**
-     *
      * @param box is the new box in which this worker will be placed
      */
     public void setBox(Box box){
@@ -146,7 +142,7 @@ public class Worker implements Serializable {
     }
 
     /**
-     * Method to check if the worker can move in a specific box
+     * Method used to check if the worker can move in a specific box
      * @param box box that needs to be checked
      * @return true <==> the worker can move in such box
      */
@@ -167,7 +163,6 @@ public class Worker implements Serializable {
                 }
 
             }
-
         }
         if (player instanceof PlayerApollo && ((PlayerApollo) player).checkFreeMovement()) {
             if (!box.hasWorker() && !box.hasDome() && !(box.getLevel() > getBox().getLevel() + 1)) {
@@ -176,12 +171,10 @@ public class Worker implements Serializable {
                 if (box.hasWorker() && !player.getWorkers().contains(box.getWorker()) && box.getLevel() <= getBox().getLevel() + 1) {
                     check = true;
                 }
-
             }
-
         }
 
-        if (player instanceof PlayerMinotaur && !((PlayerApollo) player).checkFreeMovement()) {
+        if (player instanceof PlayerMinotaur && !((PlayerMinotaur) player).checkFreeMovement()) {
             if (box.getLevel() <= getBox().getLevel() && !box.hasWorker() && !box.hasDome()) {
                 check = true;
             } else {
@@ -195,15 +188,12 @@ public class Worker implements Serializable {
                         if (!nextBox2.hasWorker() && !nextBox2.hasDome()) {
                             check = true;
                         }
-
                     } catch (InvalidIndicesException e) {
                     }
-
                 }
-
             }
         }
-            if (player instanceof PlayerMinotaur && ((PlayerApollo) player).checkFreeMovement()) {
+            if (player instanceof PlayerMinotaur && ((PlayerMinotaur) player).checkFreeMovement()) {
                 if (!box.hasWorker() && !box.hasDome() && !(box.getLevel() > getBox().getLevel() + 1)) {
                     check = true;
                 } else {
@@ -217,22 +207,16 @@ public class Worker implements Serializable {
                             if (!nextBox2.hasWorker() && !nextBox2.hasDome()) {
                                 check = true;
                             }
-
                         } catch (InvalidIndicesException e) {
                         }
-
                     }
-
                 }
 
             } else {
                 if (!box.hasWorker() && !box.hasDome() && !(box.getLevel() > getBox().getLevel() + 1)) {
                     check = true;
                 }
-
             }
             return check;
-
-
         }
     }

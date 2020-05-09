@@ -6,8 +6,9 @@ import it.polimi.ingsw.network.events.MVEventSender;
 import it.polimi.ingsw.server.model.Game;
 
 import java.io.*;
+import java.net.SocketTimeoutException;
 
-public class GameUpdatingEvent extends MVEvent {
+public class GameUpdatingEvent extends MVEvent implements Serializable {
 
     public String toString(){
         try {
@@ -30,14 +31,13 @@ public class GameUpdatingEvent extends MVEvent {
     }
 
     @Override
-    public void manage(MVEventSender eventSender) {
+    public void manage(MVEventSender eventSender) throws SocketTimeoutException {
         eventSender.send(this);
 
     }
 
     public Game getGame() {
-        Game g = game;
-        return g;
+        return game;
     }
 
 

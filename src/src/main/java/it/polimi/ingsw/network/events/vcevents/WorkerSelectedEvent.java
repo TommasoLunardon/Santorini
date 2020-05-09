@@ -11,24 +11,11 @@ import java.io.ObjectOutputStream;
 
 public class WorkerSelectedEvent extends VCEvent {
 
-    private Worker worker;
+    private int worker;
 
-    public WorkerSelectedEvent(String origin, Worker worker) {
+    public WorkerSelectedEvent(String origin, int worker) {
         super(origin);
         this.worker = worker;
-    }
-
-    public String toString(){
-        try {
-            ByteArrayOutputStream bo = new ByteArrayOutputStream();
-            ObjectOutputStream so = new ObjectOutputStream(bo);
-            so.writeObject(this);
-            so.flush();
-            return Base64.encode(bo.toByteArray());
-        } catch (Exception e) {
-            System.out.println(e);
-            return "";
-        }
     }
 
     @Override
@@ -37,9 +24,8 @@ public class WorkerSelectedEvent extends VCEvent {
 
     }
 
-    public Worker getWorker() {
-        Worker w = worker;
-        return w;
+    public int getWorker() {
+        return worker;
     }
 }
 

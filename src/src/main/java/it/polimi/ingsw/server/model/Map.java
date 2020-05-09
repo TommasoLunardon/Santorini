@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.exceptions.NotValidBoxException;
 import java.io.Serializable;
 
 /**
+ * Class Map is the class used to represent the Santorini's map
  * @author Tommaso Lunardon
  */
 
@@ -13,10 +14,6 @@ public class Map implements Serializable {
 
     private Box[][] map;
 
-    /**
-     * Map Constructor
-     * creates the Box matrix
-     */
     public Map(){
         this.map = new Box [5][5];
         for(int i = 0; i < 5; i++) {
@@ -26,14 +23,13 @@ public class Map implements Serializable {
                 } catch (NotValidBoxException e) {
                     System.out.println(e);;}
             }
-
         }
     }
 
     /**
      *
-     * @param x = latitude of box
-     * @param y = longitude of box
+     * @param x = latitude of selected box
+     * @param y = longitude of selected box
      * @return Box at position (x,y) in the matrix
      * @throws InvalidIndicesException if (x,y) isn't a position in the matrix
      */
@@ -47,10 +43,9 @@ public class Map implements Serializable {
     }
 
     /**
-     *
-     * @return number of completed buildings in the map
+     * @return the number of completed buildings in the map
      */
-    public int getCompletedBuildings() {
+    int getCompletedBuildings() {
         int x = 0;
         for(int i = 0; i < 5; i++){
             for(int j = 0; j < 5; j++) {

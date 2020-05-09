@@ -6,6 +6,6 @@ package it.polimi.ingsw.client.view.divinities;
  */
 public class Demeter extends Divinity {
     public Demeter(){
-        super("Atlas","Your worker can build one more time but not \nin same box");
+        super("Demeter","Your worker can build one additional time but not \nin the same box");
     }
 }

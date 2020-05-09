@@ -1,16 +1,14 @@
 package it.polimi.ingsw.server.model;
 
-
 import it.polimi.ingsw.network.events.MVEvent;
 import it.polimi.ingsw.network.events.mvevents.GameUpdatingEvent;
 import it.polimi.ingsw.network.server.VirtualView;
 import it.polimi.ingsw.server.model.exceptions.*;
 
-
 import java.io.Serializable;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 
 /**
  * Class Game with all the methods needed to create and play a match
@@ -25,13 +23,12 @@ public class Game implements Serializable{
     private boolean withAthena;
     private ArrayList<String> gameGods;
     public final ArrayList<String> availableGods = new ArrayList<>();
-    VirtualView virtualView;
+    private transient VirtualView virtualView;
     private ArrayList<Pair> pairs;
     private ArrayList<String> IDs;
     private ArrayList<String> availableColors;
 
 
-    //Game creation, deciding the game's settings
     public Game(int numPlayers, boolean withGods){
 
         this.withGods = withGods;
@@ -40,7 +37,7 @@ public class Game implements Serializable{
         this.numPlayers = numPlayers;
         minAge = 120;
         gameGods = new ArrayList<>();
-        String[] g = {"Apollo", "Arthemis", "Athena", "Atlas", "Demeter", "Ephaestus", "Minotaur", "Pan", "Prometheus"};
+        String[] g = {"Apollo", "Arthemis", "Athena", "Atlas", "Demeter", "Hephaestus", "Minotaur", "Pan", "Prometheus"};
         availableGods.addAll(Arrays.asList(g));
         pairs = new ArrayList<>();
         IDs = new ArrayList<>();
@@ -76,28 +73,35 @@ public class Game implements Serializable{
         return minAge;
     }
 
-    public boolean isWithAthena() {
+    private boolean isWithAthena() {
         return withAthena;
     }
 
     public boolean isGameFull(){
-        if (this.getPlayers().size()<this.getNumPlayers()){
-            return false;
-        }
-        return true;
+        return this.getPlayers().size() >= this.getNumPlayers();
     }
 
     public ArrayList<String> getGods() {
         return gameGods;
     }
 
-    //Players enter the game
+    /**
+     * Method used to insert a player in the game
+     * @param ID is the player's ID
+     * @param age is the player's age
+     * @param color is the player's color
+     * @throws InvalidInputException if the parameters are wrong
+     */
     public void addPlayer(String ID, int age, PlayerColor color) throws InvalidInputException{
 
         boolean incorrect = false;
-        for(int i = 0; i<players.size();i++){
-            if(players.get(i).getColor().equals(color)) {incorrect = true;}
-            if(players.get(i).getPlayerID().equals(ID)) {incorrect = true;}
+        for (Player value : players) {
+            if (value.getColor().equals(color)) {
+                incorrect = true;
+            }
+            if (value.getPlayerID().equals(ID)) {
+                incorrect = true;
+            }
         }
 
          if(age<1 || age> 120 || incorrect){throw new InvalidInputException();}
@@ -112,8 +116,13 @@ public class Game implements Serializable{
 
     }
 
-    //Method used to assign gods to players (CHECK FOR THE CORRECT CARD ON CONTROLLER)
-    public void becomeDivinity(Player player, String card) throws InvalidInputException {
+    /**
+     * Method used to assign a divinity to one player
+     * @param player is the selected player
+     * @param card is the selected card
+     * @throws InvalidInputException if parameters are wrong
+     */
+    void becomeDivinity(Player player, String card) throws InvalidInputException {
         removePlayer(player);
 
         if(card.equalsIgnoreCase("Apollo")){
@@ -174,11 +183,15 @@ public class Game implements Serializable{
     }
 
 
-    //Players removed from the game
+    /**
+     * Method used to remove a player from the game
+     * @param player is the selected player
+     * @throws InvalidInputException if the selected player doesn't belong to the game
+     */
     public void removePlayer(Player player) throws InvalidInputException {
-        if(!players.contains(player)){ throw new InvalidInputException();
-        }
-            try{player.removeWorkers();}catch (WorkerNotExistException e){
+        if(!players.contains(player)){ throw new InvalidInputException();}
+            try{player.removeWorkers();
+            }catch (WorkerNotExistException e){
                 System.out.println("This player doesn't have any worker");
             }
             players.remove(player);
@@ -190,7 +203,11 @@ public class Game implements Serializable{
 
     }
 
-    //Selectio of god cards for a game with god cards (Controller checks that all cards are different!)
+    /**
+     * Method used to insert the cards selected for this game
+     * @param cards is the list of selected cards
+     * @throws InvalidInputException if the parameter is wrong
+     */
      public void selectGodCards(ArrayList<String> cards) throws InvalidInputException{
         if(cards.size() != numPlayers){throw new InvalidInputException();}
         if(!availableGods.containsAll(cards)){throw new InvalidInputException();}
@@ -200,7 +217,12 @@ public class Game implements Serializable{
     }
 
 
-    //Player selects his/her card for the game
+    /**
+     * Method used to assign the selected card to each player
+     * @param player is the selected player
+     * @param card is the selected card
+     * @throws InvalidInputException if the parameters are wrong
+     */
     public void chooseCard(Player player, String card)throws InvalidInputException{
         if(!getPlayers().contains(player) || !gameGods.contains(card) ){throw new InvalidInputException();}
 
@@ -209,11 +231,13 @@ public class Game implements Serializable{
 
     }
 
-    //Selection of the starting player for the game
+    /**
+     * Method used to select the starter for this game
+     * @param player is the starter selected
+     * @throws InvalidInputException if the player selected doesn't belong to the game
+     */
     public void chooseStarter(Player player)throws InvalidInputException{
         if(!getPlayers().contains(player)){throw new InvalidInputException();}
-
-        //If there is Athena Card we attach other players as observers
 
         if(isWithAthena()){
             int k = 0;
@@ -234,41 +258,49 @@ public class Game implements Serializable{
 
     }
 
-    //Player places his/her two workers on the map at the beginning of the game
+    /**
+     * Method used to place the players' workers on the map
+     * @param player is the selected player
+     * @param box1 is the first selected box
+     * @param box2 is the second selected box
+     * @throws InvalidBoxException if the selected boxes aren't valid
+     * @throws InvalidInputException if the player doesn't belong to the game
+     */
     public void placeWorkers(Player player, Box box1, Box box2) throws InvalidBoxException, InvalidInputException {
-        if(!getPlayers().contains(player) || !box1.getMap().equals(map)  || !box2.getMap().equals(map)){throw new InvalidInputException();}
+        if(!getPlayers().contains(player)){throw new InvalidInputException();}
 
         player.setWorker1(box1);
         player.setWorker2(box2);
     }
 
 
-    //Returns all the pairs PlayerID-Player
     public ArrayList<Pair> getPairs() {
         ArrayList<Pair> p = pairs;
         return p;
     }
 
-    //Returns all the PlayerIDs in the game
     public ArrayList<String> getIDs() {
         ArrayList<String> i = IDs;
         return i;
     }
 
-
     public void setVirtualView(VirtualView view){
         this.virtualView = view;
     }
 
-    //Method used to send an MVEvent
-     public void notify(MVEvent event){
+    /**
+     * Method used to notify an MVEvent
+     * @param event is the event notified
+     */
+     public void notify(MVEvent event) throws SocketTimeoutException {
         event.manage(virtualView);
    }
 
-    //Method used for updating all the views
-    public void gameUpdate(){
+    /**
+     * Method used to update all the connected clients, sending the most updated game version
+     */
+    public void gameUpdate() throws SocketTimeoutException {
         for(int i = 0; i < getIDs().size(); i++){
-
             GameUpdatingEvent event = new GameUpdatingEvent(getIDs().get(i),this);
             this.notify(event);
         }

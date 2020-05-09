@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.events;
 
+import java.net.SocketTimeoutException;
+
 /**
  * Abstract Class MVEvent that represents the generic event sent from the server to the client
  */
@@ -15,7 +17,7 @@ public abstract class MVEvent extends Event {
      *  Manage the forwarding of the event
      * @param eventSender class that performs the event forwarding
      */
-    public abstract void manage(MVEventSender eventSender);
+    public abstract void manage(MVEventSender eventSender) throws SocketTimeoutException;
 
 
     public String getTarget() {

@@ -36,7 +36,7 @@ public class SocketConnection extends ClientConnection implements Runnable {
     public void startConnection() throws IOException {
         String host = InetAddress.getLocalHost().getHostName();
         socket = new Socket(host, getPort());
-        //socket.setSoTimeout(20000);
+        socket.setSoTimeout(20000);
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
 
@@ -44,7 +44,6 @@ public class SocketConnection extends ClientConnection implements Runnable {
         Message message = new Message(m);
 
         sendClientMessage(message);
-
     }
     /**
      *
@@ -61,17 +60,14 @@ public class SocketConnection extends ClientConnection implements Runnable {
 
     @Override
     public void run() {
-        if (!Thread.currentThread().isInterrupted()) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 message = (Message) in.readObject();
-            } catch (SocketTimeoutException e){
+                break;
+            } catch (IOException | ClassNotFoundException | NullPointerException e){
                 System.out.println("Sorry but the connection went down and the game ended");
                 disconnect();
-            } catch (IOException | ClassNotFoundException e) {
-                 System.out.println("Exception during Sock. Con. run()");
-                Logger.getGlobal().warning(e.getMessage());
-                disconnect();
-
+                System.exit(0);
             }
         }
     }
@@ -80,8 +76,9 @@ public class SocketConnection extends ClientConnection implements Runnable {
      * The disconnect method interrupts the thread
      *
      */
-    public void disconnect() {
+    private void disconnect() {
         try {
+            System.out.println("You are being disconnected");
             close();
         } catch (IOException e) {
             Logger.getGlobal().warning(e.getMessage());
@@ -90,7 +87,7 @@ public class SocketConnection extends ClientConnection implements Runnable {
 
     /**
      *
-     * The close method close the connection with server
+     * The close method closes the connection with server
      *
      */
     @Override
@@ -100,6 +97,7 @@ public class SocketConnection extends ClientConnection implements Runnable {
         }
         in = null;
         out = null;
+        Thread.currentThread().interrupt();
     }
 
 

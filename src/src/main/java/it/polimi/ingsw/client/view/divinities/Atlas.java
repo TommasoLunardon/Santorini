@@ -6,6 +6,6 @@ package it.polimi.ingsw.client.view.divinities;
  */
 public class Atlas extends Divinity {
     public Atlas(){
-        super("Atlas","Your worker can build a dome in every level,\n ground too");
+        super("Atlas","Your worker can build a dome in every level,\n even at ground level");
     }
 }

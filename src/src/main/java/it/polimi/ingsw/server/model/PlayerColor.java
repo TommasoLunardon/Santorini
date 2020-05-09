@@ -6,7 +6,6 @@ package it.polimi.ingsw.server.model;
 public enum  PlayerColor {
     RED,BLUE,YELLOW;
 
-
     @Override
     public String toString() {
         if(this.equals(RED)){return "Red";}

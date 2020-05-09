@@ -22,7 +22,5 @@ public abstract class Box {
 
     public abstract void buildDome();
 
-    public abstract int getDimension();
-
     public abstract void setBoxWhitOutWorker();
 }

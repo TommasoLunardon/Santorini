@@ -13,6 +13,6 @@ public class VCPingEvent extends VCEvent {
 
     @Override
     public void manage(VCEventSender eventSender) throws IOException {
-
+        eventSender.send(this);
     }
 }

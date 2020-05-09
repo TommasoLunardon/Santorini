@@ -4,6 +4,7 @@ import it.polimi.ingsw.network.JsonHelper;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.SocketTimeoutException;
 
 /**
  * Abstract class Event that provides the method manage(), used to manage the forwarding of events, it is extended by MVEvent and VCEvent.
@@ -23,7 +24,7 @@ public abstract class Event implements Serializable {
 
     }
 
-    public void manage(MVEventSender eventSender){
+    public void manage(MVEventSender eventSender) throws SocketTimeoutException {
         eventSender.send(this);
 
     }

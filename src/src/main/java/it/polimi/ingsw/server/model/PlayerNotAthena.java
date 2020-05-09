@@ -40,17 +40,16 @@ public class PlayerNotAthena extends PlayerDivinity{
 
     /**
      * Method used to update the Athena Condition (Pattern Observer)
-     * @param condition
+     * @param condition is the updated AthenaCondition
      */
-    public void update(boolean condition){
+    void update(boolean condition){
 
         freeMovement = condition;
     }
 
-    protected Boolean checkFreeMovement(){
+    Boolean checkFreeMovement(){
 
-        Boolean p = this.freeMovement;
-        return p;
+        return this.freeMovement;
     }
 
     @Override
@@ -60,8 +59,10 @@ public class PlayerNotAthena extends PlayerDivinity{
             for(int i = 0; i < getWorkers().size(); i++) {
                 Box b = this.getWorkers().get(i).getBox();
                 ArrayList<Box> neighbours = b.getNeighbours();
-                for(int j = 0; j < neighbours.size(); j++){
-                    if(neighbours.get(j).getLevel() <= b.getLevel() && !neighbours.get(j).hasWorker() && !neighbours.get(j).hasDome() ){check = true;}
+                for (Box neighbour : neighbours) {
+                    if (neighbour.getLevel() <= b.getLevel() && !neighbour.hasWorker() && !neighbour.hasDome()) {
+                        check = true;
+                    }
                 }
             }
             return check;

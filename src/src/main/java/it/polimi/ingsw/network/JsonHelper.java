@@ -1,6 +1,8 @@
 package it.polimi.ingsw.network;
 
 import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.MalformedJsonException;
 import it.polimi.ingsw.network.events.Event;
 
 /**
@@ -27,10 +29,11 @@ public final class JsonHelper {
 
 
 
-    public static Object deserialization(String input){
+    public static Object deserialization(String input) throws JsonSyntaxException {
         if(input == null){
             throw new NullPointerException();
         }
+        try {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
@@ -38,15 +41,11 @@ public final class JsonHelper {
         JsonObject obj = parser.parse(input).getAsJsonObject();
         String category = obj.get("category").getAsString();
         obj.remove("category");
-        Class<?> classType = null;
-        try {
-            classType = Class.forName(category);
-        } catch (ClassNotFoundException e) {
-            System.out.println();
-        }
+        Class<?> classType = Class.forName(category);
         return classType.cast(gson.fromJson(input, classType));
-
-
+        } catch (ClassNotFoundException | IllegalStateException ignored) {
+        }
+        return null;
     }
 
 }

@@ -22,8 +22,6 @@ public class PlayerDemeter extends PlayerNotAthena {
                     throw new WrongConstructionException();}
 
                     worker.build(box1);
-
                     worker.build(box2);
             }
-
-        }
+}

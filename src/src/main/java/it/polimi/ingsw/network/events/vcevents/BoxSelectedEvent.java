@@ -12,24 +12,12 @@ import java.io.ObjectOutputStream;
 
 public class BoxSelectedEvent extends VCEvent {
 
-    private Box box;
+    private int[] box = new int[2];
 
-    public BoxSelectedEvent(String origin, Box box) {
+    public BoxSelectedEvent(String origin, int x, int y) {
         super(origin);
-        this.box = box;
-    }
-
-    public String toString(){
-        try {
-            ByteArrayOutputStream bo = new ByteArrayOutputStream();
-            ObjectOutputStream so = new ObjectOutputStream(bo);
-            so.writeObject(this);
-            so.flush();
-            return Base64.encode(bo.toByteArray());
-        } catch (Exception e) {
-            System.out.println(e);
-            return "";
-        }
+        box[0] = x;
+        box[1] = y;
     }
 
     @Override
@@ -38,8 +26,10 @@ public class BoxSelectedEvent extends VCEvent {
 
     }
 
-    public Box getBox() {
-        Box b = box;
-        return b;
+    public int[] getBox() {
+        int[] res = new int[2];
+        res[0] = box[0];
+        res[1] = box[1];
+        return res;
     }
 }

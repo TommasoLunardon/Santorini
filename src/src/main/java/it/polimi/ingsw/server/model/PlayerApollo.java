@@ -60,12 +60,12 @@ public class PlayerApollo extends PlayerNotAthena {
            for(int i = 0; i < getWorkers().size(); i++) {
                Box b = this.getWorkers().get(i).getBox();
                ArrayList<Box> neighbours = b.getNeighbours();
-               for(int j = 0; j < neighbours.size(); j++) {
-                   if (checkFreeMovement() && neighbours.get(j).hasWorker() && !this.getWorkers().contains(neighbours.get(j).getWorker()) && neighbours.get(j).getLevel() <= b.getLevel() + 1) {
+               for (Box neighbour : neighbours) {
+                   if (checkFreeMovement() && neighbour.hasWorker() && !this.getWorkers().contains(neighbour.getWorker()) && neighbour.getLevel() <= b.getLevel() + 1) {
                        check = true;
                    }
 
-                   if (!checkFreeMovement() && neighbours.get(j).hasWorker() && !this.getWorkers().contains(neighbours.get(j).getWorker()) && neighbours.get(j).getLevel() <= b.getLevel()) {
+                   if (!checkFreeMovement() && neighbour.hasWorker() && !this.getWorkers().contains(neighbour.getWorker()) && neighbour.getLevel() <= b.getLevel()) {
                        check = true;
                    }
                }

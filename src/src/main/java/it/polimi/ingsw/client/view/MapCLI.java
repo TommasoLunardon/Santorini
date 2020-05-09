@@ -3,25 +3,22 @@ import it.polimi.ingsw.server.model.PlayerColor;
 import it.polimi.ingsw.server.model.Worker;
 
 /**
- * these class create a set of box orded in a matrix for simulate map conformation
+ * these class create a set of box ordered in a matrix to simulate map conformation
  * @author Gabriele Gatti
  */
 
 public class MapCLI extends Map {
     private BoxCLI[][] map;
-    private int dimension;
     /**
-     * @throws InputFailedException for insertion of a wrong dimension
+     * Creates a MapCLI
      */
-    public MapCLI() throws InputFailedException {
-        dimension=5;
+    public MapCLI(){
         this.map = new BoxCLI[5][5];
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 5; y++) {
-                this.map[x][y] = new BoxCLI(dimension, x, y);
+                this.map[x][y] = new BoxCLI(x, y);
             }
         }
-        this.dimension=dimension;
     }
 
     /**
@@ -33,16 +30,17 @@ public class MapCLI extends Map {
      */
     public void setWorker(int x, int y, PlayerColor color) throws InputFailedException{
         if (x>=0 && y>=0 && x<5 && y<5) map[x][y].setWorker(color);
-        else throw new InputFailedException();
+        else {
+            throw new InputFailedException();
+        }
     }
 
     /**
-     * build a structure in box(boxX, bobY)
+     * build a structure in box (boxX, bobY)
      * @param boxX box's where build coordinate X
      * @param boxY box's where build coordinate Y
-     * @throws InputFailedException just for sceen
      */
-    public void build(int boxX, int boxY) throws InputFailedException {
+    public void build(int boxX, int boxY){
         map[boxX][boxY].buildStructure();
     }
 
@@ -56,13 +54,12 @@ public class MapCLI extends Map {
     }
 
     /**
-     *move a worker
-     * @param boxXgo: box's where go coordinate X
-     * @param boxYgo: box's where go coordinate Y
+     *move a worker to box (boxX, boxY)
+     * @param boxXgo: box's coordinate X
+     * @param boxYgo: box's coordinate Y
      * @param worker: worker to move
-     * @throws InputFailedException if box's where go have problems
      */
-    public void moveWorker(int boxXgo, int boxYgo, Worker worker) throws InputFailedException {
+    public void moveWorker(int boxXgo, int boxYgo, Worker worker){
         map[boxXgo][boxYgo].setWorker(worker.getPlayer().getColor());
         map[worker.getBox().getPosition()[0]][worker.getBox().getPosition()[1]].setBoxWhitOutWorker();
     }
@@ -71,19 +68,20 @@ public class MapCLI extends Map {
      * map's screen printing
      */
     public void printMap() {
-        for (int boxY=5*dimension; boxY>0; boxY--){
-            for (int i=5*dimension; i>0; i--){
-                for (int boxX= 5; boxX>0; boxX--){
-                    map[boxX][boxY].printBox(i);
+        for (int mapY = 4; mapY >= 0; mapY--){
+                for(int boxY = 4; boxY >= 0; boxY--){
+                    for (int mapX = 0; mapX <5 ; mapX++) {
+                        map[mapX][mapY].printBox(boxY);
+                    }
+                    System.out.print("\n");
                 }
-            }
         }
     }
 
     /**
      * @param x box's coordinate X
      * @param y box's coordinate Y
-     * @return box(x,y)n
+     * @return box(x,y)
      */
     public BoxCLI getBoxCLI(int x, int y) {
         return map[x][y];

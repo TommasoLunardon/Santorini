@@ -1,16 +1,17 @@
 package it.polimi.ingsw.server.model;
 
-/*
-   Class Pair used to couple each player with his or her unique ID.
+/**
+ * Class Pair used to couple each player with his or her unique ID.
  */
 
+import java.io.Serializable;
 
-public class Pair {
+public class Pair implements Serializable {
     private Player player;
     private String ID;
 
 
-    public Pair(Player player, String ID) {
+    Pair(Player player, String ID) {
         this.player = player;
         this.ID = ID;
     }
@@ -19,12 +20,8 @@ public class Pair {
         return player;
     }
 
-    public String getID() {
+    String getID() {
         return ID;
-    }
-
-    public void setID(String ID) {
-        this.ID = ID;
     }
 
     public void setPlayer(Player player) {

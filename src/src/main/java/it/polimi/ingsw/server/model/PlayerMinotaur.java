@@ -13,7 +13,6 @@ public class PlayerMinotaur extends PlayerNotAthena {
 
             /**
              * Method to perform the special movement available to players with Minotaur as god
-             *
              * @param worker  is the selected worker to perform the movement
              * @param nextBox is the selected box to move in
              * @throws WrongMovementException if the movement isn't valid
@@ -68,42 +67,40 @@ public class PlayerMinotaur extends PlayerNotAthena {
                     for (int i = 0; i < getWorkers().size(); i++) {
                         Box b = this.getWorkers().get(i).getBox();
                         ArrayList<Box> neighbours = b.getNeighbours();
-                        for (int j = 0; j < neighbours.size(); j++) {
+                        for (Box neighbour : neighbours) {
 
-                            if(checkFreeMovement()) {
-                                boolean enemyNear = neighbours.get(j).hasWorker() && !this.getWorkers().contains(neighbours.get(j).getWorker()) && neighbours.get(j).getLevel() <= b.getLevel() + 1;
+                            if (checkFreeMovement()) {
+                                boolean enemyNear = neighbour.hasWorker() && !this.getWorkers().contains(neighbour.getWorker()) && neighbour.getLevel() <= b.getLevel() + 1;
 
                                 if (enemyNear) {
-                                    int dirX = neighbours.get(j).getPosition()[0] - b.getPosition()[0];
-                                    int dirY = neighbours.get(j).getPosition()[1] - b.getPosition()[1];
+                                    int dirX = neighbour.getPosition()[0] - b.getPosition()[0];
+                                    int dirY = neighbour.getPosition()[1] - b.getPosition()[1];
                                     try {
-                                        Box nextBox2 = playerMap.getBox(neighbours.get(j).getPosition()[0] + dirX, neighbours.get(j).getPosition()[1] + dirY);
+                                        Box nextBox2 = playerMap.getBox(neighbour.getPosition()[0] + dirX, neighbour.getPosition()[1] + dirY);
                                         if (!nextBox2.hasWorker() && !nextBox2.hasDome()) {
                                             check = true;
                                         }
 
-                                    } catch (InvalidIndicesException e) {
+                                    } catch (InvalidIndicesException ignored) {
                                     }
 
                                 }
-                            }else{
-                                boolean enemyNear = neighbours.get(j).hasWorker() && !this.getWorkers().contains(neighbours.get(j).getWorker()) && neighbours.get(j).getLevel() <= b.getLevel();
+                            } else {
+                                boolean enemyNear = neighbour.hasWorker() && !this.getWorkers().contains(neighbour.getWorker()) && neighbour.getLevel() <= b.getLevel();
 
                                 if (enemyNear) {
-                                    int dirX = neighbours.get(j).getPosition()[0] - b.getPosition()[0];
-                                    int dirY = neighbours.get(j).getPosition()[1] - b.getPosition()[1];
+                                    int dirX = neighbour.getPosition()[0] - b.getPosition()[0];
+                                    int dirY = neighbour.getPosition()[1] - b.getPosition()[1];
                                     try {
-                                        Box nextBox2 = playerMap.getBox(neighbours.get(j).getPosition()[0] + dirX, neighbours.get(j).getPosition()[1] + dirY);
+                                        Box nextBox2 = playerMap.getBox(neighbour.getPosition()[0] + dirX, neighbour.getPosition()[1] + dirY);
                                         if (!nextBox2.hasWorker() && !nextBox2.hasDome()) {
                                             check = true;
                                         }
 
-                                    } catch (InvalidIndicesException e) {
+                                    } catch (InvalidIndicesException ignored) {
                                     }
 
                                 }
-
-
                             }
                         }
                     }

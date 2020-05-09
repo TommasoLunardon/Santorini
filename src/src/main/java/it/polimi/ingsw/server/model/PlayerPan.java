@@ -9,7 +9,7 @@ public class PlayerPan extends PlayerNotAthena {
             }
 
             /**
-             * Method for movement that takes into account the additional win condition
+             * Method used to perform a movement that takes into account the additional win condition
              * assigned to players with Pan as God
              * @param worker is the worker that will perform the movement
              * @param nextBox is the box in which the worker will move
