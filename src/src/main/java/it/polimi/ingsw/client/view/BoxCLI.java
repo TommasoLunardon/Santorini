@@ -29,9 +29,9 @@ public class BoxCLI extends Box {
             for (int x = 0; x < dimension; x++) {
                 for (int y = 0; y < dimension; y++) {
                     if (y == 0 || x == 0 || x == dimension - 1 || y == dimension - 1 ) {
-                        this.box[x][y] = "\u001b[48;5;0m" + "\u001b[38;5;326m" + "░";
+                        this.box[x][y] = "\u001b[48;5;0m" + "\u001b[38;5;326m" + "▉";
                     } else{
-                        this.box[x][y] = "\u001b[48;5;22m" + "\u001b[38;5;28m" + "▓";
+                        this.box[x][y] = "\u001b[48;5;22m" + "\u001b[38;5;28m" + "▉";
                     }
                 }
             }
@@ -39,11 +39,14 @@ public class BoxCLI extends Box {
     }
 
     /**
+     *
      * @return return box's matrix
      */
+    /*
     public String[][] getBox() {
         return box;
     }
+    */
 
     /**
      * set a worker's figure in the box
@@ -54,7 +57,7 @@ public class BoxCLI extends Box {
         if (level > 0){
             if (color.equals(PlayerColor.YELLOW)) {
                 box[middle][middle+1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "O";
-                box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "█";
+                box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "▉";
                 box[middle+1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╜";
                 box[middle][middle-1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "∏";
                 box[middle-1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╙";
@@ -63,7 +66,7 @@ public class BoxCLI extends Box {
             else {
                 if (color.equals(PlayerColor.BLUE)) {
                     box[middle][middle+1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "O";
-                    box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "█";
+                    box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "▉";
                     box[middle+1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╜";
                     box[middle][middle-1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "∏";
                     box[middle-1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╙";
@@ -72,7 +75,7 @@ public class BoxCLI extends Box {
                 else {
                     if (color.equals(PlayerColor.RED)) {
                         box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "O";
-                        box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "█";
+                        box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "▉";
                         box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╜";
                         box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "∏";
                         box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╙";
@@ -84,26 +87,26 @@ public class BoxCLI extends Box {
         else {
             if (color.equals(PlayerColor.YELLOW)) {
                 box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "O";
-                box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "█";
-                box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╜";
+                box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "▉";
+                box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╙";
                 box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "∏";
-                box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╙";
+                box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╜";
                 playerColor = color;
             } else {
                 if (color.equals(PlayerColor.BLUE)) {
                     box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "O";
-                    box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "█";
-                    box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╜";
+                    box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "▉";
+                    box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╙";
                     box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "∏";
-                    box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╙";
+                    box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╜";
                     playerColor = color;
                 } else {
                     if (color.equals(PlayerColor.RED)) {
                         box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "O";
-                        box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "█";
-                        box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╜";
+                        box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "▉";
+                        box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╙";
                         box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "∏";
-                        box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╙";
+                        box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╜";
                         playerColor = color;
                     }
                 }
@@ -129,7 +132,7 @@ public class BoxCLI extends Box {
         for (int x = 0; x < dimension; x++) {
             for (int y = 0; y < dimension; y++) {
                 if (x==0 || x==dimension - 1|| y==0 || y==dimension-1) {
-                    this.box[x][y]="\u001b[48;5;0m"+"\u001b[38;5;326m"+"▓";
+                    this.box[x][y]="\u001b[48;5;0m"+"\u001b[38;5;326m"+"▉";
                 }
             }
         }
@@ -143,15 +146,15 @@ public class BoxCLI extends Box {
                 for (int y = 0; y < dimension; y++) {
                     /* now color in the darkest grey the level's border and in white others box */
                     if ((level == 0) && (y == 1 || x == 1 || x == dimension - 2 || y == dimension - 2)) {
-                        this.box[x][y] = "\u001b[48;5;240m" + "\u001b[38;5;240m" + "▓";
+                        this.box[x][y] = "\u001b[48;5;240m" + "\u001b[38;5;240m" + "▉";
                     } else {
                         if ((level == 1) && (y == 2 || x == 2 || x == dimension - 3 || y == dimension - 3)) {
-                            this.box[x][y] = "\u001b[48;5;241m" + "\u001b[38;5;241m" + "▓";
+                            this.box[x][y] = "\u001b[48;5;241m" + "\u001b[38;5;241m" + "▉";
                         } else {
                             if ((level == 2) && (y == 3 || x == 3 || x == dimension - 3 || y == dimension - 3)) {
-                                this.box[x][y] = "\u001b[48;5;242m" + "\u001b[38;5;242m" + "▓";
+                                this.box[x][y] = "\u001b[48;5;242m" + "\u001b[38;5;242m" + "▉";
                             } else {
-                                this.box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;255m" + "▓";
+                                this.box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;255m" + "▉";
                             }
                         }
                     }
@@ -214,10 +217,10 @@ public class BoxCLI extends Box {
                 }
             }
         }
-        this.box[1][1] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "░";
-        this.box[dimension - 2][1] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "░";
-        this.box[1][dimension - 2] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "░";
-        this.box[dimension - 2][dimension - 2] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "░";
+        this.box[1][1] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "▉";
+        this.box[dimension - 2][1] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "▉";
+        this.box[1][dimension - 2] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "▉";
+        this.box[dimension - 2][dimension - 2] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "▉";
         level++;
     }
 
@@ -230,7 +233,7 @@ public class BoxCLI extends Box {
             for (int x=0; x<dimension;x++){
                 for (int y=0; y<dimension;y++) {
                     if (x != 0 && y != 0) {
-                        box[x][y] = "\u001b[48;5;22m"+"\u001b[38;5;28m"+"▓";
+                        box[x][y] = "\u001b[48;5;22m"+"\u001b[38;5;28m"+"▉";
                     }
                 }
             }

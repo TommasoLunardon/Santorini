@@ -10,7 +10,7 @@ public abstract class Box {
 
     public abstract int getLevel();
 
-    public abstract String[][] getBox();
+    //public abstract String[][] getBox();
 
     public abstract void setWorker(PlayerColor color) throws InputFailedException;
 
