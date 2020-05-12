@@ -19,6 +19,7 @@ import java.util.Scanner;
 /**
  * @author Gabriele Gatti
  *  Class used to manage the user experience during the game.
+ * @author Gabriele Gatti
  */
 
 public class PlayerInterface {

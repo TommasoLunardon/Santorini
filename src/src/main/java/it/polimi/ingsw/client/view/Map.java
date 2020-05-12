@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.Worker;
 
 /**
  * Abstract class Map used to manage the client's view.
+ * @author Gabriele Gatti
  */
 public abstract class Map {
 
