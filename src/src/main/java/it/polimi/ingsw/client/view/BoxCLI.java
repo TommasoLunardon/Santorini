@@ -15,9 +15,11 @@ public class BoxCLI extends Box {
     private PlayerColor playerColor;
     private int coordinateX, coordinateY;
 
+
     public int getLevel(){
         return level;
     }
+
     /**
      * Creation of BoxCLI
      */
@@ -56,29 +58,29 @@ public class BoxCLI extends Box {
         int middle = 2;
         if (level > 0){
             if (color.equals(PlayerColor.YELLOW)) {
-                box[middle][middle+1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "O";
-                box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "▉";
-                box[middle+1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╜";
-                box[middle][middle-1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "∏";
-                box[middle-1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╙";
+                box[middle][middle+1] = "\u001b[48;5;21m" + "\u001b[38;5;220m" + "O";
+                box[middle][middle] =  "\u001b[48;5;21m" + "\u001b[38;5;220m" + "▉";
+                box[middle+1][middle] =  "\u001b[48;5;21m" + "\u001b[38;5;220m" + "╜";
+                box[middle][middle-1] = "\u001b[48;5;21m" + "\u001b[38;5;220m" + "∏";
+                box[middle-1][middle] = "\u001b[48;5;21m" + "\u001b[38;5;220m" + "╙";
                 playerColor = color;
             }
             else {
                 if (color.equals(PlayerColor.BLUE)) {
-                    box[middle][middle+1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "O";
-                    box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "▉";
-                    box[middle+1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╜";
-                    box[middle][middle-1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "∏";
-                    box[middle-1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╙";
+                    box[middle][middle+1] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "O";
+                    box[middle][middle] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "▉";
+                    box[middle+1][middle] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "╜";
+                    box[middle][middle-1] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "∏";
+                    box[middle-1][middle] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "╙";
                     playerColor = color;
                 }
                 else {
                     if (color.equals(PlayerColor.RED)) {
-                        box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "O";
-                        box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "▉";
-                        box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╜";
-                        box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "∏";
-                        box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╙";
+                        box[middle][middle + 1] = "\u001b[48;5;21m" + "\u001b[38;5;1m" + "O";
+                        box[middle][middle] = "\u001b[48;5;21m" + "\u001b[38;5;1m" + "▉";
+                        box[middle + 1][middle] = "\u001b[48;5;21m" + "\u001b[38;5;1m" + "╜";
+                        box[middle][middle - 1] = "\u001b[48;5;21m" + "\u001b[38;5;1m" + "∏";
+                        box[middle - 1][middle] = "\u001b[48;5;21m" + "\u001b[38;5;1m" + "╙";
                         playerColor = color;
                     }
                 }
@@ -176,8 +178,8 @@ public class BoxCLI extends Box {
      * modify box to a box building a dome
      */
     public void buildDome() {
-        for (int x = 0; x < dimension; x++) {
-            for (int y = 0; y < dimension; y++) {
+        for  (int y = 0; y < dimension; y++){
+            for (int x = 0; x < dimension; x++) {
                 this.box[x][y] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "▉";
 
                 if (x == 2) {

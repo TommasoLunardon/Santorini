@@ -29,7 +29,9 @@ public class MapCLI extends Map {
      * @throws InputFailedException for choose of a wrong box
      */
     public void setWorker(int x, int y, PlayerColor color) throws InputFailedException{
-        if (x>=0 && y>=0 && x<5 && y<5) map[x][y].setWorker(color);
+        if (x>=0 && y>=0 && x<5 && y<5) {
+            map[x][y].setWorker(color);
+        }
         else {
             throw new InputFailedException();
         }
