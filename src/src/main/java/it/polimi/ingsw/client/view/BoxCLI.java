@@ -51,36 +51,43 @@ public class BoxCLI extends Box {
     */
 
     /**
+     * paint a colored worker upon a building
+     * @param colorWorker: string color
+     */
+    private void setColorWorker(String colorWorker, boolean onGrass) {
+        int middle = dimension/2;
+        String land;
+        if (onGrass){
+            land = "\u001b[48;5;28m";
+        }
+        else{
+            land = "\u001b[48;5;21m";
+        }
+        box[middle][middle+1] = land + colorWorker + "O";
+        box[middle][middle] =  land + colorWorker + "▉";
+        box[middle+1][middle] =  land + colorWorker + "╜";
+        box[middle][middle-1] = land + colorWorker + "∏";
+        box[middle-1][middle] = land + colorWorker + "╙";
+    }
+
+    /**
      * set a worker's figure in the box
      * @param color: worker's color
      */
     public void setWorker(PlayerColor color){
-        int middle = 2;
         if (level > 0){
             if (color.equals(PlayerColor.YELLOW)) {
-                box[middle][middle+1] = "\u001b[48;5;21m" + "\u001b[38;5;220m" + "O";
-                box[middle][middle] =  "\u001b[48;5;21m" + "\u001b[38;5;220m" + "▉";
-                box[middle+1][middle] =  "\u001b[48;5;21m" + "\u001b[38;5;220m" + "╜";
-                box[middle][middle-1] = "\u001b[48;5;21m" + "\u001b[38;5;220m" + "∏";
-                box[middle-1][middle] = "\u001b[48;5;21m" + "\u001b[38;5;220m" + "╙";
+                setColorWorker("\u001b[38;5;220m",false);
                 playerColor = color;
             }
             else {
                 if (color.equals(PlayerColor.BLUE)) {
-                    box[middle][middle+1] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "O";
-                    box[middle][middle] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "▉";
-                    box[middle+1][middle] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "╜";
-                    box[middle][middle-1] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "∏";
-                    box[middle-1][middle] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "╙";
+                    setColorWorker("\u001b[38;5;21m",false);
                     playerColor = color;
                 }
                 else {
                     if (color.equals(PlayerColor.RED)) {
-                        box[middle][middle + 1] = "\u001b[48;5;21m" + "\u001b[38;5;1m" + "O";
-                        box[middle][middle] = "\u001b[48;5;21m" + "\u001b[38;5;1m" + "▉";
-                        box[middle + 1][middle] = "\u001b[48;5;21m" + "\u001b[38;5;1m" + "╜";
-                        box[middle][middle - 1] = "\u001b[48;5;21m" + "\u001b[38;5;1m" + "∏";
-                        box[middle - 1][middle] = "\u001b[48;5;21m" + "\u001b[38;5;1m" + "╙";
+                        setColorWorker("\u001b[38;5;1m",false);
                         playerColor = color;
                     }
                 }
@@ -88,27 +95,17 @@ public class BoxCLI extends Box {
         }
         else {
             if (color.equals(PlayerColor.YELLOW)) {
-                box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "O";
-                box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "▉";
-                box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╙";
-                box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "∏";
-                box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;220m" + "╜";
+                setColorWorker("\u001b[38;5;220m",true);
                 playerColor = color;
-            } else {
+            }
+            else {
                 if (color.equals(PlayerColor.BLUE)) {
-                    box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "O";
-                    box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "▉";
-                    box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╙";
-                    box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "∏";
-                    box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;21m" + "╜";
+                    setColorWorker("\u001b[38;5;21m",true);
                     playerColor = color;
-                } else {
+                }
+                else {
                     if (color.equals(PlayerColor.RED)) {
-                        box[middle][middle + 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "O";
-                        box[middle][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "▉";
-                        box[middle + 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╙";
-                        box[middle][middle - 1] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "∏";
-                        box[middle - 1][middle] = "\u001b[48;5;28m" + "\u001b[38;5;1m" + "╜";
+                        setColorWorker("\u001b[38;5;1m",true);
                         playerColor = color;
                     }
                 }
