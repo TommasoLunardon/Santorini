@@ -182,47 +182,26 @@ public class BoxCLI extends Box {
             for (int x = 0; x < dimension; x++) {
                 this.box[x][y] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "▉";
 
-                if (x == 2) {
+                if (x == 1) {
                     if (y == 1) {
                         box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▜";
                     }
-                    if (y == dimension - 2) {
+                    if (y == 3) {
                         box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▟";
                     }
                 } else {
-                    if (x == 1) {
-                        if (y == 2) {
-                            box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▜";
+                    if (x == 3) {
+                        if (y == 1) {
+                            box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▛";
                         }
-                        if (y == dimension - 3) {
-                            box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▟";
-                        }
-                    } else {
-                        if (x == dimension - level - 3) {
-                            if (y == 1) {
-                                box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▛";
-                            }
-                            if (y == dimension - level - 2) {
-                                box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▙";
-                            }
-                        } else {
-                            if (x == dimension - 2) {
-                                if (y == level + 2) {
-                                    box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▛";
-                                }
-                                if (y == dimension - 3) {
-                                    box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▙";
-                                }
-                            }
+                        if (y == 3) {
+                            box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▙";
                         }
                     }
                 }
             }
         }
-        this.box[1][1] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "▉";
-        this.box[dimension - 2][1] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "▉";
-        this.box[1][dimension - 2] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "▉";
-        this.box[dimension - 2][dimension - 2] = "\u001b[48;5;255m" + "\u001b[38;5;253m" + "▉";
+        setBorder();
         level++;
     }
 
