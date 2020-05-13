@@ -162,7 +162,7 @@ public class BoxCLI extends Box {
                     }
                 }
             }
-            setBorder();
+            //setBorder();
             level++;
             if (hasWorker) {
                 setWorker(playerColor);
