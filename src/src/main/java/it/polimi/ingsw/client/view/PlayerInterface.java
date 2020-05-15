@@ -217,7 +217,7 @@ public class PlayerInterface {
                                             divinity = new Pan();
                                         }
                                         if(selectedDivinity.equalsIgnoreCase("Prometheus")) {
-                                            divinity = new Prometheus();
+                                            divinity = new Prometeus();
                                         }
 
                                         networkHandler.send(new CardSelectedEvent(iD, selectedDivinity));
@@ -239,14 +239,11 @@ public class PlayerInterface {
                                     } catch (IOException ignored) {
                                     }
                             }
-
                             if (communicationString.equals("Please Select the first box")) {
-
                                     printScreen();
                                     try {
                                         int coordinateX = -1;
                                         int coordinateY = -1;
-
                                         while (!((coordinateX >= 0 && coordinateX < 5) && (coordinateY >= 0 && coordinateY < 5) && !(game.getMap().getBox(coordinateX, coordinateY).hasWorker()))){
                                            try {
                                                System.out.print("Select your first worker's starting box (only empty boxes can be chosen)\n\tcoordinates X: ");

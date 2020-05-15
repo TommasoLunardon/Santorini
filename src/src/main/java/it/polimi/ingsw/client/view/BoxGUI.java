@@ -5,54 +5,58 @@ import it.polimi.ingsw.server.model.PlayerColor;
 import javax.swing.*;
 import java.awt.*;
 
-public class BoxGUI extends JButton  implements Box{
+public class BoxGUI extends JButton {
     private Image icon;
-    private int coordinateX, coordinateY;
+    private static int dimension = 5;
     private int level;
-    public BoxGUI (int coordinateX, int coordinateY){
+    private boolean isMale;
+    private boolean hasWorker;
+    private PlayerColor playerColor;
+    private JPanel mapGUI;
+    public BoxGUI (JPanel map){
         super();
-        setOpaque(false);
-        setBorderPainted(false);
-        setContentAreaFilled(false);
-        this.coordinateX=coordinateX;
-        this.coordinateY=coordinateY;
+        this.setSize(50,50); //box's dimentions
+        mapGUI=map;
     }
 
     public int getLevel() {
         return level;
     }
 
-    @Override
-    public String[][] getBox() {
-        return new String[0][];
+    public void setWorker(PlayerColor color){
+
+        if (color.equals(PlayerColor.YELLOW)){
+           setForeground( new ImageIcon("ing-sw-2020-Gatti-Huang-Lunardon/ProgettoIngSW/src/src/mainresource/FemaleBuilder_Orange_v001.png"));
+        }else {
+            if (color.equals(PlayerColor.BLUE)) {
+                setIcon(new ImageIcon("ing-sw-2020-Gatti-Huang-Lunardon/ProgettoIngSW/src/src/mainresource/FemaleBuilder_Tan_v001.png"));
+            } else
+                {
+                if (color.equals(PlayerColor.RED)) {
+                    setIcon(new ImageIcon("ing-sw-2020-Gatti-Huang-Lunardon/ProgettoIngSW/src/src/mainresource/FemaleBuilder_Purple_v001.png"));
+                }
+            }
+        }
+
     }
 
-    @Override
-    public void setWorker(PlayerColor color) throws InputFailedException {
 
-    }
-
-    @Override
     public void printBox(int line) {
 
     }
 
-    @Override
     public void buildStructure() {
 
     }
 
-    @Override
     public void setLevel(int level) {
-
+        this.level=level;
     }
 
-    @Override
     public void buildDome() {
 
     }
 
-    @Override
     public void setBoxWhitOutWorker() {
 
     }

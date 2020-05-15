@@ -22,6 +22,8 @@ public class BoxCLI extends Box {
 
     /**
      * Creation of BoxCLI
+     * @param coordinateX: box's coordinates X
+     * @param coordinateY: box's coordinates Y
      */
     public BoxCLI(int coordinateX, int coordinateY){
 
@@ -40,7 +42,7 @@ public class BoxCLI extends Box {
 
     }
 
-    /**
+ /*   /**
      *
      * @return return box's matrix
      */
@@ -61,10 +63,10 @@ public class BoxCLI extends Box {
             land = "\u001b[48;5;28m";
         }
         else{
-            land = "\u001b[48;5;21m";
+            land = "\u001B[42m";
         }
         box[middle][middle+1] = land + colorWorker + "O";
-        box[middle][middle] =  land + colorWorker + "▉";
+        box[middle][middle] =  land + colorWorker + "▼";
         box[middle+1][middle] =  land + colorWorker + "╜";
         box[middle][middle-1] = land + colorWorker + "∏";
         box[middle-1][middle] = land + colorWorker + "╙";
@@ -177,25 +179,12 @@ public class BoxCLI extends Box {
     public void buildDome() {
         for  (int y = 0; y < dimension; y++){
             for (int x = 0; x < dimension; x++) {
-                this.box[x][y] = "\u001b[48;5;21m" + "\u001b[38;5;21m" + "▉";
+                box[x][y]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▉";
+                box[1][1]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▟";
+                box[1][3]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▙";
+                box[3][3]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▛";
+                box[3][1]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▜";
 
-                if (x == 1) {
-                    if (y == 1) {
-                        box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▜";
-                    }
-                    if (y == 3) {
-                        box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▟";
-                    }
-                } else {
-                    if (x == 3) {
-                        if (y == 1) {
-                            box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▛";
-                        }
-                        if (y == 3) {
-                            box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;21m" + "▙";
-                        }
-                    }
-                }
             }
         }
         setBorder();
