@@ -192,7 +192,7 @@ public class BoxCLI extends Box {
             for (int x=0; x<dimension;x++){
                 for (int y=0; y<dimension;y++) {
                     if (x != 0 && y != 0) {
-                        box[x][y] = "\u001b[48;5;22m"+"\u001b[38;5;28m"+"▉";
+                        box[x][y] = "\u001b[48;5;22m" + "\u001b[38;5;28m" + "▉\t";
                     }
                 }
             }
