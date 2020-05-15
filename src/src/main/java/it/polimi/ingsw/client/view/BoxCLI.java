@@ -13,7 +13,6 @@ public class BoxCLI extends Box {
     private int level;
     private boolean hasWorker;
     private PlayerColor playerColor;
-    private int coordinateX, coordinateY;
 
 
     public int getLevel(){
@@ -25,21 +24,14 @@ public class BoxCLI extends Box {
      * @param coordinateX: box's coordinates X
      * @param coordinateY: box's coordinates Y
      */
-    public BoxCLI(int coordinateX, int coordinateY){
-
-            this.coordinateX = coordinateX;
-            this.coordinateY = coordinateY;
-            this.box = new String[dimension][dimension];
-            for (int x = 0; x < dimension; x++) {
-                for (int y = 0; y < dimension; y++) {
-                    if (y == 0 || x == 0 || x == dimension - 1 || y == dimension - 1 ) {
-                        this.box[x][y] = "\u001b[48;5;0m" + "\u001b[38;5;326m" + "▉";
-                    } else{
-                        this.box[x][y] = "\u001b[48;5;22m" + "\u001b[38;5;28m" + "▉";
-                    }
-                }
+    public BoxCLI(int coordinateX, int coordinateY) {
+        this.box = new String[dimension][dimension];
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
+                box[x][y] = "\u001b[48;5;22m" + "\u001b[38;5;28m" + "▉\t";
             }
-
+        }
+        setBorder();
     }
 
  /*   /**
@@ -63,13 +55,19 @@ public class BoxCLI extends Box {
             land = "\u001b[48;5;28m";
         }
         else{
-            land = "\u001B[42m";
+            land="\u001b[48;5;8m";
+            for (int x = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    box[x][y] = land + "\u001b[38;5;8m" + "▉\t";
+                }
+            }
         }
-        box[middle][middle+1] = land + colorWorker + "O";
-        box[middle][middle] =  land + colorWorker + "▼";
-        box[middle+1][middle] =  land + colorWorker + "╜";
-        box[middle][middle-1] = land + colorWorker + "∏";
-        box[middle-1][middle] = land + colorWorker + "╙";
+        box[middle][middle-1] = land + colorWorker + " O\t";
+        box[middle][middle] =  land + colorWorker + "█";
+        box[middle+1][middle] =  land + colorWorker + "╜\t\t";
+        box[middle][middle+1] = land + colorWorker + " ∏\t";
+        box[middle-1][middle] = land + colorWorker + "\t╙";
+        setBorder();
     }
 
     /**
@@ -121,8 +119,8 @@ public class BoxCLI extends Box {
      *  print on screen correspondent box's line
      */
     public void printBox(int line){
-        for(int j = dimension -1; j >= 0; j--){
-                System.out.print(box[j][line]);
+        for(int j = 0; j<dimension; j++){
+            System.out.print(box[j][line]+"\u001b[0m");
         }
     }
 
@@ -133,7 +131,7 @@ public class BoxCLI extends Box {
         for (int x = 0; x < dimension; x++) {
             for (int y = 0; y < dimension; y++) {
                 if (x==0 || x==dimension - 1|| y==0 || y==dimension-1) {
-                    this.box[x][y]="\u001b[48;5;0m"+"\u001b[38;5;326m"+"▉";
+                    box[x][y]="\u001b[48;5;239m"+"\u001b[38;5;326m"+"▉\t";
                 }
             }
         }
@@ -181,10 +179,9 @@ public class BoxCLI extends Box {
             for (int x = 0; x < dimension; x++) {
                 box[x][y]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▉";
                 box[1][1]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▟";
-                box[1][3]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▙";
+                box[1][3]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▜";
                 box[3][3]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▛";
-                box[3][1]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▜";
-
+                box[3][1]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▙";
             }
         }
         setBorder();
