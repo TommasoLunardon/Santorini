@@ -58,7 +58,7 @@ public class BoxCLI extends Box {
             land="\u001b[48;5;243m";
             for (int x = 0; x < dimension; x++) {
                 for (int y = 0; y < dimension; y++) {
-                    box[x][y] = land + "\u001b[38;5;8m" + "▉\t";
+                    box[x][y] = land + "\u001b[48;5;243m" + "▉\t";
                 }
             }
         }
@@ -141,29 +141,28 @@ public class BoxCLI extends Box {
      *  modify box when building a structure
      */
     public void buildStructure() {
-            for (int x = 0; x < dimension; x++) {
-                for (int y = 0; y < dimension; y++) {
-                    /* now color in the darkest grey the level's border and in white others box */
-                    if ((level == 0) && (y == 1 || x == 1 || x == dimension - 2 || y == dimension - 2)) {
-                        this.box[x][y] = "\u001b[48;5;240m" + "\u001b[38;5;240m" + "▉";
-                    } else {
-                        if ((level == 1) && (y == 2 || x == 2 || x == dimension - 3 || y == dimension - 3)) {
-                            this.box[x][y] = "\u001b[48;5;241m" + "\u001b[38;5;241m" + "▉";
-                        } else {
-                            if ((level == 2) && (y == 3 || x == 3 || x == dimension - 3 || y == dimension - 3)) {
-                                this.box[x][y] = "\u001b[48;5;242m" + "\u001b[38;5;242m" + "▉";
-                            } else {
-                                this.box[x][y] = "\u001b[48;5;255m" + "\u001b[38;5;255m" + "▉";
-                            }
-                        }
-                    }
+        String label="\u001b[48;5;243m";
+        String place= label+ label + "▉\t";
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
+                box[x][y]="\u001b[48;5;248m" + "\u001b[48;5;249m" + "▉\t";
+            }
+        }
+        if ((level == 0)) {
+            box[1][1]=box[2][1]=box[3][1]=place;
+            box[1][2]=box[3][2]=place;
+            box[1][3]=box[1][3]=box[1][2]=place;
+        } else {
+            if ((level == 1)) {
+                box[2][1]=box[1][2]=box[3][2]=box[2][3]=place;
+            } else {
+                if ((level != 2)) {
+                    buildDome();
                 }
             }
-            //setBorder();
-            level++;
-            if (hasWorker) {
-                setWorker(playerColor);
-            }
+        }
+        setBorder();
+        level++;
     }
 
     public void setLevel(int level) {
@@ -177,11 +176,7 @@ public class BoxCLI extends Box {
     public void buildDome() {
         for  (int y = 0; y < dimension; y++){
             for (int x = 0; x < dimension; x++) {
-                box[x][y]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▉";
-                box[1][1]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▟";
-                box[1][3]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▜";
-                box[3][3]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▛";
-                box[3][1]="\u001b[48;5;255m" + "\u001b[38;5;21m"+"▙";
+                box[x][y]="\u001b[48;5;21m" + "\u001b[38;5;21m"+"▉\t";
             }
         }
         setBorder();
