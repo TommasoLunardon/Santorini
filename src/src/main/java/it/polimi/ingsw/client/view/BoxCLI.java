@@ -55,7 +55,7 @@ public class BoxCLI extends Box {
             land = "\u001b[48;5;28m";
         }
         else{
-            land="\u001b[48;5;8m";
+            land="\u001b[48;5;243m";
             for (int x = 0; x < dimension; x++) {
                 for (int y = 0; y < dimension; y++) {
                     box[x][y] = land + "\u001b[38;5;8m" + "▉\t";
@@ -131,7 +131,7 @@ public class BoxCLI extends Box {
         for (int x = 0; x < dimension; x++) {
             for (int y = 0; y < dimension; y++) {
                 if (x==0 || x==dimension - 1|| y==0 || y==dimension-1) {
-                    box[x][y]="\u001b[48;5;239m"+"\u001b[38;5;326m"+"▉\t";
+                    box[x][y]="\u001b[48;5;8m"+"\u001b[38;5;8m"+"▉\t";
                 }
             }
         }
