@@ -2,19 +2,14 @@ package it.polimi.ingsw.client.view.GUI;
 
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
+public class LoginController extends GUIController {
 
-public class LoginController implements Initializable {
 
     @FXML
     private AnchorPane root;
@@ -26,8 +21,6 @@ public class LoginController implements Initializable {
     private Button playButton;
     @FXML
     private TextField portText;
-
-    private AlterView viewAlter;
 
 
     /**
@@ -77,7 +70,7 @@ public class LoginController implements Initializable {
                 Integer.parseInt(portText.getText());
                 portText.getText();
                 if("123456".equalsIgnoreCase(portText.getText())){
-                    viewAlter.gotoChose();
+                    switchScene(root, "/scenes/ChoseGod.fxml");
                 }
             } catch (NumberFormatException e) {
                 messageText.setText("Invalid port");
@@ -85,36 +78,5 @@ public class LoginController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-    }
 
-    public void setApp(AlterView viewAlter) {
-        this.viewAlter = viewAlter;
-    }
-
-    /**
-     * The addDraggableNode method is used to permit
-     * a node to be draggable.
-     *
-     */
-    private double initialX = 0;
-    private double initialY = 0;
-
-    public void addDraggableNode(final Node node) {
-
-        node.setOnMousePressed(me -> {
-            if (me.getButton() != MouseButton.MIDDLE) {
-                initialX = me.getSceneX();
-                initialY = me.getSceneY();
-            }
-        });
-
-        node.setOnMouseDragged(me -> {
-            if (me.getButton() != MouseButton.MIDDLE) {
-                node.getScene().getWindow().setX(me.getScreenX() - initialX);
-                node.getScene().getWindow().setY(me.getScreenY() - initialY);
-            }
-        });
-    }
 }

@@ -15,12 +15,8 @@ public class ChoseController implements Initializable {
     @FXML
     private Button selectButton;
 
-    private static final Logger logger = Logger.getLogger(ChoseController.class.getName());
-    private AlterView viewAlter;
+    private static final Logger logger = Logger.getLogger(it.polimi.ingsw.client.view.GUI.ChoseController.class.getName());
 
-    public void setApp(AlterView viewAlter) {
-        this.viewAlter = viewAlter;
-    }
 
 
     @Override
