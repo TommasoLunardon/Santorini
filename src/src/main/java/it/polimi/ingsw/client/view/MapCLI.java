@@ -58,7 +58,7 @@ public class MapCLI extends Map {
         }
     }
 
-   public void moveWorker(int boxXgo, int boxYgo, Worker worker) throws InputFailedException{
+    public void moveWorker(int boxXgo, int boxYgo, Worker worker) throws InputFailedException{
         if (boxXgo>=0&&boxYgo>=0&&boxXgo<5&&boxYgo<5){
             map[boxXgo][boxYgo].setWorker(catchColor(worker.getPlayer().getColor()));
             map[worker.getBox().getPosition()[0]][worker.getBox().getPosition()[1]].leaveWorker();
