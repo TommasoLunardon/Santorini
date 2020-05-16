@@ -17,12 +17,16 @@
         </ImageView>
         <Button fx:id="playButton" layoutX="280.0" layoutY="210.0" mnemonicParsing="false" onAction="#getConnection" text="PLAY" />
         <TextField fx:id="nameText" layoutX="233.0" layoutY="88.0" onAction="#getName" promptText="Insert your name" />
-        <Text  fill="WHITE" layoutX="234.0" layoutY="82.0" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeType="INSIDE" text="Username" wrappingWidth="261.0">
+        <Text fx:id="messageText" fill="#f80000" layoutX="170.0" layoutY="379.0" stroke="#bc1e1e" strokeLineCap="ROUND" strokeLineJoin="BEVEL" textAlignment="CENTER" wrappingWidth="261.0">
+         <font>
+            <Font size="20.0" />
+         </font></Text>
+        <Text fx:id="name" fill="WHITE" layoutX="234.0" layoutY="82.0" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeType="INSIDE" text="Username" wrappingWidth="261.0">
          <font>
             <Font size="18.0" />
          </font></Text>
         <TextField fx:id="portText" layoutX="234.0" layoutY="153.0" promptText="Port" />
-      <Text  fill="WHITE" layoutX="235.0" layoutY="146.0" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeType="INSIDE" text="Port" wrappingWidth="261.0">
+      <Text fx:id="port" fill="WHITE" layoutX="235.0" layoutY="146.0" smooth="false" stroke="BLACK" strokeLineJoin="BEVEL" strokeType="INSIDE" text="Port" wrappingWidth="261.0">
          <font>
             <Font size="18.0" />
          </font>
