@@ -1,4 +1,5 @@
 package it.polimi.ingsw.client.view;
+
 import com.google.gson.JsonSyntaxException;
 import it.polimi.ingsw.network.JsonHelper;
 import it.polimi.ingsw.network.client.NetworkHandler;
@@ -403,14 +404,14 @@ public class PlayerInterface {
                             }
                         }
                     }
-                }catch (ClassCastException | JsonSyntaxException ignored) {}
+                }catch (ClassCastException ignored) {}
 
                 try {
                 CardSelectionEvent event = (CardSelectionEvent) JsonHelper.deserialization(receivedMessage.getContent());
                     if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
                         System.out.println(event.getSelectedGod());
                     }
-                }catch (ClassCastException | JsonSyntaxException ignored) {}
+                }catch (ClassCastException  ignored) {}
 
                 try {
                 GameUpdatingEvent event = (GameUpdatingEvent) networkHandler.deserialization(receivedMessage.getContent());
@@ -427,7 +428,7 @@ public class PlayerInterface {
                 }
 
             }
-            catch (ClassCastException | JsonSyntaxException ignored) {}
+            catch (ClassCastException  ignored) {}
 
                 try {
                 GodCardsSelectedEvent event = (GodCardsSelectedEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -435,7 +436,7 @@ public class PlayerInterface {
                         System.out.println(event.getSelectedCards());
                     }
                 }
-            catch (ClassCastException | JsonSyntaxException ignored) {}
+            catch (ClassCastException  ignored) {}
 
                 try {
                 LoserPlayerEvent event = (LoserPlayerEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -443,7 +444,7 @@ public class PlayerInterface {
                         System.out.println("\t\t\t\tGAME OVER");
                     }
                 }
-            catch (ClassCastException | JsonSyntaxException ignored) {}
+            catch (ClassCastException  ignored) {}
 
                 try {
                 WinnerPlayerEvent event = (WinnerPlayerEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -451,7 +452,7 @@ public class PlayerInterface {
                         System.out.println("\\t\\t\\t\\tYOU WIN");
                     }
                 }
-            catch (ClassCastException | JsonSyntaxException ignored) {}
+            catch (ClassCastException  ignored) {}
 
                 try{
                     InvalidInputEvent event = (InvalidInputEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -459,7 +460,7 @@ public class PlayerInterface {
                         System.out.println("Something went wrong, please try again");
                     }
 
-                }catch (ClassCastException | JsonSyntaxException ignored) {}
+                }catch (ClassCastException ignored) {}
 
             try{
                 InvalidMovementEvent event = (InvalidMovementEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -467,7 +468,7 @@ public class PlayerInterface {
                     System.out.println("Your move wasn't valid, please try again");
                 }
 
-            }catch (ClassCastException | JsonSyntaxException ignored) {}
+            }catch (ClassCastException  ignored) {}
 
             try{
                 InvalidConstructionEvent event = (InvalidConstructionEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -476,7 +477,7 @@ public class PlayerInterface {
                 }
 
 
-            }catch (ClassCastException | JsonSyntaxException ignored) {}
+            }catch (ClassCastException  ignored) {}
 
             try{
                 StarterSelectionEvent event = (StarterSelectionEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -484,7 +485,7 @@ public class PlayerInterface {
                     System.out.println(event.getStarter());
                 }
 
-            }catch (ClassCastException | JsonSyntaxException ignored) {}
+            }catch (ClassCastException  ignored) {}
 
             try{
                 PlayerJoinedEvent event = (PlayerJoinedEvent) networkHandler.deserialization(receivedMessage.getContent());
@@ -494,7 +495,7 @@ public class PlayerInterface {
                     System.out.println(event.getP().getColor());
                 }
 
-            }catch (ClassCastException | JsonSyntaxException ignored) {}
+            }catch (ClassCastException  ignored) {}
 
         }
     }
