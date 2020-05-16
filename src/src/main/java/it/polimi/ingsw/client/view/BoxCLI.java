@@ -7,13 +7,28 @@ import it.polimi.ingsw.server.model.PlayerColor;
  * @author Gabriele Gatti
  */
 
-public class BoxCLI extends Box {
+public class BoxCLI {
     private String[][] box;
-    private static int dimension = 5;
+    private int dimension;
     private int level;
-    private boolean hasWorker;
-    private PlayerColor playerColor;
 
+    private String catchColor(PlayerColor color){
+        String colorW;
+        if (color==PlayerColor.BLUE){
+            colorW="\u001b[38;5;21m";
+        }else {
+            if (color==PlayerColor.RED){
+                colorW="\u001b[38;5;1m";
+            }else {
+                colorW = "\u001b[38;5;220m";
+            }
+        }
+        return colorW;
+    }
+
+    public void setWorker(PlayerColor color){
+        setWorker(catchColor(color));
+    }
 
     public int getLevel(){
         return level;
@@ -21,112 +36,17 @@ public class BoxCLI extends Box {
 
     /**
      * Creation of BoxCLI
-     * @param coordinateX: box's coordinates X
-     * @param coordinateY: box's coordinates Y
      */
-    public BoxCLI(int coordinateX, int coordinateY) {
-        this.box = new String[dimension][dimension];
-        for (int x = 0; x < dimension; x++) {
-            for (int y = 0; y < dimension; y++) {
-                box[x][y] = "\u001b[48;5;22m" + "\u001b[38;5;28m" + "▉\t";
-            }
-        }
-        setBorder();
+    public BoxCLI() {
+        dimension=5;
+        box = new String[5][5];
+        plantGrass();
     }
 
- /*   /**
-     *
-     * @return return box's matrix
-     */
-    /*
-    public String[][] getBox() {
-        return box;
-    }
-    */
-
-    /**
-     * paint a colored worker upon a building
-     * @param colorWorker: string color
-     */
-    private void setColorWorker(String colorWorker, boolean onGrass) {
-        int middle = dimension/2;
-        String land;
-        if (onGrass){
-            land = "\u001b[48;5;28m";
-        }
-        else{
-            land="\u001b[48;5;243m";
-            for (int x = 0; x < dimension; x++) {
-                for (int y = 0; y < dimension; y++) {
-                    box[x][y] = land + "\u001b[48;5;243m" + "▉\t";
-                }
-            }
-        }
-        box[middle][middle-1] = land + colorWorker + " O\t";
-        box[middle][middle] =  land + colorWorker + "█";
-        box[middle+1][middle] =  land + colorWorker + "╜\t\t";
-        box[middle][middle+1] = land + colorWorker + " ∏\t";
-        box[middle-1][middle] = land + colorWorker + "\t╙";
-        setBorder();
+    public void setLevel(int level) {
+        this.level = level;
     }
 
-    /**
-     * set a worker's figure in the box
-     * @param color: worker's color
-     */
-    public void setWorker(PlayerColor color){
-        if (level > 0){
-            if (color.equals(PlayerColor.YELLOW)) {
-                setColorWorker("\u001b[38;5;220m",false);
-                playerColor = color;
-            }
-            else {
-                if (color.equals(PlayerColor.BLUE)) {
-                    setColorWorker("\u001b[38;5;21m",false);
-                    playerColor = color;
-                }
-                else {
-                    if (color.equals(PlayerColor.RED)) {
-                        setColorWorker("\u001b[38;5;1m",false);
-                        playerColor = color;
-                    }
-                }
-            }
-        }
-        else {
-            if (color.equals(PlayerColor.YELLOW)) {
-                setColorWorker("\u001b[38;5;220m",true);
-                playerColor = color;
-            }
-            else {
-                if (color.equals(PlayerColor.BLUE)) {
-                    setColorWorker("\u001b[38;5;21m",true);
-                    playerColor = color;
-                }
-                else {
-                    if (color.equals(PlayerColor.RED)) {
-                        setColorWorker("\u001b[38;5;1m",true);
-                        playerColor = color;
-                    }
-                }
-            }
-        }
-        setBorder();
-        hasWorker = true;
-    }
-
-    /**
-     *  print on screen correspondent box's line
-     */
-    public void printBox(int line){
-        for(int j = 0; j<dimension; j++){
-            System.out.print(box[j][line]+"\u001b[0m");
-        }
-    }
-
-    /**
-     * set a grey border
-     */
     private void setBorder(){
         for (int x = 0; x < dimension; x++) {
             for (int y = 0; y < dimension; y++) {
@@ -137,42 +57,6 @@ public class BoxCLI extends Box {
         }
     }
 
-    /**
-     *  modify box when building a structure
-     */
-    public void buildStructure() {
-        String label="\u001b[48;5;243m";
-        String place= label+ label + "▉\t";
-        for (int x = 0; x < dimension; x++) {
-            for (int y = 0; y < dimension; y++) {
-                box[x][y]="\u001b[48;5;248m" + "\u001b[48;5;249m" + "▉\t";
-            }
-        }
-        if ((level == 0)) {
-            box[1][1]=box[2][1]=box[3][1]=place;
-            box[1][2]=box[3][2]=place;
-            box[1][3]=box[1][3]=box[1][2]=place;
-        } else {
-            if ((level == 1)) {
-                box[2][1]=box[1][2]=box[3][2]=box[2][3]=place;
-            } else {
-                if ((level != 2)) {
-                    buildDome();
-                }
-            }
-        }
-        setBorder();
-        level++;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-        setBoxWhitOutWorker();
-    }
-
-    /**
-     * modify box to a box building a dome
-     */
     public void buildDome() {
         for  (int y = 0; y < dimension; y++){
             for (int x = 0; x < dimension; x++) {
@@ -180,29 +64,77 @@ public class BoxCLI extends Box {
             }
         }
         setBorder();
-        level++;
     }
 
-    /**
-     * set box's color to green
-     */
-    public void setBoxWhitOutWorker() {
-        if (level==0){
-            /*set grass*/
-            for (int x=0; x<dimension;x++){
-                for (int y=0; y<dimension;y++) {
-                    if (x != 0 && y != 0) {
-                        box[x][y] = "\u001b[48;5;22m" + "\u001b[38;5;28m" + "▉\t";
-                    }
+    public void buildStructure() {
+        String label="\u001b[48;5;249m";
+        String place= label+ "\u001b[38;5;249m" + "▉\t";
+        if (level<3){
+            for (int x = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    box[x][y] = place;
                 }
             }
+            level++;
+            box[1][1]="\u001b[48;5;249m" + "\u001b[38;5;255m" + level + "\t";
+        }
+        else buildDome();
+        setBorder();
+    }
+
+    public void plantGrass(){
+        for (int x = 0; x < dimension; x++) {
+            for (int y = 0; y < dimension; y++) {
+                box[x][y] = "\u001b[48;5;22m" + "\u001b[38;5;28m" + "▉\t";
+            }
+        }
+        setBorder();
+    }
+
+    public void leaveWorker(){
+        if (level==0){
+            plantGrass();
         }
         else {
-            this.level=this.level-1;
+            level--;
             buildStructure();
         }
-        hasWorker=false;
-        playerColor=null;
+        setBorder();
+    }
+
+    public void setWorker(String colorWorker){
+        boolean condition;
+        condition= level == 0;
+        setColorWorker(colorWorker,condition);
+    }
+
+    private void setColorWorker(String colorWorker, boolean onGrass) {
+        int middle = dimension/2;
+        String land;
+        if (onGrass){
+            land = "\u001b[48;5;28m";
+        }
+        else{
+            land="\u001b[48;5;249m";
+            for (int x = 0; x < dimension; x++) {
+                for (int y = 0; y < dimension; y++) {
+                    box[x][y] = land + "\u001b[38;5;249m" + "▉\t";
+                }
+            }
+            box[1][1]="\u001b[48;5;249m" + "\u001b[38;5;255m" + level + "\t";
+        }
+        box[middle][middle-1] = land + colorWorker + " O\t";
+        box[middle][middle] =  land + colorWorker + "█";
+        box[middle+1][middle] =  land + colorWorker + "╜\t\t";
+        box[middle][middle+1] = land + colorWorker + " ∏\t";
+        box[middle-1][middle] = land + colorWorker + "\t╙";
+        setBorder();
+    }
+
+    public void printBox(int line){
+        for(int j = 0; j<dimension; j++){
+            System.out.print(box[j][line]+"\u001b[0m");
+        }
     }
 
 }
