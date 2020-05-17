@@ -9,9 +9,7 @@ import it.polimi.ingsw.server.model.Worker;
 
 public class MapCLI extends Map {
     private BoxCLI[][] map;
-    /**
-     * Creates a MapCLI
-     */
+
     public MapCLI (){
         map=new BoxCLI[5][5];
         for (int y=0; y<5; y++){
@@ -22,13 +20,8 @@ public class MapCLI extends Map {
         }
     }
 
-
-    public void build(int x, int y){
+    public void build(int x,int y){
         map[x][y].buildStructure();
-    }
-
-    public void buildDome(int x, int y){
-        map[x][y].buildDome();
     }
 
     public BoxCLI getBoxCLI(int x, int y){
@@ -49,13 +42,8 @@ public class MapCLI extends Map {
         return colorW;
     }
 
-    public void setWorker(int x, int y, PlayerColor color) throws InputFailedException {
-        if (x<0||x>5||y<0||y>5) {
-            map[x][y].setWorker(catchColor(color));
-        }
-        else {
-            throw new InputFailedException();
-        }
+    public void setWorker(int x, int y, PlayerColor color){
+        map[x][y].setWorker(catchColor(color));
     }
 
     public void moveWorker(int boxXgo, int boxYgo, Worker worker) throws InputFailedException{
@@ -79,5 +67,4 @@ public class MapCLI extends Map {
         }
         System.out.println();
     }
-
 }

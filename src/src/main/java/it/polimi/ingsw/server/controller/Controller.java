@@ -23,11 +23,13 @@ public class Controller implements Serializable {
 
 
     public Game getGame(){
-        return game;
+        Game g = game;
+        return g;
     }
 
     public void setGame(Game g){
         this.game = g;
+        game.setVirtualView(view);
     }
 
     public void setUsers(ArrayList<String> users) {
@@ -47,7 +49,7 @@ public class Controller implements Serializable {
             String ID = users.get(0);
             int numPlayers = 0;
             boolean withGods;
-            String active = "Your are active now";
+            String active = "You are active now";
             CommunicationEvent activation = new CommunicationEvent(ID,active);
             view.send(activation);
             String m1 = "Please insert the number of Players";
@@ -92,41 +94,41 @@ public class Controller implements Serializable {
      * Method used to insert all users in the game as players
      */
     public void playersEnter() throws SocketTimeoutException {
-        while (!game.isGameFull()){
+        while (!game.isGameFull()) {
             for (String user : users) {
-                 boolean entered = false;
-                 setActive(user);
+                boolean entered = false;
+                setActive(user);
 
-            while (!entered) {
-                int age = 0;
-                PlayerColor color = null;
-                String m3 = "Please insert your data, colors available are: " + game.getAvailableColors();
+                while (!entered) {
+                    int age = 0;
+                    PlayerColor color = null;
+                    String m3 = "Please insert your data, colors available are: " + game.getAvailableColors();
 
-                CommunicationEvent event = new CommunicationEvent(user, m3);
-                game.notify(event);
+                    CommunicationEvent event = new CommunicationEvent(user, m3);
+                    game.notify(event);
 
-                try {
-                    Object[] data = view.receivePlayerDataEnteredEvent(user);
-                    age = (int) data[0];
-                    color = (PlayerColor) data[1];
-                } catch (InvalidSenderException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(user);
-                    game.notify(ev);
-                }
+                    try {
+                        Object[] data = view.receivePlayerDataEnteredEvent(user);
+                        age = (int) data[0];
+                        color = (PlayerColor) data[1];
+                    } catch (InvalidSenderException e) {
+                        InvalidInputEvent ev = new InvalidInputEvent(user);
+                        game.notify(ev);
+                    }
 
-                try {
-                    game.addPlayer(user, age, color);
-                    PlayerJoinedEvent event2 = new PlayerJoinedEvent(user, game.getPlayers().get(game.getPlayers().size() - 1));
-                    game.notify(event2);
-                    entered = true;
+                    try {
+                        game.addPlayer(user, age, color);
+                        PlayerJoinedEvent event2 = new PlayerJoinedEvent(user, game.getPlayers().get(game.getPlayers().size() - 1));
+                        game.notify(event2);
+                        entered = true;
 
-                } catch (InvalidInputException e) {
-                    InvalidInputEvent ev = new InvalidInputEvent(user);
-                    game.notify(ev);
+                    } catch (InvalidInputException e) {
+                        InvalidInputEvent ev = new InvalidInputEvent(user);
+                        game.notify(ev);
+                    }
                 }
             }
         }
-    }
         game.gameUpdate();
     }
 
@@ -248,28 +250,17 @@ public class Controller implements Serializable {
             while(!checkPlacement){
                 Box box1 = null;
                 Box box2 = null;
-                String m7 = "Please Select the first box";
-                CommunicationEvent event3 = new CommunicationEvent(ID,m7);
-                game.notify(event3);
-                try {
-                    int[] received = view.receiveBoxSelectedEvent(ID);
-                    int x1 = received[0];
-                    int y1 = received[1];
-                    box1 = game.getMap().getBox(x1,y1);
-                    System.out.println("Message receive, box created");
+                String m = "Please Select the first box";
+                try{
+                    box1 = askForBox(ID,m);
                 } catch (InvalidSenderException | InvalidIndicesException e) {
                     InvalidInputEvent ev = new InvalidInputEvent(ID);
                     game.notify(ev);
                 }
 
-                String m8 = "Please Select the second box";
-                CommunicationEvent event4 = new CommunicationEvent(ID,m8);
-                game.notify(event4);
-                try {
-                    int[] received = view.receiveBoxSelectedEvent(ID);
-                    int x2 = received[0];
-                    int y2 = received[1];
-                    box2 = game.getMap().getBox(x2,y2);
+                String m2 = "Please Select the second box";
+                try{
+                    box2 = askForBox(ID,m2);
                 } catch (InvalidSenderException | InvalidIndicesException e) {
                     InvalidInputEvent ev = new InvalidInputEvent(ID);
                     game.notify(ev);
@@ -342,7 +333,7 @@ public class Controller implements Serializable {
                             checkMovement = standardMove(player,ID,selectedWorker);
                         }
                     }
-                    if (player instanceof PlayerPrometheus) {
+                    else if (player instanceof PlayerPrometheus) {
                         boolean check = askForSpecialAction(ID);
                         if(check){
                             checkMovement = movePrometheus(player,ID,selectedWorker);
@@ -393,20 +384,21 @@ public class Controller implements Serializable {
                         }
 
                     }
-                    if (player instanceof PlayerEphaestus) {
+
+                    else if (player instanceof PlayerDemeter) {
                         boolean check = askForSpecialAction(ID);
                         if(check){
-                            checkConstruction = buildEphaestus(player,ID,selectedWorker);
+                            checkConstruction = buildDemeter(player,ID,selectedWorker);
                         }else{
                             checkConstruction = standardBuild(player,ID,selectedWorker);
                         }
 
                     }
 
-                    if (player instanceof PlayerDemeter) {
+                    else if (player instanceof PlayerHephaestus) {
                         boolean check = askForSpecialAction(ID);
                         if(check){
-                            checkConstruction = buildDemeter(player,ID,selectedWorker);
+                            checkConstruction = buildHephaestus(player,ID,selectedWorker);
                         }else{
                             checkConstruction = standardBuild(player,ID,selectedWorker);
                         }
@@ -459,16 +451,10 @@ public class Controller implements Serializable {
      * @return true if the movement was performed
      */
     private boolean standardMove(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
-        String m8 = "Please Select one box to move";
-        CommunicationEvent event = new CommunicationEvent(ID,m8);
-        game.notify(event);
-
-        Box box;
-        try {
-            int[] received = view.receiveBoxSelectedEvent(ID);
-            int x = received[0];
-            int y = received[1];
-            box = game.getMap().getBox(x,y);
+        String m = "Please Select one box to move";
+        Box box = null;
+        try{
+            box = askForBox(ID,m);
         } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
@@ -496,16 +482,10 @@ public class Controller implements Serializable {
      * @return true if the construction was performed
      */
     private boolean standardBuild(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
-        String m9 = "Please Select one box to build";
-        CommunicationEvent event = new CommunicationEvent(ID,m9);
-        game.notify(event);
-
-        Box box;
-        try {
-            int[] received = view.receiveBoxSelectedEvent(ID);
-            int x = received[0];
-            int y = received[1];
-            box = game.getMap().getBox(x,y);
+        String m = "Please Select one box to build";
+        Box box = null;
+        try{
+            box = askForBox(ID,m);
         } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
@@ -521,13 +501,8 @@ public class Controller implements Serializable {
             InvalidConstructionEvent event2 = new InvalidConstructionEvent(ID);
             game.notify(event2);
             return false;
-
         }
     }
-
-
-
-    //*****  AUXILIARY METHODS USED TO PERFORM DIVINITIES MOVEMENTS AND CONSTRUCTIONS**********
 
     /**
      * Method used to perform the special Arthemis Movement when required
@@ -537,31 +512,18 @@ public class Controller implements Serializable {
      * @return true if the movement was performed
      */
     private boolean moveArthemis(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
-        String m8 = "Please Select one box to move";
-        CommunicationEvent event = new CommunicationEvent(ID,m8);
-        game.notify(event);
-
-        Box box;
-        try {
-            int[] received = view.receiveBoxSelectedEvent(ID);
-            int x = received[0];
-            int y = received[1];
-            box = game.getMap().getBox(x,y);
+        String m = "Please Select one box to move";
+        Box box1 = null;
+        try{
+            box1 = askForBox(ID,m);
         } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
-        String m9 = "Please Select one box to move";
-        CommunicationEvent event2 = new CommunicationEvent(ID,m9);
-        game.notify(event2);
-
-        Box box2;
-        try {
-            int[] received = view.receiveBoxSelectedEvent(ID);
-            int x = received[0];
-            int y = received[1];
-            box2 = game.getMap().getBox(x,y);
+        Box box2 = null;
+        try{
+            box2 = askForBox(ID,m);
         } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
@@ -570,7 +532,7 @@ public class Controller implements Serializable {
 
         try {
             PlayerArthemis player1 = (PlayerArthemis) player;
-            player1.moveArthemis(box, box2, selectedWorker);
+            player1.moveArthemis(box1, box2, selectedWorker);
             game.gameUpdate();
             return true;
 
@@ -590,16 +552,10 @@ public class Controller implements Serializable {
      * @return true if the construction was performed
      */
     private boolean buildAtlas(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
-        String m9 = "Please Select one box to build";
-        CommunicationEvent event = new CommunicationEvent(ID,m9);
-        game.notify(event);
-
-        Box box;
-        try {
-            int[] received = view.receiveBoxSelectedEvent(ID);
-            int x = received[0];
-            int y = received[1];
-            box = game.getMap().getBox(x,y);
+        String m = "Please Select one box to build";
+        Box box = null;
+        try{
+            box = askForBox(ID,m);
         } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
@@ -629,30 +585,19 @@ public class Controller implements Serializable {
      * @return true if the construction was performed
      */
     private boolean buildDemeter(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
-        String m8 = "Please Select one box to build";
-        CommunicationEvent event = new CommunicationEvent(ID,m8);
-        game.notify(event);
-
-        Box box;
-        try {
-            int[] received = view.receiveBoxSelectedEvent(ID);
-            int x = received[0];
-            int y = received[1];
-            box = game.getMap().getBox(x,y);
+        String m = "Please Select one box to build";
+        Box box1 = null;
+        try{
+            box1 = askForBox(ID,m);
         } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
-        String m9 = "Please Select one box to build";
-        CommunicationEvent event2 = new CommunicationEvent(ID,m9);
-        game.notify(event2);
 
-        Box box2;
-        try {
-            int x = view.receiveBoxSelectedEvent(ID)[0];
-            int y = view.receiveBoxSelectedEvent(ID)[1];
-            box2 = game.getMap().getBox(x,y);
+        Box box2 = null;
+        try{
+            box2 = askForBox(ID,m);
         } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
@@ -661,7 +606,7 @@ public class Controller implements Serializable {
 
         try {
             PlayerDemeter player1 = (PlayerDemeter) player;
-            player1.buildDemeter(selectedWorker, box, box2);
+            player1.buildDemeter(selectedWorker, box1, box2);
             game.gameUpdate();
             return true;
 
@@ -680,17 +625,11 @@ public class Controller implements Serializable {
      * @param selectedWorker is the worker used to perform the turn
      * @return true if the construction was performed
      */
-    private boolean buildEphaestus(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
-        String m9 = "Please Select one box to build";
-        CommunicationEvent event = new CommunicationEvent(ID,m9);
-        game.notify(event);
-
-        Box box;
-        try {
-            int[] received = view.receiveBoxSelectedEvent(ID);
-            int x = received[0];
-            int y = received[1];
-            box = game.getMap().getBox(x,y);
+    private boolean buildHephaestus(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
+        String m = "Please Select one box to build";
+        Box box = null;
+        try{
+            box = askForBox(ID,m);
         } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
@@ -698,8 +637,8 @@ public class Controller implements Serializable {
         }
 
         try {
-            PlayerEphaestus player1 = (PlayerEphaestus) player;
-            player1.buildEphaestus(selectedWorker, box);
+            PlayerHephaestus player1 = (PlayerHephaestus) player;
+            player1.buildHephaestus(selectedWorker, box);
             game.gameUpdate();
             return true;
         } catch (WrongConstructionException e) {
@@ -717,47 +656,34 @@ public class Controller implements Serializable {
      * @return true if the movement was performed
      */
     private boolean movePrometheus(Player player, String ID, Worker selectedWorker) throws SocketTimeoutException {
-        String m9 = "Please Select one box to build";
-        CommunicationEvent event = new CommunicationEvent(ID,m9);
-        game.notify(event);
-
-        Box box;
-        try {
-            int[] received = view.receiveBoxSelectedEvent(ID);
-            int x = received[0];
-            int y = received[1];
-            box = game.getMap().getBox(x,y);
+        String m1 = "Please Select one box to build";
+        Box box1 = null;
+        try{
+            box1 = askForBox(ID,m1);
         } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
-        String m10 = "Please Select one box to move";
-        CommunicationEvent event4 = new CommunicationEvent(ID,m10);
-        game.notify(event4);
-
-        Box box2;
-        try {
-            int x = view.receiveBoxSelectedEvent(ID)[0];
-            int y = view.receiveBoxSelectedEvent(ID)[1];
-            box2 = game.getMap().getBox(x,y);
+        String m2 = "Please Select one box to move";
+        Box box2 = null;
+        try{
+            box2 = askForBox(ID,m2);
         } catch (InvalidSenderException | InvalidIndicesException e) {
             InvalidInputEvent ev = new InvalidInputEvent(ID);
             game.notify(ev);
             return false;
         }
-
-
         try {
             Box startingBox = selectedWorker.getBox();
             int startingLevel = startingBox.getLevel();
 
-            player.build(selectedWorker, box);
+            player.build(selectedWorker, box1);
             player.move(selectedWorker,box2);
 
-            if(box2.getLevel()>startingLevel){
-                box.setLevel(box.getLevel()-1);
-                box.setDome(false);
+            if(box2.getLevel() > startingLevel){
+                box1.setLevel(box1.getLevel()-1);
+                box1.setDome(false);
                 player.move(selectedWorker, startingBox);
                 throw new InvalidMovementException();
             }
@@ -768,10 +694,7 @@ public class Controller implements Serializable {
             InvalidConstructionEvent event5 = new InvalidConstructionEvent(ID);
             game.notify(event5);
             return false;
-
         }
-
-
     }
 
 
@@ -780,7 +703,7 @@ public class Controller implements Serializable {
      * @param ID is the username that is active
      */
     public void setActive(String ID) throws SocketTimeoutException {
-        String active = "Your are active now";
+        String active = "You are active now";
         String inactive = "Please wait for the opponent to finish its action";
 
         CommunicationEvent activeEvent = new CommunicationEvent(ID, active);
@@ -794,5 +717,24 @@ public class Controller implements Serializable {
 
     }
 
+    /**
+     * Method used to ask the client to select a box
+     * @param ID is the client's ID
+     * @param message is the message sent to the client
+     * @return the selected box
+     * @throws SocketTimeoutException if the connection went into timeout
+     * @throws InvalidSenderException if the sender is a wrong client
+     * @throws InvalidIndicesException if the box's indices aren't valid
+     */
+    private Box askForBox(String ID, String message) throws SocketTimeoutException, InvalidSenderException, InvalidIndicesException {
+        CommunicationEvent event = new CommunicationEvent(ID, message);
+        game.notify(event);
+
+        int[] received = view.receiveBoxSelectedEvent(ID);
+        int x = received[0];
+        int y = received[1];
+        return game.getMap().getBox(x,y);
+
+    }
 
 }

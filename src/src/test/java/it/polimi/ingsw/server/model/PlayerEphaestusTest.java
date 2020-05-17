@@ -13,12 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlayerEphaestusTest {
 
     private Map map;
-    private PlayerEphaestus player;
+    private PlayerHephaestus player;
 
     @BeforeEach
     void setUp() {
         map = new Map();
-        player = new PlayerEphaestus("a", 13, PlayerColor.YELLOW, map);
+        player = new PlayerHephaestus("a", 13, PlayerColor.YELLOW, map);
     }
 
     @AfterEach
@@ -34,7 +34,7 @@ class PlayerEphaestusTest {
         Box box2 =map.getBox(0,1);
 
         player.setWorker1(box1);
-        player.buildEphaestus(player.getWorkers().get(0),box2);
+        player.buildHephaestus(player.getWorkers().get(0),box2);
 
         assertEquals(2, box2.getLevel());
 
@@ -48,7 +48,7 @@ class PlayerEphaestusTest {
         box2.setLevel(2);
 
         player.setWorker1(box1);
-        try{player.buildEphaestus(player.getWorkers().get(0),box2);}catch(WrongConstructionException e){
+        try{player.buildHephaestus(player.getWorkers().get(0),box2);}catch(WrongConstructionException e){
             System.out.println("Correct!");
         }
     }

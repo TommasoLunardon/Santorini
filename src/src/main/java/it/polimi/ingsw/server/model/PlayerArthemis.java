@@ -23,9 +23,13 @@ public class PlayerArthemis extends PlayerNotAthena {
                 if (nextBox2.equals(initialBox)) {
                     throw new WrongMovementException();
                 }
-
                     worker.move(nextBox1);
+                try {
                     worker.move(nextBox2);
+                }catch(WrongMovementException e){
+                    worker.move(initialBox);
+                    throw new WrongMovementException();
+                }
 
             }
 

@@ -5,15 +5,12 @@ import it.polimi.ingsw.server.model.Worker;
 
 /**
  * Abstract class Map used to manage the client's view.
- * @author Gabriele Gatti
  */
-public abstract class Map extends it.polimi.ingsw.server.model.Map {
+public abstract class Map {
 
     public abstract void setWorker(int x, int y, PlayerColor color) throws InputFailedException;
 
     public abstract void build(int boxX, int boxY) throws InputFailedException;
-
-    public abstract void buildDome(int boxX, int boxY);
 
     public abstract void moveWorker(int boxXgo, int boxYgo, Worker worker) throws InputFailedException;
 

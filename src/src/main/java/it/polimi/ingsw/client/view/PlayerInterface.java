@@ -1,5 +1,4 @@
 package it.polimi.ingsw.client.view;
-
 import com.google.gson.JsonSyntaxException;
 import it.polimi.ingsw.network.JsonHelper;
 import it.polimi.ingsw.network.client.NetworkHandler;
@@ -20,7 +19,6 @@ import java.util.Scanner;
 /**
  * @author Gabriele Gatti
  *  Class used to manage the user experience during the game.
- * @author Gabriele Gatti
  */
 
 public class PlayerInterface {
@@ -45,9 +43,11 @@ public class PlayerInterface {
         boolean connected = false;
         while(!connected){
 
-            System.out.println("Insert your Username");
-
-            String username = input.nextLine();
+            String username = "";
+            while(username.isEmpty() || username.endsWith(" ")) {
+                System.out.println("Insert your Username");
+                username = input.nextLine();
+            }
             System.out.println("Please wait, we are trying to connect you to the server");
             SocketConnection connection = new SocketConnection(username, port);
             networkHandler = new NetworkHandler();
@@ -163,7 +163,7 @@ public class PlayerInterface {
                                             do {
                                                 System.out.println("Select divinity #" + i + " : ");
                                                 selectedCard = input.next();
-                                            } while (!((selectedCard.equals("Apollo") || selectedCard.equals("Artemis") || selectedCard.equals("Athena") || selectedCard.equals("Atlas") || selectedCard.equals("Demeter") || selectedCard.equals("Hephaestus") || selectedCard.equals("Minotaur") || selectedCard.equals("Pan") || selectedCard.equals("Prometeus")) && !(divinitySelection.contains(selectedCard))));
+                                            } while (!((selectedCard.equals("Apollo") || selectedCard.equals("Arthemis") || selectedCard.equals("Athena") || selectedCard.equals("Atlas") || selectedCard.equals("Demeter") || selectedCard.equals("Hephaestus") || selectedCard.equals("Minotaur") || selectedCard.equals("Pan") || selectedCard.equals("Prometheus")) && !(divinitySelection.contains(selectedCard))));
                                             divinitySelection.add(selectedCard);
                                         }
                                         networkHandler.send(new GodsSelectedEvent(iD, divinitySelection));
@@ -218,7 +218,7 @@ public class PlayerInterface {
                                             divinity = new Pan();
                                         }
                                         if(selectedDivinity.equalsIgnoreCase("Prometheus")) {
-                                            divinity = new Prometeus();
+                                            divinity = new Prometheus();
                                         }
 
                                         networkHandler.send(new CardSelectedEvent(iD, selectedDivinity));
@@ -241,10 +241,12 @@ public class PlayerInterface {
                                     }
                             }
                             if (communicationString.equals("Please Select the first box")) {
+
                                     printScreen();
                                     try {
                                         int coordinateX = -1;
                                         int coordinateY = -1;
+
                                         while (!((coordinateX >= 0 && coordinateX < 5) && (coordinateY >= 0 && coordinateY < 5) && !(game.getMap().getBox(coordinateX, coordinateY).hasWorker()))){
                                            try {
                                                System.out.print("Select your first worker's starting box (only empty boxes can be chosen)\n\tcoordinates X: ");
@@ -324,7 +326,6 @@ public class PlayerInterface {
                                 } catch (IOException ignored) {
                                 }
                             }
-
                             if (communicationString.equals("Please Select one worker")) {
 
                                 int workerNum = -1;
@@ -335,7 +336,7 @@ public class PlayerInterface {
                                         for (int i = 0; i < player.getWorkers().size(); i++) {
                                             System.out.println("\t> #" + i + " position (x: " + player.getWorkers().get(i).getBox().getPosition()[0] + ", y: " + player.getWorkers().get(i).getBox().getPosition()[1] + ")");
                                         }
-                                            while (!(workerNum == 0 || workerNum == 1 && player.getWorkers().get(workerNum).canMove())) {
+                                            while (!((workerNum == 0 || workerNum == 1) && player.getWorkers().get(workerNum).canMove())) {
                                                 try {
                                                     System.out.print("Select your worker: ");
                                                     workerNum = Integer.parseInt(input.next());
@@ -349,7 +350,7 @@ public class PlayerInterface {
                                     } catch (IOException ignore) {
                                     }
                             }
-                            if (communicationString.equals("Your are active now")) {
+                            if (communicationString.equals("You are active now")) {
                                 System.out.println(communicationString);
                             }
                             if (communicationString.equals("Game over, thanks for playing Santorini!")) {
@@ -381,7 +382,6 @@ public class PlayerInterface {
                                 break;
                             }
                             if (communicationString.equals("Do you want to use your God special power?")) {
-                                System.out.println("Your divinity:" + divinity.getName() + divinity.getDescription());
                                 try {
                                     boolean gotResponse = false;
                                     while (!gotResponse) {
@@ -404,14 +404,14 @@ public class PlayerInterface {
                             }
                         }
                     }
-                }catch (ClassCastException ignored) {}
+                }catch (ClassCastException | JsonSyntaxException ignored) {}
 
                 try {
                 CardSelectionEvent event = (CardSelectionEvent) JsonHelper.deserialization(receivedMessage.getContent());
                     if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
                         System.out.println(event.getSelectedGod());
                     }
-                }catch (ClassCastException  ignored) {}
+                }catch (ClassCastException | JsonSyntaxException ignored) {}
 
                 try {
                 GameUpdatingEvent event = (GameUpdatingEvent) networkHandler.deserialization(receivedMessage.getContent());
@@ -426,9 +426,8 @@ public class PlayerInterface {
                         }
                     }
                 }
-
             }
-            catch (ClassCastException  ignored) {}
+            catch (ClassCastException | JsonSyntaxException ignored) {}
 
                 try {
                 GodCardsSelectedEvent event = (GodCardsSelectedEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -436,7 +435,7 @@ public class PlayerInterface {
                         System.out.println(event.getSelectedCards());
                     }
                 }
-            catch (ClassCastException  ignored) {}
+            catch (ClassCastException | JsonSyntaxException ignored) {}
 
                 try {
                 LoserPlayerEvent event = (LoserPlayerEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -444,15 +443,15 @@ public class PlayerInterface {
                         System.out.println("\t\t\t\tGAME OVER");
                     }
                 }
-            catch (ClassCastException  ignored) {}
+            catch (ClassCastException | JsonSyntaxException ignored) {}
 
                 try {
                 WinnerPlayerEvent event = (WinnerPlayerEvent) JsonHelper.deserialization(receivedMessage.getContent());
                     if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
-                        System.out.println("\\t\\t\\t\\tYOU WIN");
+                        System.out.println("YOU WIN");
                     }
                 }
-            catch (ClassCastException  ignored) {}
+            catch (ClassCastException | JsonSyntaxException ignored) {}
 
                 try{
                     InvalidInputEvent event = (InvalidInputEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -460,7 +459,7 @@ public class PlayerInterface {
                         System.out.println("Something went wrong, please try again");
                     }
 
-                }catch (ClassCastException ignored) {}
+                }catch (ClassCastException | JsonSyntaxException ignored) {}
 
             try{
                 InvalidMovementEvent event = (InvalidMovementEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -468,7 +467,7 @@ public class PlayerInterface {
                     System.out.println("Your move wasn't valid, please try again");
                 }
 
-            }catch (ClassCastException  ignored) {}
+            }catch (ClassCastException | JsonSyntaxException ignored) {}
 
             try{
                 InvalidConstructionEvent event = (InvalidConstructionEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -477,7 +476,7 @@ public class PlayerInterface {
                 }
 
 
-            }catch (ClassCastException  ignored) {}
+            }catch (ClassCastException | JsonSyntaxException ignored) {}
 
             try{
                 StarterSelectionEvent event = (StarterSelectionEvent) JsonHelper.deserialization(receivedMessage.getContent());
@@ -485,7 +484,7 @@ public class PlayerInterface {
                     System.out.println(event.getStarter());
                 }
 
-            }catch (ClassCastException  ignored) {}
+            }catch (ClassCastException | JsonSyntaxException ignored) {}
 
             try{
                 PlayerJoinedEvent event = (PlayerJoinedEvent) networkHandler.deserialization(receivedMessage.getContent());
@@ -495,7 +494,7 @@ public class PlayerInterface {
                     System.out.println(event.getP().getColor());
                 }
 
-            }catch (ClassCastException  ignored) {}
+            }catch (ClassCastException | JsonSyntaxException ignored) {}
 
         }
     }
@@ -554,19 +553,19 @@ public class PlayerInterface {
      */
     private void updateMap(){
         map = new MapCLI();
-        for (int x=0; x<5; x++){
-            for (int y=0; y<5; y++){
+        for (int x=0; x < 5; x++){
+            for (int y=0; y < 5; y++){
                 Box boxGame;
                 BoxCLI boxCLI;
                 try{
-                    if ((boxGame=game.getMap().getBox(x,y)).getLevel()!=(boxCLI = map.getBoxCLI(x,y)).getLevel()){
+                    if ((boxGame = game.getMap().getBox(x,y)).getLevel() != (boxCLI = map.getBoxCLI(x,y)).getLevel()){
                         boxCLI.setLevel(boxGame.getLevel());
-                        if (boxGame.hasWorker()){
-                            boxCLI.setWorker(boxGame.getWorker().getPlayer().getColor());
-                        }
-                        if (boxGame.hasDome()){
-                            boxCLI.buildDome();
-                        }
+                    }
+                    if (boxGame.hasWorker()){
+                        boxCLI.setWorker(boxGame.getWorker().getPlayer().getColor());
+                    }
+                    if (boxGame.hasDome()){
+                        boxCLI.buildDome();
                     }
                 }catch (InvalidIndicesException | WorkerNotExistException ignore) {}
             }

@@ -54,7 +54,7 @@ public class Player implements Serializable {
     }
 
    public String getPlayerID(){
-       return this.playerID;
+       return playerID;
    }
 
 
@@ -99,7 +99,8 @@ public class Player implements Serializable {
     }
 
     Map getPlayerMap() {
-        return playerMap;
+        Map m = playerMap;
+        return m;
     }
 
     /**

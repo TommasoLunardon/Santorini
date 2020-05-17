@@ -48,7 +48,8 @@ public class Game implements Serializable{
     }
 
     public ArrayList<String> getAvailableColors() {
-         return availableColors;
+        ArrayList<String> a = availableColors;
+        return a;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -82,7 +83,8 @@ public class Game implements Serializable{
     }
 
     public ArrayList<String> getGods() {
-        return gameGods;
+        ArrayList<String> g = gameGods;
+        return g;
     }
 
     /**
@@ -156,8 +158,8 @@ public class Game implements Serializable{
             pairs.add(new Pair(p,p.getPlayerID()));
         }
 
-        if(card.equalsIgnoreCase("Ephaestus")){
-            PlayerEphaestus p = new PlayerEphaestus(player.getPlayerID(),player.getPlayerAge(),player.getColor(),map);
+        if(card.equalsIgnoreCase("Hephaestus")){
+            PlayerHephaestus p = new PlayerHephaestus(player.getPlayerID(),player.getPlayerAge(),player.getColor(),map);
             players.add(p);
             pairs.add(new Pair(p,p.getPlayerID()));
         }
@@ -300,8 +302,9 @@ public class Game implements Serializable{
      * Method used to update all the connected clients, sending the most updated game version
      */
     public void gameUpdate() throws SocketTimeoutException {
+        Game g = this;
         for(int i = 0; i < getIDs().size(); i++){
-            GameUpdatingEvent event = new GameUpdatingEvent(getIDs().get(i),this);
+            GameUpdatingEvent event = new GameUpdatingEvent(getIDs().get(i),g);
             this.notify(event);
         }
 

@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 
 /**
  *  Class Server used to perform an entire game of Santorini with clients connected to the server
- *  Needs to be completed with the management of "PING" Messages
  */
 
 public class Server implements Runnable, Serializable {
@@ -31,9 +30,6 @@ public class Server implements Runnable, Serializable {
     private ArrayList<String> users;
     private static Controller controller;
     private static VirtualView virtualView;
-
-    //Game used for multiple matches
-    private static Game baseGame;
 
     private void startServer() {
         try {
@@ -147,11 +143,17 @@ public class Server implements Runnable, Serializable {
             System.exit(0);
         }
 
-        //Base game for restarting the match
-        baseGame =  getGame();
 
         //Starting Point for multiple matches with the same settings
         while(restart) {
+
+            //Game baseGame will be reused when the players play consecutive games.
+            Game baseGame = new Game(getGame().getNumPlayers(),getGame().isWithGods());
+
+            for(int i = 0; i < getGame().getNumPlayers(); i++){
+                Player clone = getGame().getPlayers().get(i);
+                baseGame.addPlayer(clone.getPlayerID(),clone.getPlayerAge(),clone.getColor());
+            }
             controller.setGame(baseGame);
 
             if (getGame().isWithGods()) {
@@ -212,6 +214,7 @@ public class Server implements Runnable, Serializable {
 
             //Placement of Workers//
             try {
+                getGame().gameUpdate();
                 controller.workersPlacement();
             } catch (SocketTimeoutException e) {
                 System.out.println("Connection ended");

@@ -8,43 +8,17 @@ import it.polimi.ingsw.server.model.PlayerColor;
  */
 
 public class BoxCLI {
-    private String[][] box;
     private int dimension;
-    private int level;
+    private  String[][] box;
+    private  int level;
+    private boolean hasWorker;
 
-    private String catchColor(PlayerColor color){
-        String colorW;
-        if (color==PlayerColor.BLUE){
-            colorW="\u001b[38;5;21m";
-        }else {
-            if (color==PlayerColor.RED){
-                colorW="\u001b[38;5;1m";
-            }else {
-                colorW = "\u001b[38;5;220m";
-            }
-        }
-        return colorW;
-    }
+    public int getLevel() { return level;}
 
-    public void setWorker(PlayerColor color){
-        setWorker(catchColor(color));
-    }
-
-    public int getLevel(){
-        return level;
-    }
-
-    /**
-     * Creation of BoxCLI
-     */
     public BoxCLI() {
         dimension=5;
         box = new String[5][5];
         plantGrass();
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
     }
 
     private void setBorder(){
@@ -69,14 +43,15 @@ public class BoxCLI {
     public void buildStructure() {
         String label="\u001b[48;5;249m";
         String place= label+ "\u001b[38;5;249m" + "▉\t";
-        if (level<3){
+        if (level < 4){
             for (int x = 0; x < dimension; x++) {
                 for (int y = 0; y < dimension; y++) {
                     box[x][y] = place;
                 }
             }
-            level++;
             box[1][1]="\u001b[48;5;249m" + "\u001b[38;5;255m" + level + "\t";
+            //level++;
+
         }
         else buildDome();
         setBorder();
@@ -100,6 +75,24 @@ public class BoxCLI {
             buildStructure();
         }
         setBorder();
+    }
+
+    private String catchColor(PlayerColor color){
+        String colorW;
+        if (color==PlayerColor.BLUE){
+            colorW="\u001b[38;5;21m";
+        }else {
+            if (color==PlayerColor.RED){
+                colorW="\u001b[38;5;1m";
+            }else {
+                colorW = "\u001b[38;5;220m";
+            }
+        }
+        return colorW;
+    }
+
+    public void setWorker(PlayerColor color){
+        setWorker(catchColor(color));
     }
 
     public void setWorker(String colorWorker){
@@ -137,4 +130,13 @@ public class BoxCLI {
         }
     }
 
+    public void setLevel(int level) {
+        this.level = level;
+        if(level == 0){
+            plantGrass();
+        }
+        else{
+            buildStructure();
+        }
+    }
 }

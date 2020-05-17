@@ -17,7 +17,7 @@ public class PlayerAtlas extends PlayerNotAthena {
              * @throws WrongConstructionException if the construction isn't valid
              */
             public void buildAtlas(Box box, Worker worker) throws WrongConstructionException {
-                if ((!worker.getBox().getNeighbours().contains(box)) || box.hasDome()) {
+                if ((!worker.getBox().getNeighbours().contains(box)) || box.hasWorker() || box.hasDome()) {
                     throw new WrongConstructionException();
                 } else {
                     box.setDome(true);

@@ -1,15 +1,12 @@
 
 package it.polimi.ingsw.network.client;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import it.polimi.ingsw.network.JsonHelper;
+import java.util.Base64;
 import it.polimi.ingsw.network.events.Event;
 import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
 import it.polimi.ingsw.network.events.vcevents.VCPingEvent;
 import it.polimi.ingsw.network.messages.Message;
-import it.polimi.ingsw.server.controller.exceptions.InvalidSenderException;
-import it.polimi.ingsw.network.events.mvevents.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -63,7 +60,7 @@ public class NetworkHandler implements VCEventSender {
      */
     public Object deserialization(String message){
         try {
-            byte[] b = Base64.decode(message);
+            byte[] b = Base64.getDecoder().decode(message);
             ByteArrayInputStream bi = new ByteArrayInputStream(b);
             ObjectInputStream si = new ObjectInputStream(bi);
             return si.readObject();

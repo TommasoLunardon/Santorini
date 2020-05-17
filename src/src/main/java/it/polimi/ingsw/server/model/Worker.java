@@ -188,7 +188,7 @@ public class Worker implements Serializable {
                         if (!nextBox2.hasWorker() && !nextBox2.hasDome()) {
                             check = true;
                         }
-                    } catch (InvalidIndicesException e) {
+                    } catch (InvalidIndicesException ignored) {
                     }
                 }
             }
@@ -207,7 +207,7 @@ public class Worker implements Serializable {
                             if (!nextBox2.hasWorker() && !nextBox2.hasDome()) {
                                 check = true;
                             }
-                        } catch (InvalidIndicesException e) {
+                        } catch (InvalidIndicesException ignored) {
                         }
                     }
                 }

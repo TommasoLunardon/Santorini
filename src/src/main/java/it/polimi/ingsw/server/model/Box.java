@@ -251,7 +251,8 @@ public class Box implements Serializable {
     }
 
     public Map getMap() {
-        return map;
+        Map m = map;
+        return m;
     }
 }
 
