@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.Worker;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,8 +29,8 @@ public class BoxGUI extends JButton{
         try {
             this.x=x;
             this.y=y;
-            grassPath="E:/IntelliJ IDEA 2019.3.3/testGUI/src/main/resources/SingleBox/bo"+x+y+".png";
-            setIcon(new ImageIcon(ImageIO.read(new FileInputStream(grassPath))));
+            grassPath="SingleBox/bo"+x+y+".png";
+            setIcon(new ImageIcon(ImageIO.read(new File(String.valueOf(getClass().getResource(grassPath))))));
             setBackground(new Color(98, 229, 92));
             setOpaque(true);
             setVisible(true);
@@ -44,7 +45,6 @@ public class BoxGUI extends JButton{
     }
 
     public void setWorker(PlayerColor color, Worker worker) {
-        //inserimento dell'icona del worker
         String colorS,path;
         haveWorker=true;
         switch (color){
@@ -53,12 +53,15 @@ public class BoxGUI extends JButton{
             default:colorS="Red";
         }
         if (level==0){
-            path="E:/IntelliJ IDEA 2019.3.3/testGUI/src/main/resources/boxWhitWorkers/level0/"+colorS+"bo"+x+y+".png";
+            path="boxWhitWorkers/level0/"+colorS+"bo"+x+y+".png";
             setBackground(new Color(98, 229, 92));
         }else{
-            path="E:/IntelliJ IDEA 2019.3.3/testGUI/src/main/resources/boxWhitWorkers/level"+level+"/"+colorS+"/level"+level+".png";
+            path="boxWhitWorkers/level"+level+"/"+colorS+"/level"+level+".png";
             setBackground(new Color(165, 165, 165));
         }
+        try {
+            setIcon(new ImageIcon(ImageIO.read(new FileInputStream(String.valueOf(getClass().getResource(path))))));
+        }catch (IOException ignored) { }
         this.worker=worker;
     }
 
@@ -74,29 +77,29 @@ public class BoxGUI extends JButton{
     }
 
     public void buildDome() throws IOException {
-        String domePath = "E:/IntelliJ IDEA 2019.3.3/testGUI/src/main/resources/level/dome.jpg";
-        setIcon(new ImageIcon(ImageIO.read(new FileInputStream(domePath))));
+        String domePath = "level/dome.jpg";
+        setIcon(new ImageIcon(ImageIO.read(new File(String.valueOf(getClass().getResource(domePath))))));
         setBackground(new Color(255,255,255));
     }
 
     private void setBoxWhitOutWorker() throws IOException {
-        String level2Path = "E:/IntelliJ IDEA 2019.3.3/testGUI/src/main/resources/level/level3.png";
-        String level3Path = "E:/IntelliJ IDEA 2019.3.3/testGUI/src/main/resources/level/level2.png";
-        String level1Path = "E:/IntelliJ IDEA 2019.3.3/testGUI/src/main/resources/level/level1.png";
+        String level2Path = "level/level3.png";
+        String level3Path = "level/level2.png";
+        String level1Path = "level/level1.png";
         System.out.println(level);
         switch (level) {
             case 0:
-                setIcon(new ImageIcon(ImageIO.read(new FileInputStream(grassPath))));
+                setIcon(new ImageIcon(ImageIO.read(new File(String.valueOf(getClass().getResource(grassPath))))));
                 setBackground(new Color(98, 229, 92));break;
             case 1:
 
-                setIcon(new ImageIcon(ImageIO.read(new FileInputStream(level1Path))));
+                setIcon(new ImageIcon(ImageIO.read(new File(String.valueOf(getClass().getResource(level1Path))))));
                 setBackground(new Color(165, 165, 165));break;
             case 2:
-                setIcon(new ImageIcon(ImageIO.read(new FileInputStream(level2Path))));
+                setIcon(new ImageIcon(ImageIO.read(new File(String.valueOf(getClass().getResource(level2Path))))));
                 setBackground(new Color(165, 165, 165)); break;
             case 3:
-                setIcon(new ImageIcon(ImageIO.read(new FileInputStream(level3Path))));
+                setIcon(new ImageIcon(ImageIO.read(new File(String.valueOf(getClass().getResource(level3Path))))));
                 setBackground(new Color(165, 165, 165));break;
             default:
 
