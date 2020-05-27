@@ -8,25 +8,24 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * this class represent the selection of one divinity
+ * this class represent the selection of two or three divinity
  * @author Jing Huang
  */
 
-public class Divinity {
-
+public class DivinityT {
     String communicationString;
 
     private JFrame jf = new JFrame("[Divinity cards]");
-    private JRadioButton apolloname = new JRadioButton("Apollo");
-    private JRadioButton artemisname = new JRadioButton("Artemis");
-    private JRadioButton atenaname = new JRadioButton("Athena");
-    private JRadioButton atlasname = new JRadioButton("Atlas");
-    private JRadioButton demetername = new JRadioButton("Demeter");
-    private JRadioButton hephaestusname = new JRadioButton("Hephaestus");
-    private JRadioButton humanname = new JRadioButton("Human");
-    private JRadioButton minotaurname = new JRadioButton("Minotaur");
-    private JRadioButton panname = new JRadioButton("Pan");
-    private JRadioButton prometheusname = new JRadioButton("Prometheus");
+    private JCheckBox apolloname = new JCheckBox("Apollo");
+    private JCheckBox artemisname = new JCheckBox("Artemis");
+    private JCheckBox atenaname = new JCheckBox("Athena");
+    private JCheckBox atlasname = new JCheckBox("Atlas");
+    private JCheckBox demetername = new JCheckBox("Demeter");
+    private JCheckBox hephaestusname = new JCheckBox("Hephaestus");
+    private JCheckBox humanname = new JCheckBox("Human");
+    private JCheckBox minotaurname = new JCheckBox("Minotaur");
+    private JCheckBox panname = new JCheckBox("Pan");
+    private JCheckBox prometheusname = new JCheckBox("Prometheus");
 
 
     private JLabel title = new JLabel("Select the cards");
@@ -64,7 +63,7 @@ public class Divinity {
     JButton humanButton = new JButton(human);
 
 
-    public void init() {
+    public void init(int playernum) {
 
         label.setBounds(0, 0, background.getIconWidth(), background.getIconHeight());
         apollo.setImage(apollo.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT));
@@ -128,49 +127,49 @@ public class Divinity {
         prometheusButton.setBounds(500, 224, 85, 122);
 
 
-        ButtonGroup group = new ButtonGroup();
+        it.polimi.ingsw.client.view.gui.CheckDivinityNum group = new it.polimi.ingsw.client.view.gui.CheckDivinityNum(playernum);
 
         jpanel.add(select);
         jpanel.add(title);
 
-        group.add(apolloname);
+        group.register(apolloname);
         jf.getContentPane().add(apolloname);
         jpanel.add(apolloButton);
 
 
-        group.add(artemisname);
+        group.register(artemisname);
         jf.getContentPane().add(artemisname);
         jpanel.add(artemisButton);
 
-        group.add(atenaname);
+        group.register(atenaname);
         jf.getContentPane().add(atenaname);
         jpanel.add(athenaButton);
 
-        group.add(atlasname);
+        group.register(atlasname);
         jf.getContentPane().add(atlasname);
         jpanel.add(atlasButton);
 
-        group.add(demetername);
+        group.register(demetername);
         jf.getContentPane().add(demetername);
         jpanel.add(demeterButton);
 
-        group.add(hephaestusname);
+        group.register(hephaestusname);
         jf.getContentPane().add(hephaestusname);
         jpanel.add(hephaestusButton);
 
-        group.add(minotaurname);
+        group.register(minotaurname);
         jf.getContentPane().add(minotaurname);
         jpanel.add(minotaurButton);
 
-        group.add(panname);
+        group.register(panname);
         jf.getContentPane().add(panname);
         jpanel.add(panButton);
 
-        group.add(prometheusname);
+        group.register(prometheusname);
         jf.getContentPane().add(prometheusname);
         jpanel.add(prometheusButton);
 
-        group.add(humanname);
+        group.register(humanname);
         jf.getContentPane().add(humanname);
         jpanel.add(humanButton);
 
@@ -184,53 +183,12 @@ public class Divinity {
         jf.setResizable(false);
         jf.setLocationRelativeTo(null);
 
+        JCheckBox[] boxArray = new JCheckBox[]{apolloname, artemisname, atenaname,atlasname,demetername,hephaestusname,humanname,minotaurname,panname,prometheusname};
+
         select.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent evt) {
-                    if (humanname.isSelected()) {
-                            getDivinity();
-                            jf.dispose();
-                        }
-                    if (apolloname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (artemisname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (atenaname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (demetername.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (hephaestusname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (minotaurname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (panname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (prometheusname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    else  {
-                    select.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            JOptionPane.showMessageDialog(jf, "Please select your Divinity",
-                                    "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    });
-                }
+                getSelectedDivinity(boxArray);
+                jf.dispose();
             }
         });
 
@@ -301,39 +259,16 @@ public class Divinity {
     }
 
 
-    public String getDivinity(){
-        String Divinity = null;
-        if(apolloname.isSelected()){
-            Divinity = "Apollo";
+    private static String getSelectedDivinity(JCheckBox[] boxArray) {
+        String selecdiv = "";
+        for (JCheckBox box : boxArray) {
+            if (box.isSelected() == true) { 
+                if (selecdiv.length() > 0) {
+                    selecdiv = selecdiv + ",";
+                }
+                selecdiv = selecdiv + box.getText(); 
+            }
         }
-        if(artemisname.isSelected()){
-            Divinity = "Artemis";
-        }
-        if(atenaname.isSelected()){
-            Divinity = "Athena";
-        }
-        if(atlasname.isSelected()){
-            Divinity = "Atlas";
-        }
-        if(demetername.isSelected()){
-            Divinity = "Demeter";
-        }
-        if(hephaestusname.isSelected()){
-            Divinity = "Hephaestus";
-        }
-        if(minotaurname.isSelected()){
-            Divinity = "Minotaur";
-        }
-        if(panname.isSelected()){
-            Divinity = "Pan";
-        }
-        if(prometheusname.isSelected()){
-            Divinity = "Prometheus";
-        }
-        if(humanname.isSelected()){
-            Divinity = "Human";
-        }
-        return Divinity;
+        return selecdiv;
     }
-
 }
