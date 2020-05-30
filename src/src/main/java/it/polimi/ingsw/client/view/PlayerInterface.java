@@ -106,6 +106,7 @@ public class PlayerInterface {
                             if (communicationString.equals("Please wait for the opponent to finish its action")) {
                                 System.out.println("Please wait for your turn");
 
+
                             }
                             if (communicationString.equals("Please insert the number of Players")) {
                                 try{

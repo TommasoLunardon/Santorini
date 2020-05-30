@@ -1,10 +1,8 @@
 package it.polimi.ingsw.client.view.gui;
 
 import it.polimi.ingsw.server.model.Game;
-import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.exceptions.InvalidIndicesException;
 import it.polimi.ingsw.server.model.exceptions.WorkerNotExistException;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -12,14 +10,16 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 
-public class MapGUI extends JPanel {
+public class MapGUI extends JPanel{
     private BoxGUI[][] map;
     private BoxGUI lastClickedBox;
     private boolean waitForUpdating;
     private ArrayList<Integer> infos;
+    private LeftMenu leftMenu;
 
     public MapGUI() {
         super();
+        leftMenu=new LeftMenu(this);
         map= new BoxGUI[5][5];
         setLayout(new GridLayout(5,5));
         for (int i = 0; i < 5; i++) {
@@ -27,41 +27,38 @@ public class MapGUI extends JPanel {
                 BoxGUI boxGUI=new BoxGUI(j,i);
                 add(boxGUI);
                 map[i][j]=boxGUI;
+                map[i][j].addMouseListener(new StopReception());
             }
         }
     }
 
-    synchronized private void boxPreparer(){
-        MapGUI mapGUIo=this;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                 map[i][j].addMouseListener(new MouseAdapter() {
-                     private MapGUI mapGUI=mapGUIo;
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        super.mouseClicked(e);
-                        if (e.getComponent() instanceof  BoxGUI){
-                            lastClickedBox=(BoxGUI) e.getComponent();
-                            infos=lastClickedBox.coordinates();
-                           // System.out.println("i listened"+infos.get(0)+infos.get(1));
-/*------------------>>>>>>>>>>>>>> chiedere aiuto*/                            mapGUI.notifyAll();
-                        }
-                    }
-                });
-            }
-        }
-        waitForUpdating=true;
+    public ArrayList<Integer> selectBox(){
+        boxPreparer();
+        waitForUpdating();
+        disableBox();
+        return infos;
     }
 
-    public void updateMap(Game game, Player player){
+    public BoxGUI getBox(int coordinateX, int coordinateY){
+        return map[coordinateX][coordinateY];
+    }
+
+    public BoxGUI getCLickedBox(){
+        boxPreparer();
+        waitForUpdating();
+        disableBox();
+        return lastClickedBox;
+    }
+
+    public void updateMap(Game game) {
         try
         {for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (game.getMap().getBox(i,j).getLevel()!=map[i][j].getLevel()){
                     map[i][j].setLevel(game.getMap().getBox(i,j).getLevel());
                 }
-                if ((game.getMap().getBox(i,j).hasWorker()&&map[i][j].haveWorker())){
-                    map[i][j].setWorker(player.getColor(),game.getMap().getBox(i,j).getWorker());
+                if ((game.getMap().getBox(i,j).hasWorker()&&map[i][j].getHaveWorker())){
+                    map[i][j].setWorker(game.getMap().getBox(i,j).getWorker());
                 }
             }
         }
@@ -69,22 +66,29 @@ public class MapGUI extends JPanel {
 
     }
 
-    public BoxGUI getCLickedBox(){
-        boxPreparer();
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                synchronized (MapGUI.this){
-                    waitForUpdating();
-                }
-            }
-        };
-        thread.start();
-        disableBox();
-        return lastClickedBox;
+    public LeftMenu getLeftMenu() {
+        return leftMenu;
     }
 
+    synchronized private void boxPreparer(){
+        for (int i=0; i<5; i++){
+            for (int j=0;j<5;j++){
+                map[i][j].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        super.mouseClicked(e);
+                        BoxGUI box=(BoxGUI) e.getComponent();
+                        infos=box.getCoordinates();
+                        lastClickedBox=box;
+                        waitForUpdating=false;
+                        synchronized (MapGUI.this){
+                            MapGUI.this.notifyAll();;
+                        }
+                    }
+                });
+            }
+        }
+    }
     private void disableBox(){
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -92,7 +96,6 @@ public class MapGUI extends JPanel {
             }
         }
     }
-
     synchronized private void waitForUpdating(){
             while (waitForUpdating) {
                 try {
@@ -102,27 +105,6 @@ public class MapGUI extends JPanel {
             }
     }
 
-    public ArrayList<Integer> selectBox(){
-        ArrayList<Integer> coordinates;
-        boxPreparer();
-        Thread thread = new Thread() {
-           @Override
-           public void run() {
-               super.run();
-               synchronized (MapGUI.this){
-                   waitForUpdating();
-               }
-           }
-       };
-        thread.start();
-        disableBox();
-        coordinates=infos;
-        return coordinates;
-    }
-
-    public BoxGUI getBox(int coordinateX, int coordinateY){
-        return map[coordinateX][coordinateY];
-    }
 }
 
 

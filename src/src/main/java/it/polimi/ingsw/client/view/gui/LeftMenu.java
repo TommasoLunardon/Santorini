@@ -5,10 +5,11 @@ import it.polimi.ingsw.server.model.Player;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 
 public class LeftMenu extends JLabel {
-    private boolean choose;
+    private String choose;
     private boolean waitForUpdating;
     private MapGUI mapGUI;
 
@@ -17,6 +18,9 @@ public class LeftMenu extends JLabel {
         this.mapGUI=mapGUI;
     }
 
+    /**
+     * wait until a box is pressed
+     */
     synchronized private void waitForUpdating() {
         waitForUpdating=true;
         while (waitForUpdating) {
@@ -33,15 +37,19 @@ public class LeftMenu extends JLabel {
      * @param nameButtonTrue: text in button for true condition
      * @param nameButtonFalse: text in button for false condition
      * @param text: message for user
-     * @return user answer
+     * @return user answer <yes/no>
      */
-    public boolean askCondition(String nameButtonTrue,String nameButtonFalse, String text){
+    public String askCondition(String nameButtonTrue,String nameButtonFalse, String text){
         JButton yes=new JButton(nameButtonTrue);
         yes.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                choose=waitForUpdating=false;
+                choose= "yes";
+                waitForUpdating=false;
+                synchronized (LeftMenu.this) {
+                    LeftMenu.this.notifyAll();
+                }
             }
         });
 
@@ -50,21 +58,16 @@ public class LeftMenu extends JLabel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                choose=waitForUpdating=false;
+                choose="no";
+                waitForUpdating=false;
+                synchronized (LeftMenu.this) {
+                    LeftMenu.this.notifyAll();
+                }
             }
         });
         setText(text);
-
-        Thread waitUpadate = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                synchronized (LeftMenu.this){
-                    waitForUpdating();
-                }
-            }
-        };
-        waitUpadate.start();
+        waitForUpdating();
+        removeAll();
         return choose;
     }
 
@@ -75,27 +78,17 @@ public class LeftMenu extends JLabel {
         BoxGUI box;
         int ret;
         do {
-            setText("Select a worker");
+            setText("Select a worker from map");
             box=mapGUI.getCLickedBox();
-        }while (!(box.haveWorker()&&player.getWorkers().contains(box.getWorker())));
-        setText("");
+        }while (!(box.getHaveWorker()&&player.getWorkers().contains(box.getWorker())));
+        removeAll();
         if (player.getWorkers().get(0).equals(box.getWorker())){
             ret=0;
         }
         else ret=1;
-
         return ret;
-
     }
 
-
-
-/*    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(image, 0, 0, this);
-    }
-*/
 }
 
 
