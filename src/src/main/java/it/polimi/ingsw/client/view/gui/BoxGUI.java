@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class BoxGUI extends JButton implements Box {
+public class BoxGUI extends JButton  {
 
     private boolean haveWorker;
     private int x;
