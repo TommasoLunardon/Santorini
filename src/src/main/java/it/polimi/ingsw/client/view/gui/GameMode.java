@@ -8,14 +8,20 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GameMode {
-    private JFrame jf = new JFrame("[Game Mode]");
+    private JFrame jf;
     private JLabel question = new JLabel("Do you want to play with gods? ");
     private JRadioButton yes = new JRadioButton("YES");
     private JRadioButton no = new JRadioButton("NO");
+    private boolean waitForUpdating, waitForUpdating2;
 
     ImageIcon background = new ImageIcon("/src/main/resources/bg_panelMid.png");
     JLabel label = new JLabel(background);
     JButton select = new JButton("SELECT");
+
+
+    public GameMode(JFrame frame){
+        jf = frame;
+    }
 
     public void init() {
 
@@ -72,11 +78,35 @@ public class GameMode {
                         public void actionPerformed(ActionEvent e) {
                             JOptionPane.showMessageDialog(jf, "Please select if you want to play with gods",
                                     "Error", JOptionPane.ERROR_MESSAGE);
-                        }
+                            waitForUpdating2=false;
+                            synchronized (GameMode.this){
+                                GameMode.this.notifyAll();
+                            }                        }
                     });
+                    waitForUpdating2=true;
+                    while (waitForUpdating2){
+                        try {
+                            wait();
+                        }catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                waitForUpdating=false;
+                synchronized (GameMode.this){
+                    GameMode.this.notifyAll();
                 }
             }
         });
+        waitForUpdating=true;
+        while (waitForUpdating){
+            try {
+                wait();
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public String getmode(){

@@ -13,6 +13,8 @@ public class Login {
   private JLabel lb2 = new JLabel("P O R T     :");
   private JLabel uniq = new JLabel("(Username must be unique)");
 
+  private boolean waitForUpdate;
+  private boolean waitForUpdate2;
 
   ImageIcon background = new ImageIcon("/src/main/resources/bg_panelMid.png");
   JLabel label = new JLabel(background);
@@ -67,16 +69,40 @@ public class Login {
               jf.dispose();
           }
         }catch (NumberFormatException e) {
-            play.addActionListener(new ActionListener() {
-              @Override
-              public void actionPerformed(ActionEvent e) {
+          play.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf, "Please enter your username and the right Port",
                         "Error", JOptionPane.ERROR_MESSAGE);
+              waitForUpdate2=false;
+              synchronized (Login.this){
+                Login.this.notifyAll();
+              }
               }
             });
         }
+        waitForUpdate2=true;
+        while (waitForUpdate2){
+          try {
+            wait();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+        waitForUpdate=false;
+        synchronized (Login.this){
+          Login.this.notifyAll();
+        }
       }
     });
+    waitForUpdate=true;
+    while (waitForUpdate){
+      try {
+        wait();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
 
   }
 

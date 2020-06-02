@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 /**
  * this class represent the selection of two or three divinity
@@ -14,6 +15,7 @@ import java.awt.event.MouseEvent;
 
 public class DivinityT {
     String communicationString;
+    private ArrayList<String> selectedNames = new ArrayList<>();
 
     private JFrame jf = new JFrame("[Divinity cards]");
     private JCheckBox apolloname = new JCheckBox("Apollo");
@@ -34,7 +36,7 @@ public class DivinityT {
 
     int width = 85;
     int height = 122;
-
+    private boolean waitForUpdating;
 
     ImageIcon background = new ImageIcon("/src/main/resources/bg_panelMid.png");
     ImageIcon apollo = new ImageIcon("/src/main/resources/Divinity/apollo.png");
@@ -127,7 +129,7 @@ public class DivinityT {
         prometheusButton.setBounds(500, 224, 85, 122);
 
 
-        it.polimi.ingsw.client.view.gui.CheckDivinityNum group = new it.polimi.ingsw.client.view.gui.CheckDivinityNum(playernum);
+        CheckDivinityNum group = new CheckDivinityNum(playernum);
 
         jpanel.add(select);
         jpanel.add(title);
@@ -189,6 +191,10 @@ public class DivinityT {
             public void mousePressed(MouseEvent evt) {
                 getSelectedDivinity(boxArray);
                 jf.dispose();
+                waitForUpdating=false;
+                synchronized (DivinityT.this){
+                    DivinityT.this.notifyAll();
+                }
             }
         });
 
@@ -197,78 +203,128 @@ public class DivinityT {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to" +
                         "the space yours just vacated.","God Of Music",JOptionPane.PLAIN_MESSAGE);
+                waitForUpdating=false;
+                synchronized (DivinityT.this){
+                    DivinityT.this.notifyAll();
+                }
             }
         });
         artemisButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Move: Your Worker may move one additional time, but not back to its initial space.","Goddess of the Hunt",JOptionPane.PLAIN_MESSAGE);
-            }
+                waitForUpdating=false;
+                synchronized (DivinityT.this){
+                    DivinityT.this.notifyAll();
+                }}
         });
         athenaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot\n" +
                         "move up this turn.","Goddess of Wisdom",JOptionPane.PLAIN_MESSAGE);
-            }
+                waitForUpdating=false;
+                synchronized (DivinityT.this){
+                    DivinityT.this.notifyAll();
+                }}
         });
         atlasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Build: Your Worker may build a dome at any level.","Titan Shouldering the Heavens",JOptionPane.PLAIN_MESSAGE);
-            }
+                waitForUpdating=false;
+                synchronized (DivinityT.this){
+                    DivinityT.this.notifyAll();
+                }}
         });
         demeterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Build: Your Worker may build one additional time, but not on the same space.","Goddess of the Harvest",JOptionPane.PLAIN_MESSAGE);
-            }
+                waitForUpdating=false;
+                synchronized (DivinityT.this){
+                    DivinityT.this.notifyAll();
+                }}
         });
         hephaestusButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Build: Your Worker may build one additional block (not dome) on top of your first block.","God of Blacksmiths",JOptionPane.PLAIN_MESSAGE);
-            }
+                waitForUpdating=false;
+                synchronized (DivinityT.this){
+                    DivinityT.this.notifyAll();
+                }}
         });
         minotaurButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be\n" +
                         "forced one space straight backwards to an unoccupied space at any level.","Bull-headed Monster",JOptionPane.PLAIN_MESSAGE);
+                waitForUpdating=false;
+                synchronized (DivinityT.this){
+                    DivinityT.this.notifyAll();
+                }
             }
         });
         panButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Win Condition: You also win if your Worker moves down two or more levels.","God of the Wild",JOptionPane.PLAIN_MESSAGE);
-            }
+                waitForUpdating=false;
+                synchronized (DivinityT.this){
+                    DivinityT.this.notifyAll();
+                }}
         });
         prometheusButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Turn: If your Worker does not move up, it may build both before and after moving.","Titan Benefactor of Mankind",JOptionPane.PLAIN_MESSAGE);
+                waitForUpdating=false;
+                synchronized (DivinityT.this){
+                    DivinityT.this.notifyAll();
+                }
             }
         });
         humanButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"No power","Mortal",JOptionPane.PLAIN_MESSAGE);
+                waitForUpdating=false;
+                synchronized (DivinityT.this){
+                    DivinityT.this.notifyAll();
+                }
             }
         });
 
+        waitForUpdating=true;
+        try {
+            while (waitForUpdating){
+                wait();
+            }
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    private static String getSelectedDivinity(JCheckBox[] boxArray) {
+    private void getSelectedDivinity(JCheckBox[] boxArray) {
         String selecdiv = "";
         for (JCheckBox box : boxArray) {
-            if (box.isSelected() == true) { 
-                if (selecdiv.length() > 0) {
-                    selecdiv = selecdiv + ",";
-                }
-                selecdiv = selecdiv + box.getText(); 
+            if (box.isSelected()) {
+                selecdiv = box.getText();
+                selectedNames.add(selecdiv);
             }
         }
-        return selecdiv;
+    }
+
+    public ArrayList<String> getSelectedNames(){
+        ArrayList<String> res = new ArrayList<>();
+        res.addAll(selectedNames);
+        return res;
+    }
+
+    public DivinityT(JFrame frame){
+        jf = frame;
+
     }
 }

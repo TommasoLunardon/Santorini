@@ -6,8 +6,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class PlayerScreen {
-    private JFrame jf = new JFrame("[Welcome to Santorini]");
+    private JFrame jf;
     private JLabel question = new JLabel("Do you want to play on a CLI or on a GUI ?");
+    private boolean condition, waitForUpdate;
 
 
     ImageIcon background = new ImageIcon("/src/main/resources/bg_panelMid.png");
@@ -17,8 +18,15 @@ public class PlayerScreen {
     JButton cli = new JButton("CLI");
     JButton gui = new JButton("GUI");
 
-    public void init() {
+    public PlayerScreen(JFrame frame){
+        jf = frame;
+        label.add(cli);
+        label.add(gui);
+        jf.add(label);
+        jf.setVisible(true);
+    }
 
+    public void init() {
 
         label.setBounds(0,0,background.getIconWidth(), background.getIconHeight());
 
@@ -49,27 +57,36 @@ public class PlayerScreen {
 
         cli.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent evt) {
-                cli();
-                System.out.println(cli());
-                jf.dispose();
+                condition = false;
+                waitForUpdate=false;
+                synchronized (PlayerScreen.this){
+                    PlayerScreen.this.notifyAll();
+                }
             }
         });
         gui.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent evt) {
-                gui();
-                jf.dispose();
+                condition = true;
+                waitForUpdate=false;
+                synchronized (PlayerScreen.this){
+                    PlayerScreen.this.notifyAll();
+                }
             }
         });
+        waitForUpdate=true;
+        try{
+            while (waitForUpdate){
+                wait();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
-    public boolean cli(){
-        return false;
+    public boolean getCondition(){
+        return condition;
     }
-    public boolean gui(){
-        return true;
-    }
-
-
-
 }
 

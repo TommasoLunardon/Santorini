@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 public class Divinity {
 
     String communicationString;
+    String Divinity;
 
     private JFrame jf = new JFrame("[Divinity cards]");
     private JRadioButton apolloname = new JRadioButton("Apollo");
@@ -63,6 +64,24 @@ public class Divinity {
     JButton prometheusButton = new JButton(prometheus);
     JButton humanButton = new JButton(human);
 
+    private boolean wait, wait2;
+
+    private void waitForUpdate() {
+        wait=true;
+        try {
+            while (wait) {
+                wait();
+            }
+        }catch (InterruptedException ignored){}
+    }
+    private void waitForUpdate2() {
+        wait=true;
+        try {
+            while (wait) {
+                wait();
+            }
+        }catch (InterruptedException ignored){}
+    }
 
     public void init() {
 
@@ -79,7 +98,6 @@ public class Divinity {
         human.setImage(human.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT));
 
 
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.getLayeredPane().add(label, Integer.valueOf(Integer.MIN_VALUE));
         JPanel jp = (JPanel) jf.getContentPane();
         jp.setOpaque(false);
@@ -90,12 +108,12 @@ public class Divinity {
 
         select.setBounds(270, 380, 100, 25);
 
-        title.setBounds(255,18,400,25);
-        title.setFont(new Font("Times New Roman",Font.ITALIC,18));
+        title.setBounds(255, 18, 400, 25);
+        title.setFont(new Font("Times New Roman", Font.ITALIC, 18));
 
-        avaibledivinity.setBounds(40,355,180,25);
-        avaibledivinity.setFont(new Font("Times New Roman",Font.ITALIC,16));
-        avaibledivinity1.setBounds(170,355,200,25);
+        avaibledivinity.setBounds(40, 355, 180, 25);
+        avaibledivinity.setFont(new Font("Times New Roman", Font.ITALIC, 16));
+        avaibledivinity1.setBounds(170, 355, 200, 25);
 
         humanname.setBounds(30, 45, 110, 25);
         humanButton.setBounds(40, 69, 85, 122);
@@ -186,50 +204,59 @@ public class Divinity {
 
         select.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent evt) {
-                    if (humanname.isSelected()) {
-                            getDivinity();
-                            jf.dispose();
-                        }
-                    if (apolloname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (artemisname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (atenaname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (demetername.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (hephaestusname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (minotaurname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (panname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    if (prometheusname.isSelected()) {
-                        getDivinity();
-                        jf.dispose();
-                    }
-                    else  {
+                if (humanname.isSelected()) {
+                    getDivinity(true);
+                    jf.dispose();
+                }
+                if (apolloname.isSelected()) {
+                    getDivinity(true);
+                    jf.dispose();
+                }
+                if (artemisname.isSelected()) {
+                    getDivinity(true);
+                    jf.dispose();
+                }
+                if (atenaname.isSelected()) {
+                    getDivinity(true);
+                    jf.dispose();
+                }
+                if (demetername.isSelected()) {
+                    getDivinity(true);
+                    jf.dispose();
+                }
+                if (hephaestusname.isSelected()) {
+                    getDivinity(true);
+                    jf.dispose();
+                }
+                if (minotaurname.isSelected()) {
+                    getDivinity(true);
+                    jf.dispose();
+                }
+                if (panname.isSelected()) {
+                    getDivinity(true);
+                    jf.dispose();
+                }
+                if (prometheusname.isSelected()) {
+                    getDivinity(true);
+                    jf.dispose();
+                } else {
                     select.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             JOptionPane.showMessageDialog(jf, "Please select your Divinity",
                                     "Error", JOptionPane.ERROR_MESSAGE);
+                            wait2=false;
+                            synchronized (Divinity.this){
+                                Divinity.this.notifyAll();
+                            }
                         }
                     });
+                    wait2=true;
+                    waitForUpdate2();
+                }
+                wait = false;
+                synchronized (Divinity.this) {
+                    Divinity.this.notifyAll();
                 }
             }
         });
@@ -239,12 +266,20 @@ public class Divinity {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to" +
                         "the space yours just vacated.","God Of Music",JOptionPane.PLAIN_MESSAGE);
+                wait = false;
+                synchronized (Divinity.this) {
+                    Divinity.this.notifyAll();
+                }
             }
         });
         artemisButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Move: Your Worker may move one additional time, but not back to its initial space.","Goddess of the Hunt",JOptionPane.PLAIN_MESSAGE);
+                wait = false;
+                synchronized (Divinity.this) {
+                    Divinity.this.notifyAll();
+                }
             }
         });
         athenaButton.addActionListener(new ActionListener() {
@@ -252,24 +287,40 @@ public class Divinity {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot\n" +
                         "move up this turn.","Goddess of Wisdom",JOptionPane.PLAIN_MESSAGE);
+                wait = false;
+                synchronized (Divinity.this) {
+                    Divinity.this.notifyAll();
+                }
             }
         });
         atlasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Build: Your Worker may build a dome at any level.","Titan Shouldering the Heavens",JOptionPane.PLAIN_MESSAGE);
+                wait = false;
+                synchronized (Divinity.this) {
+                    Divinity.this.notifyAll();
+                }
             }
         });
         demeterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Build: Your Worker may build one additional time, but not on the same space.","Goddess of the Harvest",JOptionPane.PLAIN_MESSAGE);
+                wait = false;
+                synchronized (Divinity.this) {
+                    Divinity.this.notifyAll();
+                }
             }
         });
         hephaestusButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Build: Your Worker may build one additional block (not dome) on top of your first block.","God of Blacksmiths",JOptionPane.PLAIN_MESSAGE);
+                wait = false;
+                synchronized (Divinity.this) {
+                    Divinity.this.notifyAll();
+                }
             }
         });
         minotaurButton.addActionListener(new ActionListener() {
@@ -277,32 +328,52 @@ public class Divinity {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be\n" +
                         "forced one space straight backwards to an unoccupied space at any level.","Bull-headed Monster",JOptionPane.PLAIN_MESSAGE);
+                wait = false;
+                synchronized (Divinity.this) {
+                    Divinity.this.notifyAll();
+                }
             }
         });
         panButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Win Condition: You also win if your Worker moves down two or more levels.","God of the Wild",JOptionPane.PLAIN_MESSAGE);
+                wait = false;
+                synchronized (Divinity.this) {
+                    Divinity.this.notifyAll();
+                }
             }
         });
         prometheusButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"Your Turn: If your Worker does not move up, it may build both before and after moving.","Titan Benefactor of Mankind",JOptionPane.PLAIN_MESSAGE);
+                wait = false;
+                synchronized (Divinity.this) {
+                    Divinity.this.notifyAll();
+                }
             }
         });
         humanButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(jf,"No power","Mortal",JOptionPane.PLAIN_MESSAGE);
+                wait = false;
+                synchronized (Divinity.this) {
+                    Divinity.this.notifyAll();
+                }
             }
         });
 
+        waitForUpdate();
     }
 
 
     public String getDivinity(){
-        String Divinity = null;
+        return Divinity;
+    }
+
+    private String getDivinity(boolean t){
         if(apolloname.isSelected()){
             Divinity = "Apollo";
         }
@@ -334,6 +405,11 @@ public class Divinity {
             Divinity = "Human";
         }
         return Divinity;
+    }
+
+    public Divinity(JFrame frame){
+        jf = frame;
+
     }
 
 }

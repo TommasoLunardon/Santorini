@@ -8,7 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class PlayerNum {
-    private JFrame jf = new JFrame("[Number of Players]");
+    private JFrame jf;
     private JLabel playernum = new JLabel("Please select the number of Players: ");
     private JRadioButton two = new JRadioButton("2");
     private JRadioButton three = new JRadioButton("3");
@@ -16,6 +16,11 @@ public class PlayerNum {
     ImageIcon background = new ImageIcon("/src/main/resources/bg_panelMid.png");
     JLabel label = new JLabel(background);
     JButton select = new JButton("SELECT");
+    private boolean waitForUpdate,waitForUpdate2;
+
+    public PlayerNum(JFrame frame){
+        jf = frame;
+    }
 
     public void init() {
 
@@ -60,23 +65,50 @@ public class PlayerNum {
                 if (two.isSelected()) {
                     getnum();
                     jf.dispose();
-                }
-
-                if (three.isSelected()) {
-                    getnum();
-                    jf.dispose();
-                }
-                else  {
-                    select.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            JOptionPane.showMessageDialog(jf, "Please select the number of players",
-                                    "Error", JOptionPane.ERROR_MESSAGE);
+                    waitForUpdate2 = false;
+                    synchronized (PlayerNum.this) {
+                        PlayerNum.this.notifyAll();
+                    }
+                } else {
+                    if (three.isSelected()) {
+                        getnum();
+                        jf.dispose();
+                        waitForUpdate2 = false;
+                        synchronized (PlayerNum.this) {
+                            PlayerNum.this.notifyAll();
                         }
-                    });
+                    } else {
+                        select.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                JOptionPane.showMessageDialog(jf, "Please select the number of players",
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                                waitForUpdate2 = false;
+                                synchronized (PlayerNum.this) {
+                                    PlayerNum.this.notifyAll();
+                                }
+                            }
+
+                        });
+                    }
                 }
             }
         });
+        waitForUpdate2=true;
+        while (waitForUpdate2){
+            try{
+                wait();
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }}
+        waitForUpdate=true;
+        try{
+            while (waitForUpdate){
+                wait();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getnum(){

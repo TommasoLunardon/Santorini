@@ -17,7 +17,29 @@ public class PlayerAgeColor {
     private JLabel avaiblecolor1= new JLabel((String) communicationString);
     private JComboBox agelist = new JComboBox();
     private JComboBox color = new JComboBox();
+    private boolean waitForUpdate, waitForUpdate2;
 
+    private void waitForUpdate(){
+        waitForUpdate=true;
+        while (waitForUpdate){
+            try{
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void waitForUpdate2(){
+        waitForUpdate2=true;
+        while (waitForUpdate2){
+            try{
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     ImageIcon background = new ImageIcon("/src/main/resources/bg_panelMid.png");
     JLabel label = new JLabel(background);
@@ -85,6 +107,10 @@ public class PlayerAgeColor {
                 if (agelist.getSelectedItem()!="" && color.getSelectedItem()!="") {
                     ret();
                     jf.dispose();
+                    waitForUpdate=false;
+                    synchronized (PlayerAgeColor.this){
+                        PlayerAgeColor.this.notifyAll();;
+                    }
                 }
                 else  {
                     select.addActionListener(new ActionListener() {
@@ -92,11 +118,17 @@ public class PlayerAgeColor {
                         public void actionPerformed(ActionEvent e) {
                             JOptionPane.showMessageDialog(jf, "Please select your age and the color",
                                     "Error", JOptionPane.ERROR_MESSAGE);
+                            waitForUpdate2=false;
+                            synchronized (PlayerAgeColor.this){
+                                PlayerAgeColor.this.notifyAll();;
+                            }
                         }
                     });
+                    waitForUpdate2();
                 }
             }
         });
+        waitForUpdate();
     }
 
     public int getAge(){

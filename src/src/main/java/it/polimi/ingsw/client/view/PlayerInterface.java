@@ -330,7 +330,6 @@ public class PlayerInterface {
                             if (communicationString.equals("Please Select one worker")) {
 
                                 int workerNum = -1;
-                                Worker workerMoved;
                                 System.out.println("It's your turn, please select your worker ");
 
                                         System.out.println("These are your workers:");
