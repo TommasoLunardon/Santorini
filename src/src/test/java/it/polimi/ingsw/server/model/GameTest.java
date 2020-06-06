@@ -29,7 +29,7 @@ class GameTest {
 
     //Test Case where game is full
     @Test
-    void isGameFull1() throws InvalidInputException {
+    void isGameFull_true() throws InvalidInputException {
         game.addPlayer("aaa", 15, PlayerColor.RED);
         game.addPlayer("abc", 17, PlayerColor.YELLOW);
         assertTrue(game.isGameFull());
@@ -37,13 +37,13 @@ class GameTest {
 
     //Test Case where game is not full
     @Test
-    void isGameFull2() {
+    void isGameFull_false() {
         assertFalse(game.isGameFull());
     }
 
     //Test Case where the parameters are correct
     @Test
-    void addPlayer1() throws InvalidInputException {
+    void addPlayer_correct() throws InvalidInputException {
         game.addPlayer("aaa", 15, PlayerColor.RED);
 
         System.out.println(game.getAvailableColors());
@@ -55,7 +55,7 @@ class GameTest {
 
     //Test Case where the color has already been chosen
     @Test
-    void addPlayer2() throws InvalidInputException {
+    void addPlayer_wrong_color() throws InvalidInputException {
         game.addPlayer("aaa", 15, PlayerColor.RED);
 
         try{game.addPlayer("abc", 17, PlayerColor.RED);}catch (InvalidInputException e) {
@@ -66,7 +66,7 @@ class GameTest {
 
     //Test Case where the ID has already been chosen
     @Test
-    void addPlayer3() throws InvalidInputException {
+    void addPlayer_wrong_ID() throws InvalidInputException {
         game.addPlayer("aaa", 15, PlayerColor.RED);
 
         try{game.addPlayer("aaa", 17, PlayerColor.YELLOW);}catch (InvalidInputException e) {
@@ -75,14 +75,14 @@ class GameTest {
 
     //Test Case where the age isn't an acceptable number
     @Test
-    void addPlayer4() {
+    void addPlayer_wrong_number() {
         try{game.addPlayer("aaa", 170, PlayerColor.YELLOW);}catch (InvalidInputException e) {
             System.out.println("Correct Response");}
     }
 
     //Single Test Case to check that all the operations are correct
     @Test
-    void becomeDivinity() throws InvalidInputException {
+    void becomeDivinity_correct() throws InvalidInputException {
         game.addPlayer("aaa", 15, PlayerColor.RED);
         game.addPlayer("abc", 17, PlayerColor.YELLOW);
 
@@ -102,7 +102,7 @@ class GameTest {
 
     //Test Case where the player belongs to the game
     @Test
-    void removePlayer1() throws InvalidInputException, InvalidIndicesException, InvalidBoxException {
+    void removePlayer_correct() throws InvalidInputException, InvalidIndicesException, InvalidBoxException {
         game.addPlayer("aaa", 15, PlayerColor.RED);
         game.addPlayer("abc", 16, PlayerColor.YELLOW);
         ArrayList<Player> otherPlayers = new ArrayList<>();
@@ -128,7 +128,7 @@ class GameTest {
 
     //Test Case where the player doesn't belong to the game
     @Test
-    void removePlayer2() {
+    void removePlayer_Exception() {
         try{
             game.removePlayer(new Player("a",12,PlayerColor.RED, game.getMap()));
         }catch(InvalidInputException e){
@@ -138,7 +138,7 @@ class GameTest {
 
     //Test Case where the input is correct
     @Test
-    void selectGodCards1() throws InvalidInputException {
+    void selectGodCards_correct() throws InvalidInputException {
         ArrayList<String> cards = new ArrayList<>();
         cards.add("Arthemis");
         cards.add("Apollo");
@@ -150,7 +150,7 @@ class GameTest {
 
     //Test Case where cards aren't valid
     @Test
-    void selectGodCards2() {
+    void selectGodCards_Exception() {
         ArrayList<String> cards = new ArrayList<>();
         cards.add("Arthemis");
         cards.add("Buddha");
@@ -161,7 +161,7 @@ class GameTest {
 
     //Test Case where cards aren't enough, or are too many
     @Test
-    void selectGodCards3() {
+    void selectGodCards_Exception_number() {
         ArrayList<String> cards = new ArrayList<>();
         cards.add("Arthemis");
         try{game.selectGodCards(cards);}catch(InvalidInputException e){
@@ -171,7 +171,7 @@ class GameTest {
 
     //Test Case where the parameters are correct
     @Test
-    void chooseCard1() throws InvalidInputException {
+    void chooseCard_correct() throws InvalidInputException {
         game.addPlayer("aaa",15,PlayerColor.RED);
         ArrayList<String> gods = new ArrayList<>();
         gods.addAll(Arrays.asList(new String[]{"Apollo", "Arthemis"}));
@@ -188,7 +188,7 @@ class GameTest {
 
     //Test Case where the player doesn't belong to the game
     @Test
-    void chooseCard2() throws InvalidInputException {
+    void chooseCard_Exception_Player() throws InvalidInputException {
         Player p = new Player("a",12,PlayerColor.YELLOW,new Map());
         ArrayList<String> gods = new ArrayList<>();
         gods.addAll(Arrays.asList(new String[]{"Apollo", "Arthemis"}));
@@ -200,7 +200,7 @@ class GameTest {
 
     //Test Case where the god selected isn't available
     @Test
-    void chooseCard3() throws InvalidInputException {
+    void chooseCard_Exception_God() throws InvalidInputException {
         game.addPlayer("aaa",15,PlayerColor.RED);
         ArrayList<String> gods = new ArrayList<>();
         gods.addAll(Arrays.asList(new String[]{"Apollo", "Arthemis"}));
@@ -213,7 +213,7 @@ class GameTest {
 
     //Test Case where the player belongs to the game
     @Test
-    void chooseStarter1() throws InvalidInputException {
+    void chooseStarter_correct() throws InvalidInputException {
         game.addPlayer("aaa", 15, PlayerColor.RED);
         game.addPlayer("abc", 16, PlayerColor.YELLOW);
 
@@ -226,7 +226,7 @@ class GameTest {
 
     //Test Case where the player doesn't belong to the game
     @Test
-    void chooseStarter2() {
+    void chooseStarter_Exception() {
 
         try{game.chooseStarter(new Player("aaa",12,PlayerColor.RED,new Map()));}catch (InvalidInputException e){
             System.out.println("Correct Response");
@@ -235,7 +235,7 @@ class GameTest {
 
     //Test Case where the parameters are correct
     @Test
-    void placeWorkers1() throws InvalidInputException, InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
+    void placeWorkers_correct() throws InvalidInputException, InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
         game.addPlayer("aaa", 14, PlayerColor.RED);
         Box box1 = game.getMap().getBox(0,0);
         Box box2 = game.getMap().getBox(1,0);
@@ -254,18 +254,15 @@ class GameTest {
 
     //Test Case where the boxes aren't correct (Don't belong to the map)
     @Test
-    void placeWorkers2() throws InvalidInputException, InvalidIndicesException, InvalidBoxException {
+    void placeWorkers_Exception() throws InvalidInputException, InvalidIndicesException{
         Map m1 = new Map();
         game.addPlayer("aaa", 14, PlayerColor.RED);
         Box box1 = m1.getBox(0,0);
         Box box2 = m1.getBox(1,0);
 
-        try{game.placeWorkers(game.getPlayers().get(0),box1,box2);}catch(InvalidInputException e) {
+        try{game.placeWorkers(game.getPlayers().get(0),box1,box2);}catch(InvalidInputException | InvalidBoxException e) {
             System.out.println("Correct Response");
         }
     }
 
-    @Test
-    void turn() {
-    }
 }

@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Class Game with all the methods needed to create and play a match
- * @author Tommaso Lunardon
+ * Class Game that represents the game model
  */
 public class Game implements Serializable{
     private ArrayList<Player> players;
@@ -47,41 +46,69 @@ public class Game implements Serializable{
 
     }
 
+    /**
+     *
+     * @return the colors available
+     */
     public ArrayList<String> getAvailableColors() {
         ArrayList<String> a = availableColors;
         return a;
     }
-
+    /**
+     *
+     * @return the players in the game
+     */
     public ArrayList<Player> getPlayers() {
         ArrayList<Player> p = players;
         return p;
     }
-
+    /**
+     *
+     * @return the game's map
+     */
     public Map getMap() {
         Map m = map;
         return m;
     }
-
+    /**
+     *
+     * @return the number of players
+     */
     public int getNumPlayers() {
         return numPlayers;
     }
-
+    /**
+     *
+     * @return true <==> the game is with god cards
+     */
     public boolean isWithGods() {
         return withGods;
     }
-
+    /**
+     *
+     * @return the minimum age of the players in the game
+     */
     public int getMinAge(){
         return minAge;
     }
-
+    /**
+     *
+     * @return true <==> one player has Athena as card
+     */
     private boolean isWithAthena() {
         return withAthena;
     }
-
+    /**
+     *
+     * @return true <==> the game has all the players needed to perform the match
+     */
     public boolean isGameFull(){
         return this.getPlayers().size() >= this.getNumPlayers();
     }
-
+    /**
+     *
+     * @return the god cards of the game
+     */
     public ArrayList<String> getGods() {
         ArrayList<String> g = gameGods;
         return g;

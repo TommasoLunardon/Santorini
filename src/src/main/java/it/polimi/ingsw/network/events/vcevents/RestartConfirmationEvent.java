@@ -4,7 +4,9 @@ import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
 
 import java.io.IOException;
-
+/**
+ * Event that communicates the decision of restarting selected by the client
+ */
 public class RestartConfirmationEvent extends VCEvent {
     private boolean condition;
 

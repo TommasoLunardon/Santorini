@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.view.divinities;
 
 /**
- * create an Athena instance for out stamp
- * @author Gabriele Gatti
+ * Class used to describe Athena Card to the client
  */
 public class Athena extends Divinity {
     public Athena(){

@@ -1,7 +1,9 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.exceptions.WrongMovementException;
-
+import it.polimi.ingsw.server.model.exceptions.*;
+/**
+ * The class PlayerArthemis represents a player using Arthemis as god
+ */
 public class PlayerArthemis extends PlayerNotAthena {
 
             public PlayerArthemis(String id, Integer age, PlayerColor color, Map map) {
@@ -17,17 +19,17 @@ public class PlayerArthemis extends PlayerNotAthena {
              * @param worker selected worker to perform the movement
              * @throws WrongMovementException if the movement isn't valid
              */
-            public void moveArthemis(Box nextBox1, Box nextBox2, Worker worker) throws WrongMovementException {
+            public void moveArthemis(Box nextBox1, Box nextBox2, Worker worker) throws WrongMovementException, InvalidMovementException, WorkerNotExistException, InvalidIndicesException, AthenaConditionException {
 
                     Box initialBox = worker.getBox();
                 if (nextBox2.equals(initialBox)) {
                     throw new WrongMovementException();
                 }
-                    worker.move(nextBox1);
+                    super.move(worker, nextBox1);
                 try {
-                    worker.move(nextBox2);
-                }catch(WrongMovementException e){
-                    worker.move(initialBox);
+                   super.move(worker, nextBox2);
+                }catch(WrongMovementException | AthenaConditionException e){
+                    super.move(worker, initialBox);
                     throw new WrongMovementException();
                 }
 

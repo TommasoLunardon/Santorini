@@ -6,7 +6,9 @@ import it.polimi.ingsw.server.model.Game;
 
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-
+/**
+ * Event that confirms to the client which card he chose
+ */
 public class CardSelectionEvent extends MVEvent {
 
     private String selectedGod;

@@ -4,6 +4,9 @@ import it.polimi.ingsw.network.messages.Message;
 
 import java.io.IOException;
 
+/**
+ * Interface that represents the server to be implemented in our network
+ */
 public interface ServerConnection {
 
     /**

@@ -7,7 +7,9 @@ import it.polimi.ingsw.server.model.Game;
 
 import java.io.*;
 import java.net.SocketTimeoutException;
-
+/**
+ * Event that sends to the client the updated version of the current game
+ */
 public class GameUpdatingEvent extends MVEvent implements Serializable {
 
     public String toString(){

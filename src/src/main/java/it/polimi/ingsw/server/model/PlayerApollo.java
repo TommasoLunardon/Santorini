@@ -3,7 +3,9 @@ package it.polimi.ingsw.server.model;
 import it.polimi.ingsw.server.model.exceptions.*;
 
 import java.util.ArrayList;
-
+/**
+ * The class PlayerApollo represents a player using Apollo as god
+ */
 public class PlayerApollo extends PlayerNotAthena {
 
    public PlayerApollo(String id, Integer age, PlayerColor color, Map map) {
@@ -26,7 +28,6 @@ public class PlayerApollo extends PlayerNotAthena {
        if (!worker.getBox().getNeighbours().contains(nextBox) || nextBox.hasDome() || nextBox.getLevel() > worker.getBox().getLevel() + 1) {
            throw new WrongMovementException();
        }
-
 
        if(nextBox.hasWorker()) {
 

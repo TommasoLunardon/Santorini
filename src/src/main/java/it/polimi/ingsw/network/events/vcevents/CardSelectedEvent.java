@@ -4,7 +4,9 @@ import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
 
 import java.io.IOException;
-
+/**
+ * Event that communicate the selection of a card by the client
+ */
 public class CardSelectedEvent extends VCEvent {
 
     private String card;

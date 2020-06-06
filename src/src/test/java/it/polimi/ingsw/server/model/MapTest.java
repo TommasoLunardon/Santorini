@@ -8,10 +8,6 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * @author Tommaso Lunardon
- */
-
 class MapTest {
 
     private Map map;
@@ -28,7 +24,7 @@ class MapTest {
 
     //Test Case with correct parameters
     @Test
-    void getBox1() throws Exception {
+    void getBox_correct() throws Exception {
         ArrayList<Box> boxes = new ArrayList<Box>();
         for (int i = 0; i<5; i++){
             for(int j = 0; j<5; j++) {
@@ -41,7 +37,7 @@ class MapTest {
 
     //Test Case with wrong parameters
     @Test
-    void getBox2() throws Exception {
+    void getBox_Exception(){
         try{map.getBox(5,5); }catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,23 +46,4 @@ class MapTest {
         }
     }
 
-    //Test Case where Map doesn't contain any building completed
-    @Test
-    void getCompletedBuildings1() {
-        assertEquals(0,map.getCompletedBuildings());
-    }
-
-    //Test Case where Map contains some buildings completed
-    @Test
-    void getCompletedBuildings2() {
-
-        for(int n = 0; n<3; n++) {
-            try {
-                map.getBox(2, n).setLevel(4);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        assertEquals(3,map.getCompletedBuildings());
-    }
 }

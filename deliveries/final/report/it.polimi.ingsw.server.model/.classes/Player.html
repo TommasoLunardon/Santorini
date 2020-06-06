@@ -1,0 +1,272 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Player</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.server.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Player (it.polimi.ingsw.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Player</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98%
+  </span>
+  <span class="absValue">
+    (50/ 51)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.server.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.server.model.exceptions.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.io.Serializable;
+<i>6</i>&nbsp;import java.util.ArrayList;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * The class Player represents a Santorini&#39;s player, it has a playerID that uniquely identifies him/her.
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;public class Player implements Serializable {
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    private final String playerID;
+<i>15</i>&nbsp;    private final int playerAge;
+<i>16</i>&nbsp;    private final PlayerColor color;
+<i>17</i>&nbsp;    private  Worker worker1;
+<i>18</i>&nbsp;    private  Worker worker2;
+<i>19</i>&nbsp;    final Map playerMap;
+<i>20</i>&nbsp;    private boolean isLoser;
+<i>21</i>&nbsp;    private boolean isWinner;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;
+<b class="fc"><i>24</i>&nbsp;    public Player(String playerID, int playerAge, PlayerColor color, Map playerMap) throws NullPointerException {</b>
+<i>25</i>&nbsp;
+<b class="fc"><i>26</i>&nbsp;        if(playerID == null|| color == null||playerMap==null){throw new NullPointerException();}</b>
+<i>27</i>&nbsp;
+<b class="fc"><i>28</i>&nbsp;        this.playerID = playerID;</b>
+<b class="fc"><i>29</i>&nbsp;        this.playerAge = playerAge;</b>
+<b class="fc"><i>30</i>&nbsp;        this.color = color;</b>
+<b class="fc"><i>31</i>&nbsp;        this.playerMap = playerMap;</b>
+<b class="fc"><i>32</i>&nbsp;        this.worker1 = null;</b>
+<b class="fc"><i>33</i>&nbsp;        this.worker2 = null;</b>
+<b class="fc"><i>34</i>&nbsp;        isLoser = false;</b>
+<b class="fc"><i>35</i>&nbsp;        isWinner = false;</b>
+<b class="fc"><i>36</i>&nbsp;    }</b>
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * Method used to set the first worker starting box
+<i>40</i>&nbsp;     * @param box is the selected box
+<i>41</i>&nbsp;     * @throws NullPointerException if box == null
+<i>42</i>&nbsp;     * @throws InvalidBoxException if the selected box isn&#39;t valid
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    public void setWorker1(Box box) throws NullPointerException, InvalidBoxException {
+<b class="fc"><i>45</i>&nbsp;        if(box==null){throw new NullPointerException();}</b>
+<i>46</i>&nbsp;
+<b class="fc"><i>47</i>&nbsp;        if(!box.getMap().equals(playerMap)||box.hasDome()||box.hasWorker()){throw new InvalidBoxException();}</b>
+<i>48</i>&nbsp;
+<b class="fc"><i>49</i>&nbsp;        this.worker1 = new Worker(this,box);</b>
+<b class="fc"><i>50</i>&nbsp;    }</b>
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * Method used to set the second worker starting box
+<i>53</i>&nbsp;     * @param box is the selected box
+<i>54</i>&nbsp;     * @throws NullPointerException if box == null
+<i>55</i>&nbsp;     * @throws InvalidBoxException if the selected box isn&#39;t valid
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    public void setWorker2(Box box)throws NullPointerException, InvalidBoxException{
+<b class="fc"><i>58</i>&nbsp;        if(box==null){throw new NullPointerException();}</b>
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;        if(!box.getMap().equals(playerMap)|| box.hasDome()||box.hasWorker()){throw new InvalidBoxException();}</b>
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;
+<b class="fc"><i>63</i>&nbsp;        this.worker2 = new Worker(this,box);</b>
+<b class="fc"><i>64</i>&nbsp;    }</b>
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /**
+<i>67</i>&nbsp;     *
+<i>68</i>&nbsp;     * @return  the player&#39;s ID
+<i>69</i>&nbsp;     */
+<i>70</i>&nbsp;   public String getPlayerID(){
+<b class="fc"><i>71</i>&nbsp;       return playerID;</b>
+<i>72</i>&nbsp;   }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /**
+<i>75</i>&nbsp;     *
+<i>76</i>&nbsp;     * @return  the player&#39;s age
+<i>77</i>&nbsp;     */
+<i>78</i>&nbsp;    public int getPlayerAge() {
+<b class="fc"><i>79</i>&nbsp;        return playerAge;</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;    /**
+<i>82</i>&nbsp;     *
+<i>83</i>&nbsp;     * @return  the player&#39;s color
+<i>84</i>&nbsp;     */
+<i>85</i>&nbsp;    public PlayerColor getColor(){
+<b class="fc"><i>86</i>&nbsp;        return this.color;</b>
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     *
+<i>91</i>&nbsp;     * @return the workers belonging to the player
+<i>92</i>&nbsp;     */
+<i>93</i>&nbsp;    public ArrayList&lt;Worker&gt; getWorkers(){
+<i>94</i>&nbsp;
+<b class="fc"><i>95</i>&nbsp;        ArrayList&lt;Worker&gt; workers = new ArrayList&lt;Worker&gt;();</b>
+<b class="fc"><i>96</i>&nbsp;        workers.add(worker1);</b>
+<b class="fc"><i>97</i>&nbsp;        workers.add(worker2);</b>
+<b class="fc"><i>98</i>&nbsp;      return workers;</b>
+<i>99</i>&nbsp;    }
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    /**
+<i>102</i>&nbsp;     * Method used to remove the player&#39;s workers from the map
+<i>103</i>&nbsp;     * @throws WorkerNotExistException if the player doesn&#39;t have any workers on the map
+<i>104</i>&nbsp;     */
+<i>105</i>&nbsp;    void removeWorkers() throws  WorkerNotExistException{
+<i>106</i>&nbsp;
+<b class="fc"><i>107</i>&nbsp;        if(worker1==null||worker2==null) {throw new WorkerNotExistException();}</b>
+<i>108</i>&nbsp;
+<b class="fc"><i>109</i>&nbsp;        getWorkers().get(0).getBox().removeWorker();</b>
+<b class="fc"><i>110</i>&nbsp;        getWorkers().get(1).getBox().removeWorker();</b>
+<b class="fc"><i>111</i>&nbsp;    }</b>
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    /**
+<i>114</i>&nbsp;     *
+<i>115</i>&nbsp;     * @return true &lt;==&gt; the player wins
+<i>116</i>&nbsp;     */
+<i>117</i>&nbsp;    public boolean isWinner() {
+<b class="fc"><i>118</i>&nbsp;        return isWinner;</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Method used to set the player as winner
+<i>123</i>&nbsp;     * @param condition specifies whether the player wins or not
+<i>124</i>&nbsp;     */
+<i>125</i>&nbsp;    void setWinner(boolean condition) {
+<b class="fc"><i>126</i>&nbsp;        isWinner = condition;</b>
+<b class="fc"><i>127</i>&nbsp;    }</b>
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    /**
+<i>130</i>&nbsp;     *
+<i>131</i>&nbsp;     * @return the player&#39;s map
+<i>132</i>&nbsp;     */
+<i>133</i>&nbsp;    Map getPlayerMap() {
+<b class="fc"><i>134</i>&nbsp;        Map m = playerMap;</b>
+<b class="fc"><i>135</i>&nbsp;        return m;</b>
+<i>136</i>&nbsp;    }
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;    /**
+<i>139</i>&nbsp;     * @return true &lt;==&gt; the player is able to move with at least one worker
+<i>140</i>&nbsp;     */
+<i>141</i>&nbsp;    public boolean canMove() throws WorkerNotExistException {
+<b class="fc"><i>142</i>&nbsp;        boolean check = false;</b>
+<b class="fc"><i>143</i>&nbsp;        for (int i = 0; i&lt;getWorkers().size(); i++){</b>
+<b class="fc"><i>144</i>&nbsp;            if(getWorkers().get(i).canMove()){check = true;}</b>
+<i>145</i>&nbsp;        }
+<b class="fc"><i>146</i>&nbsp;        return check;</b>
+<i>147</i>&nbsp;    }
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    /**
+<i>150</i>&nbsp;     * @return true &lt;==&gt; the player is able to build with at least one worker
+<i>151</i>&nbsp;     */
+<i>152</i>&nbsp;    public boolean canBuild(){
+<b class="fc"><i>153</i>&nbsp;        boolean check = false;</b>
+<b class="fc"><i>154</i>&nbsp;        for (int i = 0; i&lt;getWorkers().size(); i++){</b>
+<b class="fc"><i>155</i>&nbsp;            if(getWorkers().get(i).canBuild()){check = true;}</b>
+<i>156</i>&nbsp;        }
+<b class="fc"><i>157</i>&nbsp;        return check;</b>
+<i>158</i>&nbsp;    }
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;    /**
+<i>161</i>&nbsp;     * Method used to perform a worker&#39;s movement
+<i>162</i>&nbsp;     * @param worker is the worker that will perform the movement
+<i>163</i>&nbsp;     * @param nextBox is the box in which the worker will move
+<i>164</i>&nbsp;     * @throws InvalidMovementException if the worker can&#39;t be chosen
+<i>165</i>&nbsp;     */
+<i>166</i>&nbsp;    public void move(Worker worker, Box nextBox) throws InvalidMovementException, AthenaConditionException, WrongMovementException, WorkerNotExistException, InvalidIndicesException {
+<i>167</i>&nbsp;
+<b class="fc"><i>168</i>&nbsp;        if (!getWorkers().contains(worker)){ throw new InvalidMovementException();}</b>
+<i>169</i>&nbsp;
+<b class="fc"><i>170</i>&nbsp;            worker.move(nextBox);</b>
+<i>171</i>&nbsp;
+<b class="fc"><i>172</i>&nbsp;        if (worker.isWinner()){</b>
+<b class="nc"><i>173</i>&nbsp;            setWinner(true);</b>
+<i>174</i>&nbsp;        }
+<b class="fc"><i>175</i>&nbsp;    }</b>
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    /**
+<i>178</i>&nbsp;     * Method used to perform a worker&#39;s construction
+<i>179</i>&nbsp;     * @param worker is the worker that will build
+<i>180</i>&nbsp;     * @param selectedBox is the box in which the worker will build a block
+<i>181</i>&nbsp;     * @throws InvalidConstructionException if the worker can&#39;t be chosen
+<i>182</i>&nbsp;     */
+<i>183</i>&nbsp;    public void build(Worker worker, Box selectedBox) throws InvalidConstructionException, WrongConstructionException {
+<b class="fc"><i>184</i>&nbsp;        if (!getWorkers().contains(worker)){ throw new InvalidConstructionException();}</b>
+<i>185</i>&nbsp;
+<b class="fc"><i>186</i>&nbsp;            worker.build(selectedBox);</b>
+<b class="fc"><i>187</i>&nbsp;    }</b>
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-05 16:07</div>
+</div>
+</body>
+</html>

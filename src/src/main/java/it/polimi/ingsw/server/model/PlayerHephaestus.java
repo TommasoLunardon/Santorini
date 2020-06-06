@@ -1,7 +1,9 @@
 package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.server.model.exceptions.WrongConstructionException;
-
+/**
+ * The class PlayerHephaestus represents a player using Hephaestus as god
+ */
 public class PlayerHephaestus extends PlayerNotAthena {
 
             public PlayerHephaestus(String id, Integer age, PlayerColor color, Map map) {

@@ -5,7 +5,9 @@ import it.polimi.ingsw.network.events.VCEventSender;
 import it.polimi.ingsw.server.model.PlayerColor;
 
 import java.io.IOException;
-
+/**
+ * Event that communicates the selection of a player's data by the client
+ */
 public class PlayerDataEnteredEvent extends VCEvent {
 
     private  int age;

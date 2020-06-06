@@ -3,7 +3,9 @@ package it.polimi.ingsw.server.model;
 import it.polimi.ingsw.server.model.exceptions.*;
 
 import java.util.ArrayList;
-
+/**
+ * The class PlayerMinotaur represents a player using Minotaur as god
+ */
 public class PlayerMinotaur extends PlayerNotAthena {
 
             public PlayerMinotaur(String id, Integer age, PlayerColor color, Map map) {

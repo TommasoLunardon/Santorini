@@ -4,7 +4,9 @@ import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
 
 import java.io.IOException;
-
+/**
+ * Event that communicates the selection of game settings (Use of cards or not) by the client
+ */
 public class WithGodsSelectedEvent extends VCEvent {
 
     private boolean condition;

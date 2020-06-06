@@ -5,6 +5,9 @@ import it.polimi.ingsw.network.events.MVEventSender;
 
 import java.net.SocketTimeoutException;
 
+/**
+ * Event used to check the connection
+ */
 public class MVPingEvent extends MVEvent {
 
     public MVPingEvent(String target) {

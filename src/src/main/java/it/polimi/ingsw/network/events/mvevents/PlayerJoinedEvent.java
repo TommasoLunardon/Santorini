@@ -9,7 +9,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.SocketTimeoutException;
-
+/**
+ * Event that communicates to the client its data when he/her joins the game
+ */
 public class PlayerJoinedEvent extends MVEvent implements Serializable {
 
     private Player player;

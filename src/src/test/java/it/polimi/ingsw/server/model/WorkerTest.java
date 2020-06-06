@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.model.exceptions.NotValidLevelException;
+import it.polimi.ingsw.server.model.exceptions.WorkerNotExistException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -120,26 +122,25 @@ class WorkerTest {
         }
     }
 
+    //Test Case in which the worker belongs to a standard player and isn't able to move in the box (box has worker)
     @Test
-    void isWinner() {
+    void canMove3() throws WorkerNotExistException {
+        ArrayList<Box> neighbours = worker.getBox().getNeighbours();
+        Box next = neighbours.get(0);
+        next.setWorker(new Worker(new Player("b", 10, PlayerColor.BLUE, worker.getBox().getMap()),next));
+
+        assertFalse(worker.canMove(next));
     }
 
+    //Test Case in which the worker belongs to a standard player and isn't able to move in the box (box's level is too high)
     @Test
-    void isLoser() {
+    void canMove4() throws NotValidLevelException, WorkerNotExistException {
+        ArrayList<Box> neighbours = worker.getBox().getNeighbours();
+        Box next = neighbours.get(0);
+        next.setLevel(3);
+
+        assertFalse(worker.canMove(next));
+
     }
 
-    //Single Test Case to verify the correct value returned
-    @Test
-    void getBox() {
-
-    }
-
-    //Single Test Case to verify the correct value returned
-    @Test
-    void getPlayer() {
-    }
-
-    @Test
-    void setBox() {
-    }
 }

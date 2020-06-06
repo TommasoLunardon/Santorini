@@ -3,7 +3,9 @@ package it.polimi.ingsw.server.model;
 import it.polimi.ingsw.server.model.exceptions.*;
 
 import java.util.ArrayList;
-
+/**
+ * The class PlayerNotAthena represents a generic player playing against someone with Athena's card
+ */
 public class PlayerNotAthena extends PlayerDivinity{
 
     private boolean freeMovement;
@@ -23,15 +25,15 @@ public class PlayerNotAthena extends PlayerDivinity{
      */
     public void move(Worker worker, Box nextBox) throws AthenaConditionException, InvalidMovementException, WrongMovementException, WorkerNotExistException, InvalidIndicesException {
         if (checkFreeMovement()){
-
             super.move(worker,nextBox);
         }
         else{
             int oldLevel = worker.getBox().getLevel();
 
-            worker.move(nextBox);
-
-            if(oldLevel < worker.getBox().getLevel()){
+            if(oldLevel >= nextBox.getLevel()) {
+                super.move(worker, nextBox);
+            }
+            else{
                 throw new AthenaConditionException();
             }
 
@@ -39,7 +41,7 @@ public class PlayerNotAthena extends PlayerDivinity{
     }
 
     /**
-     * Method used to update the Athena Condition (Pattern Observer)
+     * Method used to update the Athena Condition
      * @param condition is the updated AthenaCondition
      */
     void update(boolean condition){

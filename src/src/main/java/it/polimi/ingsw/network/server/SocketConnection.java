@@ -14,11 +14,6 @@ import java.util.logging.Logger;
 
 import static it.polimi.ingsw.network.JsonHelper.deserialization;
 
-
-/**
- * The SocketConnection class implements a socket that receives the message.
- */
-
 public class SocketConnection implements Runnable, ServerConnection {
 
     private final Socket socket;
@@ -56,12 +51,6 @@ public class SocketConnection implements Runnable, ServerConnection {
         return server;
     }
 
-
-    /**
-     *
-     * run method continues to listen for an input and sends the messages to the server
-     *
-     */
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
@@ -102,24 +91,11 @@ public class SocketConnection implements Runnable, ServerConnection {
         return lastReceived;
     }
 
-
-    /**
-     *
-     * The isActive method is used to check if the SocketConnection is active.
-     *
-     */
-
     @Override
     public boolean isActive() {
         return active && !socket.isClosed();
     }
 
-
-    /**
-     * The sendServerMessage method elaborates the server message
-     *
-     * @param serverMessage is the string message to be elaborated.
-     */
 
     @Override
     public void sendServerMessage(Message serverMessage){

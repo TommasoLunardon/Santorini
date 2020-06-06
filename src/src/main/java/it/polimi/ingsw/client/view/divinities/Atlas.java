@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.view.divinities;
 
 /**
- * create an Atlas instance for out stamp
- * @author Gabriele Gatti
+ * Class used to describe Atlas Card to the client
  */
 public class Atlas extends Divinity {
     public Atlas(){

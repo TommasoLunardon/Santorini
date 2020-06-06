@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.view.divinities;
 
 /**
- ** create an Artemis instance for out stamp
- * @author Gabriele Gatti
+ * Class used to describe Arthemis Card to the client
  */
 public class Arthemis extends Divinity {
     public Arthemis(){

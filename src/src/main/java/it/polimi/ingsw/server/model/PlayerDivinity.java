@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.model;
 
 
 /**
- * @author Gabriele Gatti, Tommaso Lunardon
  * Abstract subclass of Player, used to play games with Divinity Cards
  */
 

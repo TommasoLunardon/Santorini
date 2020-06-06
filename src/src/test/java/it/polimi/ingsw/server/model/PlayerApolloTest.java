@@ -25,7 +25,7 @@ class PlayerApolloTest {
 
     //Test Case where the special Apollo movement works correctly
     @Test
-    void move1() throws InvalidBoxException, InvalidIndicesException, WorkerNotExistException, WrongMovementException, AthenaConditionException, InvalidMovementException {
+    void move_correct() throws InvalidBoxException, InvalidIndicesException, WorkerNotExistException, WrongMovementException, AthenaConditionException, InvalidMovementException {
         Box box1 = map.getBox(0,0);
 
         Box box2 = map.getBox(0,1);
@@ -43,7 +43,7 @@ class PlayerApolloTest {
 
     //Test Case where the selected box doesn't have a worker
     @Test
-    void moveApollo2() throws InvalidIndicesException, InvalidBoxException, AthenaConditionException, WorkerNotExistException {
+    void moveApollo_Exception_empty() throws InvalidIndicesException, InvalidBoxException, AthenaConditionException, WorkerNotExistException {
 
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(0,1);
@@ -58,7 +58,7 @@ class PlayerApolloTest {
 
     //Test Case where the selected box has a worker of the Apollo Player
     @Test
-    void moveApollo3() throws InvalidBoxException, InvalidIndicesException, WorkerNotExistException, AthenaConditionException {
+    void moveApollo_Exception_same_worker() throws InvalidBoxException, InvalidIndicesException, WorkerNotExistException, AthenaConditionException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(0,1);
         player.setWorker1(box1);
@@ -73,7 +73,7 @@ class PlayerApolloTest {
 
     //Test Case to verify the additional movement possibilities for Apollo
     @Test
-    void canMove1() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
+    void canMove_correct() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(4,4);
         map.getBox(0,1).setDome(true);
@@ -91,7 +91,7 @@ class PlayerApolloTest {
 
     //Test Case to verify the additional movement possibilities for Apollo (Case where the movement isn't possible)
     @Test
-    void canMove2() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
+    void canMove_wrong() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(1,0);
         map.getBox(0,1).setDome(true);

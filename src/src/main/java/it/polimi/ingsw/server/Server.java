@@ -27,6 +27,7 @@ public class Server implements Runnable, Serializable {
     private static final int socketPort = 65535;
     public static final Logger LOGGER = Logger.getLogger("Server");
 
+
     private ArrayList<String> users;
     private static Controller controller;
     private static VirtualView virtualView;
@@ -151,8 +152,14 @@ public class Server implements Runnable, Serializable {
             Game baseGame = new Game(getGame().getNumPlayers(),getGame().isWithGods());
 
             for(int i = 0; i < getGame().getNumPlayers(); i++){
-                Player clone = getGame().getPlayers().get(i);
-                baseGame.addPlayer(clone.getPlayerID(),clone.getPlayerAge(),clone.getColor());
+                try {
+                    Player clone = getGame().getPlayers().get(i);
+                    baseGame.addPlayer(clone.getPlayerID(), clone.getPlayerAge(), clone.getColor());
+                }catch(IndexOutOfBoundsException e){
+                    Player clone = controller.removedPlayers.get(controller.removedPlayers.size()-1);
+                    controller.removedPlayers.remove(controller.removedPlayers.size()-1);
+                    baseGame.addPlayer(clone.getPlayerID(), clone.getPlayerAge(), clone.getColor());
+                }
             }
             controller.setGame(baseGame);
 

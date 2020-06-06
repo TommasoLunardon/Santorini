@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * @author Gabriele Gatti
  *  Class used to manage the user experience during the game.
  */
 
@@ -35,7 +34,7 @@ public class PlayerInterface {
     private static final int port = 65535;
 
     /**
-     * Create Client's connection to the Server and starts game
+     * Create Client's connection to the Server and starts the game
      */
     public PlayerInterface(){
 
@@ -84,7 +83,7 @@ public class PlayerInterface {
     }
 
     /**
-     * Method used to communicate with the server and progress in the game.
+     * Method used to provide to the client the interaction with the server
      */
     private void catchMVEvent() {
         String communicationString;
@@ -105,7 +104,6 @@ public class PlayerInterface {
 
                             if (communicationString.equals("Please wait for the opponent to finish its action")) {
                                 System.out.println("Please wait for your turn");
-
 
                             }
                             if (communicationString.equals("Please insert the number of Players")) {
@@ -330,6 +328,7 @@ public class PlayerInterface {
                             if (communicationString.equals("Please Select one worker")) {
 
                                 int workerNum = -1;
+                                Worker workerMoved;
                                 System.out.println("It's your turn, please select your worker ");
 
                                         System.out.println("These are your workers:");
@@ -456,7 +455,7 @@ public class PlayerInterface {
                 try{
                     InvalidInputEvent event = (InvalidInputEvent) JsonHelper.deserialization(receivedMessage.getContent());
                     if (event != null && event.getTarget().equalsIgnoreCase(iD)) {
-                        System.out.println("Something went wrong, please try again");
+                        System.out.println("Your input wasn't correct, please try again");
                     }
 
                 }catch (ClassCastException | JsonSyntaxException ignored) {}

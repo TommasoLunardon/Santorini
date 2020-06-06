@@ -20,7 +20,7 @@ public class Controller implements Serializable {
     private Game game;
     private VirtualView view;
     private ArrayList<String> users;
-
+    public  ArrayList<Player> removedPlayers = new ArrayList<>();
 
     public Game getGame(){
         Game g = game;
@@ -298,9 +298,10 @@ public class Controller implements Serializable {
                 setActive(ID);
 
                 if (!player.canMove()) {
-                    game.removePlayer(player);
                     LoserPlayerEvent event = new LoserPlayerEvent(ID);
                     game.notify(event);
+                    game.removePlayer(player);
+                    removedPlayers.add(player);
                     game.gameUpdate();
                     break;
                 }
@@ -367,6 +368,7 @@ public class Controller implements Serializable {
                     LoserPlayerEvent event = new LoserPlayerEvent(player.getPlayerID());
                     game.notify(event);
                     game.removePlayer(player);
+                    removedPlayers.add(player);
                     game.gameUpdate();
                     break;
                 }
@@ -444,7 +446,7 @@ public class Controller implements Serializable {
     }
 
     /**
-     * Method to perform the Standard Player Movement
+     * Method used to perform the Standard Player Movement
      * @param player is the player performing the turn
      * @param ID is the player's ID
      * @param selectedWorker is the worker used to perform the turn
@@ -475,7 +477,7 @@ public class Controller implements Serializable {
 
 
     /**
-     * Method to perform the Standard Player Construction
+     * Method used to perform the Standard Player Construction
      * @param player is the player performing the turn
      * @param ID is the player's ID
      * @param selectedWorker is the worker used to perform the turn
@@ -536,7 +538,7 @@ public class Controller implements Serializable {
             game.gameUpdate();
             return true;
 
-        } catch (WrongMovementException e) {
+        } catch (WrongMovementException | AthenaConditionException | InvalidMovementException | WorkerNotExistException | InvalidIndicesException e) {
             InvalidMovementEvent event6 = new InvalidMovementEvent(ID);
             game.notify(event6);
             return false;
@@ -675,31 +677,21 @@ public class Controller implements Serializable {
             return false;
         }
         try {
-            Box startingBox = selectedWorker.getBox();
-            int startingLevel = startingBox.getLevel();
-
-            player.build(selectedWorker, box1);
-            player.move(selectedWorker,box2);
-
-            if(box2.getLevel() > startingLevel){
-                box1.setLevel(box1.getLevel()-1);
-                box1.setDome(false);
-                player.move(selectedWorker, startingBox);
-                throw new InvalidMovementException();
-            }
+            PlayerPrometheus player1 = (PlayerPrometheus) player;
+            player1.movePrometheus(box1, box2, selectedWorker);
             game.gameUpdate();
             return true;
-
-        } catch (WrongConstructionException | InvalidConstructionException | InvalidMovementException | AthenaConditionException | WrongMovementException | WorkerNotExistException | InvalidIndicesException | NotValidLevelException e) {
+        } catch (WrongConstructionException | InvalidConstructionException | PrometheusMovementException | NotValidLevelException e) {
             InvalidConstructionEvent event5 = new InvalidConstructionEvent(ID);
             game.notify(event5);
             return false;
         }
+
     }
 
 
     /**
-     * Method to communicate that a player is active, and all others are inactive
+     * Method used to communicate that a player is active, and all others are inactive
      * @param ID is the username that is active
      */
     public void setActive(String ID) throws SocketTimeoutException {

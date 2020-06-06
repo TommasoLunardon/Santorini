@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.view.divinities;
 
 /**
- * create a Minotaur instance for out stamp
- * @author Gabriele Gatti
+ * Class used to describe Minotaur Card to the client
  */
 public class Minotaur extends Divinity {
     public Minotaur(){

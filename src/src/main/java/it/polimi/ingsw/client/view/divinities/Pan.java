@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.view.divinities;
 
 /**
- * create a Pan instance for out stamp
- * @author Gabriele Gatti
+ * Class used to describe Pan Card to the client
  */
 public class Pan extends Divinity {
     public Pan(){

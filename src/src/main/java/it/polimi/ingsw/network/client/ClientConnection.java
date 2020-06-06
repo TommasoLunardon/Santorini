@@ -3,8 +3,10 @@ package it.polimi.ingsw.network.client;
 import it.polimi.ingsw.network.messages.Message;
 
 import java.io.IOException;
-import java.net.Socket;
 
+/**
+ * Abstract class that represents a connection to the server (client-side)
+ */
 public abstract class ClientConnection {
     private final String username;
     private final int port;

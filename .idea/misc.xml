@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavadocGenerationManager">
-    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/JavaDoc" />
-    <option name="OPEN_IN_BROWSER" value="false" />
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/deliveries/final/javadoc" />
+    <option name="OPTION_HIERARCHY" value="false" />
+    <option name="OPTION_SEPARATE_INDEX" value="false" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">

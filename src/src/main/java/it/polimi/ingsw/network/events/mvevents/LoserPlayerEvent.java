@@ -4,7 +4,9 @@ import it.polimi.ingsw.network.events.MVEvent;
 import it.polimi.ingsw.network.events.MVEventSender;
 
 import java.net.SocketTimeoutException;
-
+/**
+ * Event that communicates to the client that he lost
+ */
 public class LoserPlayerEvent extends MVEvent {
 
     public LoserPlayerEvent(String target) {

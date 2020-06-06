@@ -3,11 +3,10 @@ package it.polimi.ingsw.client.view;
 import it.polimi.ingsw.server.model.PlayerColor;
 
 /**
- * Class used to control the specific visual unit box
- * @author Gabriele Gatti
+ * Class used to represent a map's box for the client
  */
 
-public class BoxCLI {
+public class BoxCLI extends Box {
     private int dimension;
     private  String[][] box;
     private  int level;
@@ -21,6 +20,9 @@ public class BoxCLI {
         plantGrass();
     }
 
+    /**
+     * Method used to graphically represent the box's border
+     */
     private void setBorder(){
         for (int x = 0; x < dimension; x++) {
             for (int y = 0; y < dimension; y++) {
@@ -31,6 +33,9 @@ public class BoxCLI {
         }
     }
 
+    /**
+     * Method used to graphically represent a dome on the box
+     */
     public void buildDome() {
         for  (int y = 0; y < dimension; y++){
             for (int x = 0; x < dimension; x++) {
@@ -39,7 +44,9 @@ public class BoxCLI {
         }
         setBorder();
     }
-
+    /**
+     * Method used to graphically represent the blocks on the box
+     */
     public void buildStructure() {
         String label="\u001b[48;5;249m";
         String place= label+ "\u001b[38;5;249m" + "▉\t";
@@ -57,6 +64,9 @@ public class BoxCLI {
         setBorder();
     }
 
+    /**
+     * Method used to represent the box at level 0
+     */
     public void plantGrass(){
         for (int x = 0; x < dimension; x++) {
             for (int y = 0; y < dimension; y++) {
@@ -66,6 +76,9 @@ public class BoxCLI {
         setBorder();
     }
 
+    /**
+     * Method used to represent a box freed by its worker
+     */
     public void leaveWorker(){
         if (level==0){
             plantGrass();
@@ -77,6 +90,11 @@ public class BoxCLI {
         setBorder();
     }
 
+    /**
+     * Method used to represent graphically the player's color
+     * @param color is the player's color
+     * @return the color name
+     */
     private String catchColor(PlayerColor color){
         String colorW;
         if (color==PlayerColor.BLUE){
@@ -91,16 +109,28 @@ public class BoxCLI {
         return colorW;
     }
 
+    /**
+     * Method used to set a worker in the box (x,y)
+     * @param color worker's color
+     */
     public void setWorker(PlayerColor color){
         setWorker(catchColor(color));
     }
-
+    /**
+     * Method used to set a worker in the box (x,y)
+     * @param colorWorker worker's color
+     */
     public void setWorker(String colorWorker){
         boolean condition;
         condition= level == 0;
         setColorWorker(colorWorker,condition);
     }
 
+    /**
+     * Method used to graphically set a worker's color
+     * @param colorWorker is the color of the worker
+     * @param onGrass is true <==> the box has level = 0
+     */
     private void setColorWorker(String colorWorker, boolean onGrass) {
         int middle = dimension/2;
         String land;
@@ -124,12 +154,20 @@ public class BoxCLI {
         setBorder();
     }
 
+    /**
+     * Method used to graphically represent the box on the screen
+     * @param line
+     */
     public void printBox(int line){
         for(int j = 0; j<dimension; j++){
             System.out.print(box[j][line]+"\u001b[0m");
         }
     }
 
+    /**
+     * Method used to graphically represent a box at a given level
+     * @param level is the box's level
+     */
     public void setLevel(int level) {
         this.level = level;
         if(level == 0){

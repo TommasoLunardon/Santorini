@@ -29,7 +29,7 @@ class PlayerAthenaTest {
 
     //Test Case where the AthenaCondition is set to true;
     @Test
-    void move1() throws InvalidIndicesException, NotValidLevelException, InvalidBoxException, InvalidMovementException, AthenaConditionException, WrongMovementException, WorkerNotExistException {
+    void move_upLevel() throws InvalidIndicesException, NotValidLevelException, InvalidBoxException, InvalidMovementException, AthenaConditionException, WrongMovementException, WorkerNotExistException {
         ArrayList<PlayerNotAthena> observer = new ArrayList<PlayerNotAthena>();
         PlayerNotAthena player1 = new PlayerPan("a", 13, PlayerColor.YELLOW, map);
         PlayerNotAthena player2 = new PlayerApollo("a", 13, PlayerColor.YELLOW, map);
@@ -53,7 +53,7 @@ class PlayerAthenaTest {
 
     //Test Case where the AthenaCondition is set to false;
     @Test
-    void move2() throws InvalidBoxException, NotValidLevelException, InvalidIndicesException, InvalidMovementException, AthenaConditionException, WrongMovementException, WorkerNotExistException {
+    void move_NoUpLevel() throws InvalidBoxException, NotValidLevelException, InvalidIndicesException, InvalidMovementException, AthenaConditionException, WrongMovementException, WorkerNotExistException {
         ArrayList<PlayerNotAthena> observer = new ArrayList<PlayerNotAthena>();
         PlayerNotAthena player1 = new PlayerPan("a", 13, PlayerColor.YELLOW, map);
         PlayerNotAthena player2 = new PlayerApollo("a", 13, PlayerColor.YELLOW, map);

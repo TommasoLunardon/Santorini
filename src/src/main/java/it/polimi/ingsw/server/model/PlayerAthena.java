@@ -3,7 +3,9 @@ package it.polimi.ingsw.server.model;
 import it.polimi.ingsw.server.model.exceptions.*;
 
 import java.util.ArrayList;
-
+/**
+ * The class PlayerAthena represents a player using Athena as god
+ */
 public class PlayerAthena extends PlayerDivinity {
 
             private ArrayList<PlayerNotAthena> observer = new ArrayList<PlayerNotAthena>();
@@ -17,7 +19,7 @@ public class PlayerAthena extends PlayerDivinity {
             }
 
             /**
-             *Method to assign other players as Observers of Athena Condition
+             *Method used to assign other players as Observers of Athena Condition
              * @param observersList is the list of players playing the same game as the one having Athena as god
              */
             void attach(ArrayList<PlayerNotAthena> observersList) {
@@ -47,7 +49,7 @@ public class PlayerAthena extends PlayerDivinity {
             }
 
             /**
-             * Method used to update the Athena Condition an notify the Observers
+             * Method used to update the Athena Condition and notify the Observers
              * @param condition is the updated AthenaCondition
              */
             private void notifyPlayers(boolean condition) {

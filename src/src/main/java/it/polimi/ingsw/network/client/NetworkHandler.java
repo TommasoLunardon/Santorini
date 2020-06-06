@@ -15,7 +15,7 @@ import java.net.SocketTimeoutException;
 import java.util.*;
 
 /**
- * Class Network Handler handles the client's communications with the server.
+ * Class that handles the client's communications with the server.
  */
 
 public class NetworkHandler implements VCEventSender {

@@ -10,8 +10,6 @@ public abstract class Box {
 
     public abstract int getLevel();
 
-    //public abstract String[][] getBox();
-
     public abstract void setWorker(PlayerColor color) throws InputFailedException;
 
     public abstract void printBox(int line);
@@ -22,5 +20,4 @@ public abstract class Box {
 
     public abstract void buildDome();
 
-    public abstract void setBoxWhitOutWorker();
 }

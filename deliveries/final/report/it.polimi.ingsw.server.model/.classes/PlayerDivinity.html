@@ -1,0 +1,117 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PlayerDivinity</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.server.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PlayerDivinity (it.polimi.ingsw.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerDivinity</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/ 6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.server.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;/**
+<i>5</i>&nbsp; * Abstract subclass of Player, used to play games with Divinity Cards
+<i>6</i>&nbsp; */
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;    public abstract class PlayerDivinity extends Player{
+<i>9</i>&nbsp;    private String godName;
+<i>10</i>&nbsp;    private Integer nPlayer;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    public PlayerDivinity(String id, Integer age, Map map, PlayerColor color, Integer nPlayer, String godName){
+<b class="fc"><i>13</i>&nbsp;        super(id, age, color, map);</b>
+<b class="fc"><i>14</i>&nbsp;        this.nPlayer = nPlayer;</b>
+<b class="fc"><i>15</i>&nbsp;        this.godName = godName;</b>
+<b class="fc"><i>16</i>&nbsp;    }</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * @return The name of the God&#39;s Card assigned to the player
+<i>20</i>&nbsp;     */
+<i>21</i>&nbsp;    public String getGodName(){
+<i>22</i>&nbsp;
+<b class="nc"><i>23</i>&nbsp;        return godName;</b>
+<i>24</i>&nbsp;    }
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * @return the  accepted number of players in the game for the specific card used
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    public int getnPlayer(){
+<b class="nc"><i>30</i>&nbsp;        return this.nPlayer;</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;}
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-05 16:07</div>
+</div>
+</body>
+</html>

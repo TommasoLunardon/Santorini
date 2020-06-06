@@ -25,7 +25,7 @@ class PlayerMinotaurTest {
 
     //Test Case where the movement is correct
     @Test
-    void moveMinotaur1() throws InvalidIndicesException, InvalidBoxException, WrongMovementException, WorkerNotExistException, InvalidMovementException, AthenaConditionException {
+    void moveMinotaur_correct() throws InvalidIndicesException, InvalidBoxException, WrongMovementException, WorkerNotExistException, InvalidMovementException, AthenaConditionException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(0,1);
         Box box3 = map.getBox(0,2);
@@ -44,7 +44,7 @@ class PlayerMinotaurTest {
 
     //Test Case where the movement isn't correct (the following box is occupied)
     @Test
-    void moveMinotaur2() throws InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
+    void moveMinotaur_wrong_occupied() throws InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(0,1);
         Box box3 = map.getBox(0,2);
@@ -59,7 +59,7 @@ class PlayerMinotaurTest {
 
     //Test Case where the movement isn't correct (the following box doesn't exist in the map)
     @Test
-    void moveMinotaur3() throws InvalidIndicesException, InvalidBoxException, WrongMovementException, WorkerNotExistException, InvalidMovementException, AthenaConditionException {
+    void moveMinotaur_wrong_noNextBox() throws InvalidIndicesException, InvalidBoxException, WrongMovementException, WorkerNotExistException, InvalidMovementException, AthenaConditionException {
         Box box1 = map.getBox(0,3);
         Box box2 = map.getBox(0,4);
 
@@ -73,7 +73,7 @@ class PlayerMinotaurTest {
 
     //Test Case to verify the additional movement possibilities for Minotaur
     @Test
-    void canMove1() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
+    void canMove_correct() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(4,4);
         map.getBox(0,1).setDome(true);
@@ -91,7 +91,7 @@ class PlayerMinotaurTest {
 
     //Test Case to verify the additional movement possibilities for Minotaur (Case where the movement isn't possible)
     @Test
-    void canMove2() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
+    void canMove_false_noNextBoxFree() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(4,4);
         map.getBox(0,1).setDome(true);
@@ -114,7 +114,7 @@ class PlayerMinotaurTest {
 
     //Test Case to verify the additional movement possibilities for Minotaur (Case where the movement isn't possible)
     @Test
-    void canMove3() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
+    void canMove_false_Dome() throws InvalidIndicesException, WorkerNotExistException, InvalidBoxException {
         Box box1 = map.getBox(1,0);
         Box box2 = map.getBox(4,4);
         map.getBox(0,1).setDome(true);

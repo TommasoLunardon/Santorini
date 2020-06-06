@@ -1,7 +1,9 @@
 package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.server.model.exceptions.*;
-
+/**
+ * The class PlayerPan represents a player using Pan as god
+ */
 public class PlayerPan extends PlayerNotAthena {
 
             public PlayerPan(String id, Integer age, PlayerColor color, Map map) {

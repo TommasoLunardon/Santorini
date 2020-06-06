@@ -2,7 +2,9 @@ package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.server.model.exceptions.NotValidLevelException;
 import it.polimi.ingsw.server.model.exceptions.WrongConstructionException;
-
+/**
+ * The class PlayerDemeter represents a player using Demeter as god
+ */
 public class PlayerDemeter extends PlayerNotAthena {
 
             public PlayerDemeter(String id, Integer age, PlayerColor color, Map map) {

@@ -6,8 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * The class Player represents a Santorini's player, it has a playerID that uniquely identifies player.
- * @author Jing Huang, Tommaso Lunardon
+ * The class Player represents a Santorini's player, it has a playerID that uniquely identifies him/her.
  */
 
 public class Player implements Serializable {
@@ -36,6 +35,12 @@ public class Player implements Serializable {
         isWinner = false;
     }
 
+    /**
+     * Method used to set the first worker starting box
+     * @param box is the selected box
+     * @throws NullPointerException if box == null
+     * @throws InvalidBoxException if the selected box isn't valid
+     */
     public void setWorker1(Box box) throws NullPointerException, InvalidBoxException {
         if(box==null){throw new NullPointerException();}
 
@@ -43,7 +48,12 @@ public class Player implements Serializable {
 
         this.worker1 = new Worker(this,box);
     }
-
+    /**
+     * Method used to set the second worker starting box
+     * @param box is the selected box
+     * @throws NullPointerException if box == null
+     * @throws InvalidBoxException if the selected box isn't valid
+     */
     public void setWorker2(Box box)throws NullPointerException, InvalidBoxException{
         if(box==null){throw new NullPointerException();}
 
@@ -53,15 +63,25 @@ public class Player implements Serializable {
         this.worker2 = new Worker(this,box);
     }
 
+    /**
+     *
+     * @return  the player's ID
+     */
    public String getPlayerID(){
        return playerID;
    }
 
-
+    /**
+     *
+     * @return  the player's age
+     */
     public int getPlayerAge() {
         return playerAge;
     }
-
+    /**
+     *
+     * @return  the player's color
+     */
     public PlayerColor getColor(){
         return this.color;
     }
@@ -90,14 +110,26 @@ public class Player implements Serializable {
         getWorkers().get(1).getBox().removeWorker();
     }
 
+    /**
+     *
+     * @return true <==> the player wins
+     */
     public boolean isWinner() {
         return isWinner;
     }
 
+    /**
+     * Method used to set the player as winner
+     * @param condition specifies whether the player wins or not
+     */
     void setWinner(boolean condition) {
         isWinner = condition;
     }
 
+    /**
+     *
+     * @return the player's map
+     */
     Map getPlayerMap() {
         Map m = playerMap;
         return m;

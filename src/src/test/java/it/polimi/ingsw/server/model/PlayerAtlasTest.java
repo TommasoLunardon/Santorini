@@ -29,7 +29,7 @@ class PlayerAtlasTest {
     //Single Test Case to verify the correct execution of the construction, the cases of Exception are the same tested
     //for the standard method BUILD
     @Test
-    void buildAtlas() throws InvalidIndicesException, InvalidBoxException, WrongConstructionException {
+    void buildAtlas_correct() throws InvalidIndicesException, InvalidBoxException, WrongConstructionException {
         Box box1= map.getBox(0,0);
         Box box2 =map.getBox(0,1);
         player.setWorker1(box1);

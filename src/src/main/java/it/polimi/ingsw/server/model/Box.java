@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * @author Tommaso Lunardon
+ * Class Box that represents a box in the game map
  */
 
 
@@ -208,7 +208,7 @@ public class Box implements Serializable {
 
 
     /**
-     *
+     * Method used to set the box's level
      * @param level = new box's level
      * @throws NotValidLevelException if the new level isn't acceptable by the game's rules
      */
@@ -221,7 +221,7 @@ public class Box implements Serializable {
     }
 
     /**
-     *
+     * Method used to set a dome in the box
      * @param hasDome indicates whether the box will or won't have a Dome
      */
     public void setDome(boolean hasDome) {
@@ -229,7 +229,7 @@ public class Box implements Serializable {
     }
 
     /**
-     *
+     * Method used to set a worker in the box
      * @param worker is the worker that will be on the box
      * @throws NullPointerException if the worker doesn't exist
      */
@@ -250,6 +250,10 @@ public class Box implements Serializable {
         this.worker = null;
     }
 
+    /**
+     *
+     * @return the map containing this box
+     */
     public Map getMap() {
         Map m = map;
         return m;

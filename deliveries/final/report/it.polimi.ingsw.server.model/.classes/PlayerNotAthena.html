@@ -1,0 +1,156 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PlayerNotAthena</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.server.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PlayerNotAthena (it.polimi.ingsw.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerNotAthena</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.8%
+  </span>
+  <span class="absValue">
+    (23/ 24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.server.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.server.model.exceptions.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.ArrayList;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;public class PlayerNotAthena extends PlayerDivinity{
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;    private boolean freeMovement;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    public PlayerNotAthena(String id, Integer age, Map map, PlayerColor color, Integer nPlayer, String godName){
+<i>12</i>&nbsp;
+<b class="fc"><i>13</i>&nbsp;        super(id, age, map, color,  nPlayer, godName);</b>
+<i>14</i>&nbsp;
+<b class="fc"><i>15</i>&nbsp;        freeMovement = true;</b>
+<b class="fc"><i>16</i>&nbsp;    }</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * Override of the movement method, to satisfy the eventual Athena&#39;s restriction
+<i>20</i>&nbsp;     * @param worker is the worker that will perform the movement
+<i>21</i>&nbsp;     * @param nextBox is the box in which the worker will move
+<i>22</i>&nbsp;     * @throws AthenaConditionException if the Athena Condition isn&#39;t followed
+<i>23</i>&nbsp;     */
+<i>24</i>&nbsp;    public void move(Worker worker, Box nextBox) throws AthenaConditionException, InvalidMovementException, WrongMovementException, WorkerNotExistException, InvalidIndicesException {
+<b class="fc"><i>25</i>&nbsp;        if (checkFreeMovement()){</b>
+<b class="fc"><i>26</i>&nbsp;            super.move(worker,nextBox);</b>
+<i>27</i>&nbsp;        }
+<i>28</i>&nbsp;        else{
+<b class="fc"><i>29</i>&nbsp;            int oldLevel = worker.getBox().getLevel();</b>
+<i>30</i>&nbsp;
+<b class="fc"><i>31</i>&nbsp;            if(oldLevel &gt;= nextBox.getLevel()) {</b>
+<b class="nc"><i>32</i>&nbsp;                super.move(worker, nextBox);</b>
+<i>33</i>&nbsp;            }
+<i>34</i>&nbsp;            else{
+<b class="fc"><i>35</i>&nbsp;                throw new AthenaConditionException();</b>
+<i>36</i>&nbsp;            }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;        }
+<b class="fc"><i>39</i>&nbsp;    }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * Method used to update the Athena Condition
+<i>43</i>&nbsp;     * @param condition is the updated AthenaCondition
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    void update(boolean condition){
+<i>46</i>&nbsp;
+<b class="fc"><i>47</i>&nbsp;        freeMovement = condition;</b>
+<b class="fc"><i>48</i>&nbsp;    }</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    Boolean checkFreeMovement(){
+<i>51</i>&nbsp;
+<b class="fc"><i>52</i>&nbsp;        return this.freeMovement;</b>
+<i>53</i>&nbsp;    }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    @Override
+<i>56</i>&nbsp;    public boolean canMove() throws WorkerNotExistException {
+<b class="fc"><i>57</i>&nbsp;        if(!checkFreeMovement() &amp;&amp; super.canMove()){</b>
+<b class="fc"><i>58</i>&nbsp;            boolean check = false;</b>
+<b class="fc"><i>59</i>&nbsp;            for(int i = 0; i &lt; getWorkers().size(); i++) {</b>
+<b class="fc"><i>60</i>&nbsp;                Box b = this.getWorkers().get(i).getBox();</b>
+<b class="fc"><i>61</i>&nbsp;                ArrayList&lt;Box&gt; neighbours = b.getNeighbours();</b>
+<b class="fc"><i>62</i>&nbsp;                for (Box neighbour : neighbours) {</b>
+<b class="fc"><i>63</i>&nbsp;                    if (neighbour.getLevel() &lt;= b.getLevel() &amp;&amp; !neighbour.hasWorker() &amp;&amp; !neighbour.hasDome()) {</b>
+<b class="fc"><i>64</i>&nbsp;                        check = true;</b>
+<i>65</i>&nbsp;                    }
+<b class="fc"><i>66</i>&nbsp;                }</b>
+<i>67</i>&nbsp;            }
+<b class="fc"><i>68</i>&nbsp;            return check;</b>
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;        }
+<b class="fc"><i>71</i>&nbsp;        else{return super.canMove();}</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-05 16:07</div>
+</div>
+</body>
+</html>

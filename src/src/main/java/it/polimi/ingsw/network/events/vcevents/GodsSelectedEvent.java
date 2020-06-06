@@ -5,7 +5,9 @@ import it.polimi.ingsw.network.events.VCEventSender;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
+/**
+ * Event that communicates the selection of the game cards by the client
+ */
 public class GodsSelectedEvent extends VCEvent {
     private ArrayList<String> gods;
 

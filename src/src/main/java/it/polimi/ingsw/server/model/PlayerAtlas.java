@@ -1,7 +1,9 @@
 package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.server.model.exceptions.WrongConstructionException;
-
+/**
+ * The class PlayerAtlas represents a player using Atlas as god
+ */
 public class PlayerAtlas extends PlayerNotAthena {
 
             public PlayerAtlas(String id, Integer age, PlayerColor color, Map map) {

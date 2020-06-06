@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.view.divinities;
 
 /**
- * create a Prometheus instance for out stamp
- * @author Gabriele Gatti
+ * Class used to describe Prometheus Card to the client
  */
 public class Prometheus extends Divinity {
     public Prometheus(){

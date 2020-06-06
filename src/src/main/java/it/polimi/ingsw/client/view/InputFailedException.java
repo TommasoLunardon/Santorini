@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.view;
 
 /**
- * these exceptions could be used for signal a failed input
- * @author Gabriele Gatti
+ * Exception thrown when some methods are used with an invalid input
  */
 
 public class InputFailedException extends Exception{

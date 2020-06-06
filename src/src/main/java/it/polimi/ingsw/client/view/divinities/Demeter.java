@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.view.divinities;
 
 /**
- * create a Demeter instance for out stamp
- * @author Gabriele Gatti
+ * Class used to describe Demeter Card to the client
  */
 public class Demeter extends Divinity {
     public Demeter(){

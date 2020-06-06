@@ -27,7 +27,7 @@ class PlayerDemeterTest {
 
     // Test Case where the construction is correct
     @Test
-    void buildDemeter1() throws InvalidIndicesException, InvalidBoxException, WrongConstructionException {
+    void buildDemeter_correct() throws InvalidIndicesException, InvalidBoxException, WrongConstructionException {
         Box box1= map.getBox(0,0);
         Box box2 =map.getBox(0,1);
         Box box3 =map.getBox(1,0);
@@ -41,7 +41,7 @@ class PlayerDemeterTest {
 
     //Test Case where the construction isn't correct (Two boxes are the same)
     @Test
-    void buildDemeter2() throws InvalidIndicesException, InvalidBoxException {
+    void buildDemeter_wrong_sameBox() throws InvalidIndicesException, InvalidBoxException {
         Box box1= map.getBox(0,0);
         Box box2 =map.getBox(0,1);
         Box box3 =map.getBox(0,1);

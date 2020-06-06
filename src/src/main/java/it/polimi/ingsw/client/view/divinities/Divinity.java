@@ -1,10 +1,8 @@
 package it.polimi.ingsw.client.view.divinities;
 
 /**
- * These class create a support an some methods for others class DivinityCLI
- * @author Gabriele Gatti
+ * Class used to describe a generic Divinity Card to the client
  */
-
 public class Divinity {
     private String name;
     private String description;

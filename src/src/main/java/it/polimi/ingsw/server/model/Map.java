@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 /**
  * Class Map is the class used to represent the Santorini's map
- * @author Tommaso Lunardon
  */
 
 public class Map implements Serializable {
@@ -42,22 +41,4 @@ public class Map implements Serializable {
 
     }
 
-    /**
-     * @return the number of completed buildings in the map
-     */
-    int getCompletedBuildings() {
-        int x = 0;
-        for(int i = 0; i < 5; i++){
-            for(int j = 0; j < 5; j++) {
-                try {
-                    if (getBox(i, j).getLevel() == 4) {
-                        x++;
-                    }
-                } catch (InvalidIndicesException e) {
-                    System.out.println(e);;
-                }
-            }
-        }
-        return x;
-    }
 }

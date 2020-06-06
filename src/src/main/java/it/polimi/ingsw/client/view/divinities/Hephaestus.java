@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.view.divinities;
 
 /**
- * create a Hephaestus instance for out stamp
- * @author Gabriele Gatti
+ * Class used to describe Hephaestus Card to the client
  */
 public class Hephaestus extends Divinity {
     public Hephaestus(){

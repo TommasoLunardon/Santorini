@@ -13,7 +13,9 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.logging.Logger;
 
-
+/**
+ * Class used to implement the client's connection to the server
+ */
 public class SocketConnection extends ClientConnection implements Runnable {
 
     private transient java.net.Socket socket;
@@ -29,7 +31,7 @@ public class SocketConnection extends ClientConnection implements Runnable {
 
     /**
      *
-     * The startConnection method obtain a connection with server
+     * The startConnection method obtains a connection with server
      *
      */
     @Override
@@ -47,7 +49,7 @@ public class SocketConnection extends ClientConnection implements Runnable {
     }
     /**
      *
-     * The sendClientMessage send message to server
+     * The sendClientMessage sends a message to server
      *
      */
     @Override
@@ -73,7 +75,7 @@ public class SocketConnection extends ClientConnection implements Runnable {
     }
     /**
      *
-     * The disconnect method interrupts the thread
+     * The disconnect method interrupts the connection
      *
      */
     private void disconnect() {

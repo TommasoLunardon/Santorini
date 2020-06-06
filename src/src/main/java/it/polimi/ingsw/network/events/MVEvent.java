@@ -14,7 +14,7 @@ public abstract class MVEvent extends Event {
     }
 
     /**
-     *  Manage the forwarding of the event
+     * Method used to perform the forwarding of the event
      * @param eventSender class that performs the event forwarding
      */
     public abstract void manage(MVEventSender eventSender) throws SocketTimeoutException;

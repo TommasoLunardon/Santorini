@@ -4,7 +4,9 @@ import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
 
 import java.io.IOException;
-
+/**
+ * Event that communicates the selection of the starter by the client
+ */
 public class StarterSelectedEvent extends VCEvent {
 
     private String starter;

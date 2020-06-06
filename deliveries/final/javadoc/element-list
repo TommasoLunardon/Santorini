@@ -1,0 +1,15 @@
+unnamed package
+it.polimi.ingsw.client.view
+it.polimi.ingsw.client.view.divinities
+it.polimi.ingsw.network
+it.polimi.ingsw.network.client
+it.polimi.ingsw.network.events
+it.polimi.ingsw.network.events.mvevents
+it.polimi.ingsw.network.events.vcevents
+it.polimi.ingsw.network.messages
+it.polimi.ingsw.network.server
+it.polimi.ingsw.server
+it.polimi.ingsw.server.controller
+it.polimi.ingsw.server.controller.exceptions
+it.polimi.ingsw.server.model
+it.polimi.ingsw.server.model.exceptions

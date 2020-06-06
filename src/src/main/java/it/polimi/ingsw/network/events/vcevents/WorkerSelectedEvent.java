@@ -1,14 +1,13 @@
 package it.polimi.ingsw.network.events.vcevents;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
-import it.polimi.ingsw.server.model.Worker;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
+/**
+ * Event that communicates the selection of a worker by the client
+ */
 public class WorkerSelectedEvent extends VCEvent {
 
     private int worker;

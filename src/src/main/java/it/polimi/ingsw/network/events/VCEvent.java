@@ -16,7 +16,7 @@ public abstract class VCEvent extends Event {
     }
 
     /**
-     *  Manage the forwarding of the event
+     *Method used to manage the forwarding of the event
      * @param eventSender class that performs the event forwarding
      */
     public abstract void manage(VCEventSender eventSender) throws IOException;

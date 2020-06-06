@@ -27,7 +27,7 @@ class PlayerTest {
 
     //Test Case with correct execution of the method
     @Test
-    void setWorker1_A() throws InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
+    void setWorker_correct() throws InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
         Box box = map.getBox(0,0);
 
         player.setWorker1(box);
@@ -37,7 +37,7 @@ class PlayerTest {
 
     //Test Case with box == null;
     @Test
-    void setWorker1_B() throws InvalidBoxException {
+    void setWorker_NullPointerException() throws InvalidBoxException {
        Box box = null;
         try{player.setWorker1(box);}catch(NullPointerException e){
             System.out.println("CORRECT");
@@ -46,7 +46,7 @@ class PlayerTest {
 
     //Test Case with worker's Map not valid;
     @Test
-    void setWorker1_C() throws InvalidIndicesException {
+    void setWorker_NotValidMap() throws InvalidIndicesException {
         Map map1 = new Map();
         Box box = map1.getBox(0,0);
 
@@ -90,7 +90,7 @@ class PlayerTest {
 
     //Test Case where the Player can move
     @Test
-    void canMove1() throws InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
+    void canMove_true() throws InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(1,1);
 
@@ -102,7 +102,7 @@ class PlayerTest {
 
     //Test Case where the Player can't move
     @Test
-    void canMove2() throws InvalidBoxException, InvalidIndicesException, WorkerNotExistException {
+    void canMove_false() throws InvalidBoxException, InvalidIndicesException, WorkerNotExistException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(4,4);
 
@@ -121,7 +121,7 @@ class PlayerTest {
 
     //Test Case where the player can build
     @Test
-    void canBuild1() throws InvalidIndicesException, InvalidBoxException {
+    void canBuild_true() throws InvalidIndicesException, InvalidBoxException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(1,1);
 
@@ -133,7 +133,7 @@ class PlayerTest {
 
     //Test Case where the player can't build
     @Test
-    void canBuild2() throws InvalidBoxException, InvalidIndicesException {
+    void canBuild_false() throws InvalidBoxException, InvalidIndicesException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(4,4);
 
@@ -152,7 +152,7 @@ class PlayerTest {
 
     //Test Case where the movement is correct
     @Test
-    void move1() throws InvalidIndicesException, InvalidBoxException, InvalidMovementException, AthenaConditionException, WrongMovementException, WorkerNotExistException {
+    void move_correct() throws InvalidIndicesException, InvalidBoxException, InvalidMovementException, AthenaConditionException, WrongMovementException, WorkerNotExistException {
         Box box1 = map.getBox(0,0);
         Box box2 = map.getBox(0,1);
 
@@ -167,7 +167,7 @@ class PlayerTest {
 
     //Test Case where the movement isn't correct (Worker doesn't belong to the player)
     @Test
-    void move2() throws InvalidIndicesException, InvalidMovementException, AthenaConditionException {
+    void move_WrongWorker() throws InvalidIndicesException, InvalidMovementException, AthenaConditionException {
         Worker w = new Worker(new Player("b", 15, PlayerColor.BLUE,map), map.getBox(2,2));
 
         try{player.move(w,map.getBox(1,2));}catch(InvalidMovementException e){
@@ -181,7 +181,7 @@ class PlayerTest {
 
     //Test case where the construction is correct
     @Test
-    void build1() throws InvalidIndicesException, InvalidBoxException, InvalidConstructionException, WrongConstructionException {
+    void build_correct() throws InvalidIndicesException, InvalidBoxException, InvalidConstructionException, WrongConstructionException {
         Box box1 = map.getBox(0,0);
 
         player.setWorker1(box1);
@@ -194,7 +194,7 @@ class PlayerTest {
 
     //Test case where the construction isn't correct (Worker doesn't belong to the player)
     @Test
-    void build2() throws InvalidIndicesException, WrongConstructionException {
+    void build_WrongWorker() throws InvalidIndicesException, WrongConstructionException {
         Worker w = new Worker(new Player("b", 15, PlayerColor.BLUE,map), map.getBox(2,2));
 
         try{player.build(w,map.getBox(1,2));}catch(InvalidConstructionException  e){
@@ -204,7 +204,7 @@ class PlayerTest {
 
     //Test Case where the operation is performed correctly
     @Test
-    void removeWorkers1() throws InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
+    void removeWorkers_correct() throws InvalidIndicesException, InvalidBoxException, WorkerNotExistException {
         player.setWorker1(map.getBox(1,1));
         player.setWorker2(map.getBox(0,0));
 
@@ -218,7 +218,7 @@ class PlayerTest {
 
     //Test Case where the player doesn't have workers
     @Test
-    void removeWorkers2(){
+    void removeWorkers_NoWorkers(){
 
         try{player.removeWorkers();}catch (WorkerNotExistException e){
             System.out.println("Correct Response");

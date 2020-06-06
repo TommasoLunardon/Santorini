@@ -4,7 +4,9 @@ import it.polimi.ingsw.network.events.VCEvent;
 import it.polimi.ingsw.network.events.VCEventSender;
 
 import java.io.IOException;
-
+/**
+ * Event that communicates the selection of the special power by the client
+ */
 public class UseofSpecialPowerEvent  extends VCEvent {
 
     private boolean condition;

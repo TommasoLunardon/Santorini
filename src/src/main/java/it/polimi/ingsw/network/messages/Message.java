@@ -4,11 +4,7 @@ import java.io.Serializable;
 
 /**
  *
- * Message object is the message sent from the client to the server.
- *
- *
- * @author Jing Huang
- *
+ * Class used to represent a generic message sent throughout our network
  */
 
 public class Message implements Serializable {
@@ -31,9 +27,9 @@ public class Message implements Serializable {
 
     /**
      *
-     * The getContent is used to obtain the message.
+     * Method used to obtain the message content.
      *
-     * @return the String of message
+     * @return the message
      *
      */
 
