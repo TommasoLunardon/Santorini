@@ -1,1 +1,1 @@
-###### COMPONENTI DEL GRUPPO: Gabriele Gatti, Jing Huang, Tommaso Lunardon. FUNZIONALITA' IMPLEMENTATE: Regole Complete e CLI. ##TODO: ISTRUZIONI SU COME ESEGUIRE IL JAR
+###### ing-sw-2020-Gatti-Huang-Lunardon

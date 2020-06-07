@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ad681894-20b4-4d08-b01c-e504c1a40cd2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/jar/Santorini_Client_jar/ing-sw-2020-Gatti-Huang-Lunardon.jar" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/jar/Santorini_Client_jar/ing-sw-2020-Gatti-Huang-Lunardon.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/jar/Santorini_Server_jar/ing-sw-2020-Gatti-Huang-Lunardon.jar" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/jar/Santorini_Server_jar/ing-sw-2020-Gatti-Huang-Lunardon.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/external/jquery/jquery.js" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/external/jquery/jquery.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-3.4.1.js" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-3.4.1.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.css" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.structure.css" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.structure.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.structure.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jquery-ui.structure.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip-utils/dist/jszip-utils-ie.js" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip-utils/dist/jszip-utils-ie.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip-utils/dist/jszip-utils-ie.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip-utils/dist/jszip-utils-ie.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip-utils/dist/jszip-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip-utils/dist/jszip-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip-utils/dist/jszip-utils.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip-utils/dist/jszip-utils.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip/dist/jszip.js" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip/dist/jszip.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip/dist/jszip.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/javadoc/script-dir/jszip/dist/jszip.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/.css/coverage.css" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/.css/coverage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_BLOCK.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_BLOCK.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_BLOCK_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_CLASS.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_CLASS.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_CLASS_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_CLASS_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_LINE.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_LINE.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_LINE_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_LINE_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_METHOD.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_METHOD.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_METHOD_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_METHOD_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_NAME_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/index_SORT_BY_NAME_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/AthenaConditionException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/AthenaConditionException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/InvalidBoxException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/InvalidBoxException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/InvalidConstructionException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/InvalidConstructionException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/InvalidIndicesException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/InvalidIndicesException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/InvalidInputException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/InvalidInputException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/InvalidMovementException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/InvalidMovementException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/NotValidBoxException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/NotValidBoxException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/NotValidLevelException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/NotValidLevelException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/NotValidPlayersException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/NotValidPlayersException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/NotValidWorkersException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/NotValidWorkersException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/PlayerNotValidException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/PlayerNotValidException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/PrometheusMovementException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/PrometheusMovementException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/WorkerNotExistException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/WorkerNotExistException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/WrongConstructionException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/WrongConstructionException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/WrongMovementException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/WrongMovementException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/WrongPlayers_WorkersException.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/.classes/WrongPlayers_WorkersException.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_BLOCK.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_BLOCK.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_BLOCK_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_CLASS.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_CLASS.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_CLASS_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_CLASS_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_LINE.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_LINE.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_LINE_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_LINE_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_METHOD.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_METHOD.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_METHOD_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_METHOD_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_NAME_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model.exceptions/index_SORT_BY_NAME_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Box.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Box.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Game.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Game.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Map.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Map.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Pair.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Pair.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Player.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Player.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerApollo.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerApollo.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerArthemis.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerArthemis.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerAthena.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerAthena.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerAtlas.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerAtlas.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerColor.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerColor.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerDemeter.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerDemeter.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerDivinity.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerDivinity.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerHephaestus.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerHephaestus.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerMinotaur.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerMinotaur.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerNotAthena.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerNotAthena.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerPan.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerPan.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerPrometheus.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/PlayerPrometheus.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Worker.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/.classes/Worker.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_BLOCK.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_BLOCK.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_BLOCK_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_CLASS.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_CLASS.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_CLASS_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_CLASS_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_LINE.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_LINE.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_LINE_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_LINE_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_METHOD.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_METHOD.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_METHOD_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_METHOD_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_NAME_DESC.html" beforeDir="false" afterPath="$PROJECT_DIR$/deliveries/final/report/it.polimi.ingsw.server.model/index_SORT_BY_NAME_DESC.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/main/META-INF-CLIENT/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/main/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/main/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/main/java/Player2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/main/java/it/polimi/ingsw/client/view/PlayerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/main/java/it/polimi/ingsw/client/view/PlayerInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/main/java/it/polimi/ingsw/network/client/SocketConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/main/java/it/polimi/ingsw/network/client/SocketConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/Player2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/Box.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/BoxCLI.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/InputFailedException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/Map.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/MapCLI.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/PlayerInterface.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/divinities/Apollo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/divinities/Arthemis.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/divinities/Athena.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/divinities/Atlas.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/divinities/Demeter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/divinities/Divinity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/divinities/Hephaestus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/divinities/Minotaur.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/divinities/Pan.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/client/view/divinities/Prometheus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/JsonHelper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/client/ClientConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/client/NetworkHandler$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/client/NetworkHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/client/SocketConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/Event.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/EventSender.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/MVEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/MVEventSender.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/VCEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/VCEventSender.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/CardSelectionEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/CommunicationEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/GameUpdatingEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/GodCardsSelectedEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/InvalidConstructionEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/InvalidInputEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/InvalidMovementEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/LoserPlayerEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/MVPingEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/PlayerJoinedEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/StarterSelectionEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/mvevents/WinnerPlayerEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/vcevents/BoxSelectedEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/vcevents/CardSelectedEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/vcevents/GodsSelectedEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/vcevents/NumPlayersSelectedEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/vcevents/PlayerDataEnteredEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/vcevents/RestartConfirmationEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/vcevents/StarterSelectedEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/vcevents/UseofSpecialPowerEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/vcevents/VCPingEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/vcevents/WithGodsSelectedEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/events/vcevents/WorkerSelectedEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/messages/ConnectionRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/messages/Message.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/server/ServerConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/server/SocketConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/server/SocketServer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/server/VirtualView$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/network/server/VirtualView.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/Server.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/controller/Controller.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/controller/exceptions/ClientNotFoundException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/controller/exceptions/InvalidSenderException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/Box.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/Game.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/Map.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/Pair.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/Player.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerApollo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerArthemis.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerAthena.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerAtlas.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerColor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerDemeter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerDivinity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerHephaestus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerMinotaur.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerNotAthena.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerPan.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/PlayerPrometheus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/Worker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/AthenaConditionException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/InvalidBoxException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/InvalidConstructionException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/InvalidIndicesException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/InvalidInputException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/InvalidMovementException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/NotValidBoxException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/NotValidLevelException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/NotValidPlayersException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/NotValidWorkersException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/PlayerNotValidException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/PrometheusMovementException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/WorkerNotExistException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/WrongConstructionException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/WrongMovementException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/classes/it/polimi/ingsw/server/model/exceptions/WrongPlayers_WorkersException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/original-src-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/src-1.0-SNAPSHOT-shaded.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/src-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/surefire-reports/TEST-it.polimi.ingsw.server.model.WorkerApolloTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/surefire-reports/TEST-it.polimi.ingsw.server.model.WorkerMinotaurTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/surefire-reports/TEST-it.polimi.ingsw.server.model.WorkerNotAthenaTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/surefire-reports/it.polimi.ingsw.server.model.WorkerApolloTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/surefire-reports/it.polimi.ingsw.server.model.WorkerMinotaurTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/surefire-reports/it.polimi.ingsw.server.model.WorkerNotAthenaTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/BoxTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/GameTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/MapTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/PlayerApolloTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/PlayerArthemisTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/PlayerAthenaTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/PlayerAtlasTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/PlayerDemeterTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/PlayerHephaestusTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/PlayerMinotaurTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/PlayerNotAthenaTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/PlayerPanTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/PlayerPrometheusTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/PlayerTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/WorkerApolloTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/WorkerMinotaurTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/WorkerNotAthenaTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/target/test-classes/it/polimi/ingsw/server/model/WorkerTest.class" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1czd4QhH0PG4lCgIyPBidgXsqYF" />
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ad681894-20b4-4d08-b01c-e504c1a40cd2" name="Default Changelist" comment="" />
+      <created>1591535174926</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1591535174926</updated>
+      <workItem from="1591535189986" duration="218000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

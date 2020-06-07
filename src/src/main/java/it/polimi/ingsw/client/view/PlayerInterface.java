@@ -36,7 +36,7 @@ public class PlayerInterface {
     /**
      * Create Client's connection to the Server and starts the game
      */
-    public PlayerInterface(){
+    public PlayerInterface(String host){
 
         input = new Scanner(System.in);
         boolean connected = false;
@@ -48,7 +48,7 @@ public class PlayerInterface {
                 username = input.nextLine();
             }
             System.out.println("Please wait, we are trying to connect you to the server");
-            SocketConnection connection = new SocketConnection(username, port);
+            SocketConnection connection = new SocketConnection(username, port, host);
             networkHandler = new NetworkHandler();
             networkHandler.setConnection(connection);
             try {
@@ -572,7 +572,12 @@ public class PlayerInterface {
     }
 
     public static void main(String[] args){
-        new PlayerInterface();
+        if(args.length == 1) {
+            new PlayerInterface(args[0]);
+        }
+        else{
+            new PlayerInterface("169.254.245.82");
+        }
     }
 
 }

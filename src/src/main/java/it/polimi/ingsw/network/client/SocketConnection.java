@@ -22,9 +22,11 @@ public class SocketConnection extends ClientConnection implements Runnable {
     private transient ObjectInputStream in;
     private transient ObjectOutputStream out;
     private Message message;
+    private String host;
 
-    public SocketConnection(String username, int port) {
+    public SocketConnection(String username, int port, String host) {
         super(username, port);
+        this.host = host;
     }
 
     public Message getMessage(){return message;}
@@ -36,7 +38,6 @@ public class SocketConnection extends ClientConnection implements Runnable {
      */
     @Override
     public void startConnection() throws IOException {
-        String host = InetAddress.getLocalHost().getHostName();
         socket = new Socket(host, getPort());
         socket.setSoTimeout(20000);
         out = new ObjectOutputStream(socket.getOutputStream());
